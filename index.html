@@ -19,138 +19,305 @@
             --warm: #E8DDD0;
         }
 
+        html { scroll-behavior: smooth; }
+
         body {
             font-family: 'DM Sans', sans-serif;
             background: var(--cream);
             color: var(--dark);
             overflow-x: hidden;
+            padding-top: 94px; /* nav 56px + ticker 38px */
         }
 
-        /* NAV */
+        /* ─── NAV ─── */
         nav {
             position: fixed;
             top: 0; left: 0; right: 0;
             z-index: 200;
-            height: 56px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 0 40px;
+            height: 56px;
             background: var(--dark);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
         }
         .nav-links { display: flex; gap: 32px; }
-        .nav-links a { color: rgba(255,255,255,0.7); text-decoration: none; font-size: 12px; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 500; transition: color 0.2s; }
+        .nav-links a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
         .nav-links a:hover { color: #fff; }
-        .logo { font-family: 'Playfair Display', serif; font-style: italic; font-size: 22px; color: var(--cream); text-decoration: none; }
-        .status-pill { display: flex; align-items: center; gap: 7px; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.55); background: rgba(255,255,255,0.07); padding: 6px 14px; border-radius: 20px; }
-        .dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.3); transition: all 0.4s; }
+        .logo-link { text-decoration: none; }
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 22px;
+            color: var(--cream);
+            letter-spacing: -0.01em;
+        }
+        .status-pill {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 11px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.55);
+            background: rgba(255,255,255,0.07);
+            padding: 6px 14px;
+            border-radius: 20px;
+        }
+        .dot {
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            transition: all 0.4s;
+        }
         .dot.on { background: #90E8B4; box-shadow: 0 0 8px #90E8B4; }
 
-        /* TICKER */
-        .ticker-wrap { position: fixed; top: 56px; left: 0; right: 0; z-index: 199; background: var(--paper); border-bottom: 1px solid rgba(26,20,16,0.12); overflow: hidden; height: 38px; display: flex; align-items: center; }
-        .ticker-track { display: flex; white-space: nowrap; animation: ticker 18s linear infinite; }
-        .ticker-item { display: inline-flex; align-items: center; gap: 24px; padding: 0 40px; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
-        .ticker-item::after { content: '✦'; font-size: 9px; color: var(--accent); }
-        @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-
-        /* GIANT WORD — position:fixed so it is NEVER in document flow
-           and can NEVER block any element below it in the DOM */
-        .giant-word-fixed {
+        /* ─── TICKER ─── */
+        .ticker-wrap {
             position: fixed;
-            bottom: 24px;
-            left: 40px;
-            z-index: 1;
+            top: 56px; left: 0; right: 0;
+            z-index: 199;
+            background: var(--paper);
+            border-bottom: 1px solid rgba(26,20,16,0.12);
+            overflow: hidden;
+            height: 38px;
+            display: flex;
+            align-items: center;
+        }
+        .ticker-track {
+            display: flex;
+            white-space: nowrap;
+            animation: ticker 18s linear infinite;
+        }
+        .ticker-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 24px;
+            padding: 0 40px;
+            font-size: 11px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--muted);
+            font-weight: 500;
+        }
+        .ticker-item::after { content: '✦'; font-size: 9px; color: var(--accent); }
+        @keyframes ticker {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* ─── HERO: GIANT STICKY TEXT ─── */
+        .scroll-stage {
+            position: relative;
+            /* tall enough to scroll through all steps */
+            height: 600vh;
+        }
+
+        .sticky-bg {
+            position: sticky;
+            top: 0;
+            height: calc(100vh - 94px);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            overflow: hidden;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .giant-word {
             font-family: 'Playfair Display', serif;
             font-weight: 900;
-            font-size: clamp(100px, 16vw, 200px);
+            font-size: clamp(120px, 18vw, 220px);
             line-height: 0.88;
             letter-spacing: -0.03em;
             color: var(--dark);
+            padding: 0 0 0 40px;
+            padding-bottom: 30px;
             white-space: nowrap;
-            pointer-events: none;
-            user-select: none;
-            opacity: 1;
-            transition: opacity 0.4s;
+            transform: translateX(0);
+            transition: none;
         }
-        .giant-word-fixed.hidden { opacity: 0; pointer-events: none; }
 
-        /* SCROLL STAGE — tall div that gives us room to scroll and show cards.
-           NO sticky, NO absolute overlay that could block the converter below. */
-        .scroll-stage {
-            margin-top: 94px;
-            position: relative;
-            height: 550vh;
-            background: var(--cream);
-            /* overflow hidden so absolutely positioned cards inside don't
-               escape and overlap things outside this container */
+        /* ─── FLOATING CARDS LAYER ─── */
+        .cards-layer {
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 100%;
+            pointer-events: none;
             overflow: hidden;
         }
 
-        .intro-text {
-            position: absolute;
-            top: 28vh;
-            left: 50%;
-            transform: translateX(-50%);
-            text-align: center;
-            width: min(580px, 88vw);
-            pointer-events: none;
-            z-index: 2;
+        .scroll-card {
+            position: sticky;
+            pointer-events: all;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
-        .intro-text p { font-family: 'DM Serif Display', serif; font-style: italic; font-size: clamp(18px, 2.4vw, 23px); line-height: 1.65; color: var(--dark); opacity: 0.7; }
 
-        /* Each card is absolutely positioned at a specific vertical offset
-           within the scroll-stage. The scroll-stage has overflow:hidden so
-           they cannot leak outside of it. */
         .card-slot {
-            position: absolute;
-            left: 0; right: 0;
+            height: calc(100vh - 94px);
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
-            height: 100vh;
+            padding: 20px 40px 40px;
+            pointer-events: none;
         }
 
         .step-card {
+            pointer-events: all;
             background: var(--warm);
             border: 1.5px solid rgba(26,20,16,0.15);
             border-radius: 4px;
-            width: min(460px, 90vw);
+            width: min(480px, 90vw);
+            padding: 0;
             overflow: hidden;
-            box-shadow: 0 2px 4px rgba(26,20,16,0.06), 0 12px 40px rgba(26,20,16,0.14), 0 30px 60px rgba(26,20,16,0.08);
+            box-shadow:
+                0 2px 4px rgba(26,20,16,0.06),
+                0 12px 40px rgba(26,20,16,0.12),
+                0 40px 80px rgba(26,20,16,0.08);
+            transform: rotate(-1.5deg) translateY(60px);
             opacity: 0;
-            transform: translateY(50px) rotate(-1.5deg);
-            transition: opacity 0.75s ease, transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                        opacity 0.7s ease;
         }
-        .step-card.alt { transform: translateY(50px) rotate(1.5deg); }
-        .step-card.visible { opacity: 1; transform: translateY(0) rotate(-1.5deg); }
-        .step-card.alt.visible { transform: translateY(0) rotate(1.5deg); }
+        .step-card:nth-child(even) { transform: rotate(1.2deg) translateY(60px); }
 
-        .card-illustration { height: 195px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-        .card-illustration.blue  { background: #C8DEF2; }
-        .card-illustration.peach { background: #F2D4BE; }
-        .card-illustration.mint  { background: #C4E8D4; }
-        .card-illustration.lilac { background: #DDD0F0; }
+        .step-card.visible {
+            opacity: 1;
+            transform: rotate(-1.5deg) translateY(0);
+        }
+        .step-card:nth-child(even).visible {
+            transform: rotate(1.2deg) translateY(0);
+        }
 
-        .card-body { padding: 24px 28px 28px; background: var(--cream); }
-        .card-step-num { font-family: 'DM Serif Display', serif; font-style: italic; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
-        .card-title { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; margin-bottom: 9px; line-height: 1.2; }
-        .card-desc { font-size: 14px; line-height: 1.75; color: var(--muted); }
-        .card-tag { display: inline-block; margin-top: 13px; padding: 5px 12px; border: 1px solid rgba(26,20,16,0.2); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dark); font-weight: 500; border-radius: 2px; }
+        /* Illustration area at top of card */
+        .card-illustration {
+            height: 220px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .card-illustration.blue   { background: #C8DEF2; }
+        .card-illustration.peach  { background: #F2D4BE; }
+        .card-illustration.mint   { background: #C4E8D4; }
+        .card-illustration.lilac  { background: #DDD0F0; }
 
-        /* CONVERTER — plain block element, comes after scroll-stage in DOM.
-           Because scroll-stage has overflow:hidden, nothing inside it
-           can overlap this section. Full interactivity guaranteed. */
+        /* SVG illustration inside each card */
+        .illus-svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .card-body {
+            padding: 28px 32px 32px;
+            background: var(--cream);
+        }
+        .card-step-num {
+            font-family: 'DM Serif Display', serif;
+            font-style: italic;
+            font-size: 12px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 8px;
+        }
+        .card-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            line-height: 1.25;
+        }
+        .card-desc {
+            font-size: 14px;
+            line-height: 1.75;
+            color: var(--muted);
+        }
+        .card-tag {
+            display: inline-block;
+            margin-top: 16px;
+            padding: 6px 14px;
+            border: 1px solid rgba(26,20,16,0.2);
+            font-size: 11px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--dark);
+            font-weight: 500;
+            border-radius: 2px;
+        }
+
+        /* ─── INTRO TEXT (appears early) ─── */
+        .intro-float {
+            position: absolute;
+            top: 25vh;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            width: min(600px, 88vw);
+            z-index: 10;
+            pointer-events: none;
+        }
+        .intro-float p {
+            font-family: 'DM Serif Display', serif;
+            font-style: italic;
+            font-size: clamp(18px, 2.5vw, 24px);
+            line-height: 1.6;
+            color: var(--dark);
+            opacity: 0.75;
+        }
+
+        /* ─── CONVERTER SECTION ─── */
         .converter-section {
             background: var(--dark);
-            padding: 110px 40px;
+            padding: 120px 40px;
+            position: relative;
+            overflow: hidden;
+            z-index: 10;
+            pointer-events: all;
         }
-        .converter-inner { max-width: 900px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
-
-        .converter-left h2 { font-family: 'Playfair Display', serif; font-size: clamp(42px, 6vw, 72px); font-weight: 900; color: var(--cream); line-height: 1.0; letter-spacing: -0.03em; margin-bottom: 20px; }
-        .converter-left p { font-size: 15px; line-height: 1.8; color: rgba(245,240,232,0.5); margin-bottom: 28px; }
-
-        .connect-btn {
+        .converter-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 60% 50% at 80% 50%, rgba(201,185,154,0.08), transparent);
+        }
+        .converter-inner {
+            max-width: 900px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: start;
+        }
+        .converter-left h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(42px, 6vw, 72px);
+            font-weight: 900;
+            color: var(--cream);
+            line-height: 1.0;
+            letter-spacing: -0.03em;
+            margin-bottom: 24px;
+        }
+        .converter-left p {
+            font-size: 15px;
+            line-height: 1.8;
+            color: rgba(245,240,232,0.55);
+            margin-bottom: 32px;
+        }
+        .converter-left .connect-btn {
             display: inline-flex;
             align-items: center;
             gap: 10px;
@@ -167,18 +334,27 @@
             border-radius: 2px;
             transition: background 0.2s, transform 0.2s;
         }
-        .connect-btn:hover { background: #fff; transform: translateY(-1px); }
-        .connect-btn.connected { background: #90E8B4; color: #0A2018; }
+        .converter-left .connect-btn:hover { background: #fff; transform: translateY(-1px); }
+        .converter-left .connect-btn.connected {
+            background: #90E8B4;
+            color: #0A2018;
+        }
+        .connect-icon { font-size: 16px; }
 
-        .converter-right { display: flex; flex-direction: column; gap: 14px; }
+        .converter-right {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
 
         .input-box {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(245,240,232,0.14);
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(245,240,232,0.12);
             border-radius: 4px;
+            padding: 4px;
             transition: border-color 0.3s;
         }
-        .input-box:focus-within { border-color: rgba(245,240,232,0.35); }
+        .input-box:focus-within { border-color: rgba(245,240,232,0.3); }
 
         textarea {
             width: 100%;
@@ -192,17 +368,20 @@
             color: var(--cream);
             resize: none;
             line-height: 1.6;
-            display: block;
-            -webkit-user-select: text;
-            user-select: text;
         }
         textarea::placeholder { color: rgba(245,240,232,0.25); font-style: italic; }
 
-        .input-footer { display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; border-top: 1px solid rgba(245,240,232,0.08); }
-        .char-count { font-size: 12px; color: rgba(245,240,232,0.3); }
+        .input-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 16px;
+            border-top: 1px solid rgba(245,240,232,0.08);
+        }
+        .char-count { font-size: 12px; color: rgba(245,240,232,0.3); letter-spacing: 0.05em; }
 
         .send-btn {
-            padding: 9px 20px;
+            padding: 9px 22px;
             background: var(--cream);
             color: var(--dark);
             border: none;
@@ -219,34 +398,93 @@
         .send-btn:disabled { opacity: 0.3; cursor: not-allowed; }
         .send-btn.sent { background: #90E8B4; color: #0A2018; }
 
-        .braille-preview { display: flex; gap: 12px; flex-wrap: wrap; min-height: 56px; align-items: center; }
-        .braille-char { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; padding: 4px; }
-        .braille-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(245,240,232,0.15); transition: background 0.3s; }
+        .braille-preview {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            min-height: 60px;
+            align-items: center;
+        }
+        .braille-char {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5px;
+            padding: 4px;
+        }
+        .braille-dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            background: rgba(245,240,232,0.15);
+            transition: background 0.3s;
+        }
         .braille-dot.raised { background: var(--cream); }
-        .braille-label { font-size: 11px; color: rgba(245,240,232,0.3); text-align: center; margin-top: 3px; }
-        .braille-cell { display: flex; flex-direction: column; align-items: center; }
+        .braille-label {
+            font-size: 11px;
+            color: rgba(245,240,232,0.3);
+            text-align: center;
+            margin-top: 4px;
+            letter-spacing: 0.05em;
+        }
+        .braille-cell {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0;
+        }
 
-        /* REQUIREMENTS */
-        .req-strip { display: grid; grid-template-columns: repeat(3, 1fr); background: var(--cream); }
-        .req-item { padding: 56px 48px; border-right: 1px solid rgba(26,20,16,0.1); }
+        /* ─── REQUIREMENTS STRIP ─── */
+        .req-strip {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            border-top: 1px solid rgba(26,20,16,0.1);
+            position: relative;
+            z-index: 10;
+            background: var(--cream);
+        }
+        .req-item {
+            padding: 56px 48px;
+            border-right: 1px solid rgba(26,20,16,0.1);
+        }
         .req-item:last-child { border-right: none; }
-        .req-num { font-family: 'Playfair Display', serif; font-style: italic; font-size: 40px; color: var(--accent); margin-bottom: 12px; display: block; }
-        .req-item h3 { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+        .req-num {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 40px;
+            color: var(--accent);
+            margin-bottom: 12px;
+            display: block;
+        }
+        .req-item h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
         .req-item p { font-size: 14px; color: var(--muted); line-height: 1.7; }
 
-        /* FOOTER */
-        footer { background: var(--dark); padding: 36px 40px; display: flex; justify-content: space-between; align-items: center; }
-        footer p { font-size: 12px; color: rgba(255,255,255,0.3); letter-spacing: 0.05em; }
+        /* ─── FOOTER ─── */
+        footer {
+            background: var(--dark);
+            padding: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            position: relative;
+            z-index: 10;
+        }
+        footer p { font-size: 12px; color: rgba(255,255,255,0.3); letter-spacing: 0.06em; }
         footer a { color: rgba(255,255,255,0.3); text-decoration: none; }
         footer a:hover { color: rgba(255,255,255,0.6); }
 
+        /* ─── RESPONSIVE ─── */
         @media (max-width: 768px) {
-            .converter-inner { grid-template-columns: 1fr; gap: 36px; }
+            .converter-inner { grid-template-columns: 1fr; gap: 40px; }
             .req-strip { grid-template-columns: 1fr; }
             .req-item { border-right: none; border-bottom: 1px solid rgba(26,20,16,0.1); }
             nav { padding: 0 20px; }
             .nav-links { display: none; }
-            .giant-word-fixed { font-size: 20vw; left: 16px; }
+            .giant-word { font-size: 22vw; padding-left: 16px; }
         }
     </style>
 </head>
@@ -255,10 +493,12 @@
 <!-- NAV -->
 <nav>
     <div class="nav-links">
-        <a href="testhowitworks.html">How It Works</a>
-        <a href="testabout.html">About</a>
+        <a href="how-it-works.html">How It Works</a>
+        <a href="about.html">About</a>
     </div>
-    <a href="testindex.html" class="logo">braillino</a>
+    <a href="index.html" class="logo-link">
+        <span class="logo">braillino</span>
+    </a>
     <div class="status-pill">
         <div class="dot" id="statusDot"></div>
         <span id="statusText">Offline</span>
@@ -268,159 +508,206 @@
 <!-- TICKER -->
 <div class="ticker-wrap">
     <div class="ticker-track">
-        <span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span><span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span><span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span><span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span>
+        <span class="ticker-item">Connect</span>
+        <span class="ticker-item">Type</span>
+        <span class="ticker-item">Convert</span>
+        <span class="ticker-item">Feel</span>
+        <span class="ticker-item">Connect</span>
+        <span class="ticker-item">Type</span>
+        <span class="ticker-item">Convert</span>
+        <span class="ticker-item">Feel</span>
+        <span class="ticker-item">Connect</span>
+        <span class="ticker-item">Type</span>
+        <span class="ticker-item">Convert</span>
+        <span class="ticker-item">Feel</span>
+        <span class="ticker-item">Connect</span>
+        <span class="ticker-item">Type</span>
+        <span class="ticker-item">Convert</span>
+        <span class="ticker-item">Feel</span>
     </div>
 </div>
 
-<!-- GIANT WORD: position:fixed — completely outside document flow -->
-<div class="giant-word-fixed hidden" id="giantWord">Braillino.</div>
-
-<!-- SCROLL STAGE: overflow:hidden keeps all cards contained inside -->
+<!-- SCROLL STAGE -->
 <div class="scroll-stage" id="stage">
 
-    <div class="intro-text">
-        <p>Words, made accessible by touch.<br>Transform your messages into tactile Braille patterns.</p>
+    <!-- Sticky background: giant word -->
+    <div class="sticky-bg" id="stickyBg">
+        <div class="intro-float">
+            <p>Words, made accessible by touch. Transform your messages into tactile Braille patterns.</p>
+        </div>
+        <div class="giant-word" id="giantWord">Braillino.</div>
     </div>
 
-    <div class="card-slot" style="top: 80vh;">
-        <div class="step-card" id="card1">
-            <div class="card-illustration blue">
-                <svg viewBox="0 0 480 195" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
-                    <circle cx="100" cy="50" r="30" fill="white" opacity="0.15"/>
-                    <circle cx="400" cy="170" r="45" fill="white" opacity="0.12"/>
-                    <rect x="160" y="75" width="80" height="50" rx="8" fill="#3A5F8A" opacity="0.8"/>
-                    <rect x="195" y="55" width="10" height="20" fill="#2D4A6E"/>
-                    <rect x="225" y="55" width="10" height="20" fill="#2D4A6E"/>
-                    <rect x="240" y="95" width="80" height="4" rx="2" fill="#2D4A6E" opacity="0.6"/>
-                    <rect x="315" y="80" width="50" height="34" rx="6" fill="#1A3A5C" opacity="0.9"/>
-                    <circle cx="330" cy="97" r="8" fill="#4A9EFF" opacity="0.8"/>
-                    <circle cx="175" cy="97" r="4" fill="#7BBFFF" opacity="0.5"/>
-                    <circle cx="190" cy="97" r="4" fill="#7BBFFF" opacity="0.5"/>
-                    <circle cx="205" cy="97" r="4" fill="#7BBFFF" opacity="0.5"/>
-                    <text x="240" y="155" font-family="serif" font-style="italic" font-size="13" fill="#2D4A6E" opacity="0.6" text-anchor="middle">Upload the .ino code first</text>
-                </svg>
-            </div>
-            <div class="card-body">
-                <div class="card-step-num">Step one</div>
-                <div class="card-title">Upload the Arduino Code</div>
-                <div class="card-desc">Open the Arduino IDE, paste the Braillino .ino sketch, select your board and port, then hit upload. Wait for "Done uploading."</div>
-                <span class="card-tag">Arduino IDE required</span>
+    <!-- Cards layer: stacks on top of sticky bg -->
+    <div class="cards-layer">
+
+        <!-- Spacer so first card appears after intro -->
+        <div style="height: 80vh;"></div>
+
+        <!-- STEP 1 -->
+        <div class="card-slot">
+            <div class="step-card" id="card1">
+                <div class="card-illustration blue">
+                    <svg class="illus-svg" viewBox="0 0 480 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- USB cable illustration -->
+                        <rect x="160" y="85" width="80" height="50" rx="8" fill="#3A5F8A" opacity="0.8"/>
+                        <rect x="195" y="65" width="10" height="20" fill="#2D4A6E"/>
+                        <rect x="225" y="65" width="10" height="20" fill="#2D4A6E"/>
+                        <rect x="240" y="105" width="80" height="4" rx="2" fill="#2D4A6E" opacity="0.6"/>
+                        <rect x="315" y="90" width="50" height="34" rx="6" fill="#1A3A5C" opacity="0.9"/>
+                        <circle cx="330" cy="107" r="8" fill="#4A9EFF" opacity="0.8"/>
+                        <circle cx="350" cy="107" r="4" fill="#7BBFFF" opacity="0.6"/>
+                        <!-- small dots -->
+                        <circle cx="175" cy="107" r="4" fill="#7BBFFF" opacity="0.5"/>
+                        <circle cx="190" cy="107" r="4" fill="#7BBFFF" opacity="0.5"/>
+                        <circle cx="205" cy="107" r="4" fill="#7BBFFF" opacity="0.5"/>
+                        <!-- decorative -->
+                        <circle cx="100" cy="60" r="30" fill="white" opacity="0.15"/>
+                        <circle cx="400" cy="180" r="45" fill="white" opacity="0.12"/>
+                        <text x="200" y="160" font-family="serif" font-style="italic" font-size="13" fill="#2D4A6E" opacity="0.7" text-anchor="middle">Upload the .ino code first</text>
+                    </svg>
+                </div>
+                <div class="card-body">
+                    <div class="card-step-num">Step one</div>
+                    <div class="card-title">Upload the Arduino Code</div>
+                    <div class="card-desc">Open the Arduino IDE, paste the Braillino .ino sketch, select your board and port, then hit upload. Wait for "Done uploading."</div>
+                    <span class="card-tag">Arduino IDE required</span>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="card-slot" style="top: 180vh;">
-        <div class="step-card alt" id="card2">
-            <div class="card-illustration peach">
-                <svg viewBox="0 0 480 195" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
-                    <circle cx="420" cy="30" r="35" fill="white" opacity="0.12"/>
-                    <circle cx="60" cy="175" r="25" fill="white" opacity="0.15"/>
-                    <rect x="80" y="38" width="320" height="130" rx="10" fill="#D4956A" opacity="0.3"/>
-                    <rect x="80" y="38" width="320" height="28" rx="10" fill="#C4855A" opacity="0.5"/>
-                    <circle cx="100" cy="52" r="5" fill="#E87060" opacity="0.8"/>
-                    <circle cx="118" cy="52" r="5" fill="#F0B060" opacity="0.8"/>
-                    <circle cx="136" cy="52" r="5" fill="#80C080" opacity="0.8"/>
-                    <rect x="155" y="45" width="180" height="14" rx="7" fill="white" opacity="0.3"/>
-                    <rect x="160" y="104" width="160" height="36" rx="4" fill="#C4855A" opacity="0.7"/>
-                    <text x="240" y="127" font-family="sans-serif" font-size="13" fill="white" text-anchor="middle" font-weight="600">Connect Device</text>
-                    <circle cx="310" cy="82" r="7" fill="#90E8B4"/>
-                    <text x="325" y="86" font-family="sans-serif" font-size="10" fill="#3A6A4A" font-weight="600">CONNECTED</text>
-                </svg>
-            </div>
-            <div class="card-body">
-                <div class="card-step-num">Step two</div>
-                <div class="card-title">Connect Your Device</div>
-                <div class="card-desc">Plug your Arduino in via USB, open Braillino in Chrome or Edge, click "Connect Device" and select your board from the popup.</div>
-                <span class="card-tag">Chrome or Edge only</span>
+        <!-- STEP 2 -->
+        <div class="card-slot">
+            <div class="step-card" id="card2" style="transform: rotate(1.8deg) translateY(60px);">
+                <div class="card-illustration peach">
+                    <svg class="illus-svg" viewBox="0 0 480 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Browser window -->
+                        <rect x="80" y="50" width="320" height="130" rx="10" fill="#D4956A" opacity="0.35"/>
+                        <rect x="80" y="50" width="320" height="28" rx="10" fill="#C4855A" opacity="0.5"/>
+                        <circle cx="100" cy="64" r="5" fill="#E87060" opacity="0.8"/>
+                        <circle cx="118" cy="64" r="5" fill="#F0B060" opacity="0.8"/>
+                        <circle cx="136" cy="64" r="5" fill="#80C080" opacity="0.8"/>
+                        <rect x="155" y="57" width="180" height="14" rx="7" fill="white" opacity="0.3"/>
+                        <!-- Connect button -->
+                        <rect x="160" y="120" width="160" height="36" rx="4" fill="#C4855A" opacity="0.7"/>
+                        <text x="240" y="143" font-family="sans-serif" font-size="13" fill="white" text-anchor="middle" font-weight="600">Connect Device</text>
+                        <!-- Green dot -->
+                        <circle cx="320" cy="95" r="7" fill="#90E8B4"/>
+                        <text x="336" y="99" font-family="sans-serif" font-size="10" fill="#4A7A5A" font-weight="600">CONNECTED</text>
+                        <!-- decorative circles -->
+                        <circle cx="420" cy="40" r="35" fill="white" opacity="0.12"/>
+                        <circle cx="60" cy="190" r="25" fill="white" opacity="0.15"/>
+                    </svg>
+                </div>
+                <div class="card-body">
+                    <div class="card-step-num">Step two</div>
+                    <div class="card-title">Connect Your Device</div>
+                    <div class="card-desc">Plug your Arduino in via USB, open Braillino in Chrome or Edge, click "Connect Device" and select your board from the popup.</div>
+                    <span class="card-tag">Chrome or Edge only</span>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="card-slot" style="top: 280vh;">
-        <div class="step-card" id="card3">
-            <div class="card-illustration mint">
-                <svg viewBox="0 0 480 195" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
-                    <circle cx="60" cy="48" r="28" fill="white" opacity="0.15"/>
-                    <circle cx="420" cy="158" r="38" fill="white" opacity="0.12"/>
-                    <g opacity="0.85">
-                        <rect x="100" y="68" width="34" height="30" rx="5" fill="#4A8A6A"/>
-                        <rect x="142" y="68" width="34" height="30" rx="5" fill="#4A8A6A"/>
-                        <rect x="184" y="68" width="34" height="30" rx="5" fill="#3A7A5A"/>
-                        <rect x="226" y="68" width="34" height="30" rx="5" fill="#4A8A6A"/>
-                        <rect x="268" y="68" width="34" height="30" rx="5" fill="#4A8A6A"/>
-                        <rect x="310" y="68" width="34" height="30" rx="5" fill="#4A8A6A"/>
-                        <rect x="352" y="68" width="34" height="30" rx="5" fill="#4A8A6A"/>
-                        <rect x="118" y="106" width="34" height="30" rx="5" fill="#5A9A7A" opacity="0.8"/>
-                        <rect x="160" y="106" width="34" height="30" rx="5" fill="#5A9A7A" opacity="0.8"/>
-                        <rect x="202" y="106" width="34" height="30" rx="5" fill="#5A9A7A" opacity="0.8"/>
-                        <rect x="244" y="106" width="34" height="30" rx="5" fill="#5A9A7A" opacity="0.8"/>
-                        <rect x="286" y="106" width="34" height="30" rx="5" fill="#5A9A7A" opacity="0.8"/>
-                        <rect x="328" y="106" width="34" height="30" rx="5" fill="#5A9A7A" opacity="0.8"/>
-                        <rect x="155" y="144" width="170" height="26" rx="5" fill="#3A7A5A" opacity="0.9"/>
-                    </g>
-                    <text x="117" y="89" font-family="sans-serif" font-size="11" fill="white" text-anchor="middle" font-weight="600">H</text>
-                    <text x="159" y="89" font-family="sans-serif" font-size="11" fill="white" text-anchor="middle" font-weight="600">I</text>
-                </svg>
-            </div>
-            <div class="card-body">
-                <div class="card-step-num">Step three</div>
-                <div class="card-title">Type Your Message</div>
-                <div class="card-desc">Type any word up to 100 characters. Letters are auto-converted to uppercase for Braille Grade 1. Hit Enter or press Send.</div>
-                <span class="card-tag">Max 100 characters</span>
-            </div>
-        </div>
-    </div>
-
-    <div class="card-slot" style="top: 380vh;">
-        <div class="step-card alt" id="card4">
-            <div class="card-illustration lilac">
-                <svg viewBox="0 0 480 195" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
-                    <circle cx="80" cy="68" r="30" fill="white" opacity="0.12"/>
-                    <circle cx="400" cy="148" r="40" fill="white" opacity="0.1"/>
-                    <rect x="120" y="48" width="240" height="100" rx="12" fill="#6A50A0" opacity="0.5"/>
-                    <rect x="130" y="58" width="220" height="80" rx="8" fill="#5A3A8A" opacity="0.6"/>
-                    <circle cx="175" cy="83" r="7" fill="#EEE0FF"/>
-                    <circle cx="195" cy="83" r="7" fill="rgba(238,224,255,0.3)"/>
-                    <circle cx="175" cy="100" r="7" fill="#EEE0FF"/>
-                    <circle cx="195" cy="100" r="7" fill="#EEE0FF"/>
-                    <circle cx="175" cy="117" r="7" fill="rgba(238,224,255,0.3)"/>
-                    <circle cx="195" cy="117" r="7" fill="rgba(238,224,255,0.3)"/>
-                    <circle cx="225" cy="83" r="7" fill="#EEE0FF"/>
-                    <circle cx="245" cy="83" r="7" fill="rgba(238,224,255,0.3)"/>
-                    <circle cx="225" cy="100" r="7" fill="rgba(238,224,255,0.3)"/>
-                    <circle cx="245" cy="100" r="7" fill="rgba(238,224,255,0.3)"/>
-                    <circle cx="225" cy="117" r="7" fill="rgba(238,224,255,0.3)"/>
-                    <circle cx="245" cy="117" r="7" fill="#EEE0FF"/>
-                    <circle cx="275" cy="83" r="7" fill="#EEE0FF"/>
-                    <circle cx="295" cy="83" r="7" fill="#EEE0FF"/>
-                    <circle cx="275" cy="100" r="7" fill="#EEE0FF"/>
-                    <circle cx="295" cy="100" r="7" fill="rgba(238,224,255,0.3)"/>
-                    <circle cx="275" cy="117" r="7" fill="rgba(238,224,255,0.3)"/>
-                    <circle cx="295" cy="117" r="7" fill="rgba(238,224,255,0.3)"/>
-                    <rect x="148" y="158" width="50" height="16" rx="4" fill="#4A2A7A" opacity="0.5"/>
-                    <rect x="215" y="158" width="50" height="16" rx="4" fill="#4A2A7A" opacity="0.5"/>
-                    <rect x="280" y="158" width="50" height="16" rx="4" fill="#4A2A7A" opacity="0.5"/>
-                </svg>
-            </div>
-            <div class="card-body">
-                <div class="card-step-num">Step four</div>
-                <div class="card-title">Feel the Braille</div>
-                <div class="card-desc">Watch the servo motors move in real time, forming each Braille letter. Each character displays for 4 seconds. Touch and read.</div>
-                <span class="card-tag">Tactile · Real-time</span>
+        <!-- STEP 3 -->
+        <div class="card-slot">
+            <div class="step-card" id="card3">
+                <div class="card-illustration mint">
+                    <svg class="illus-svg" viewBox="0 0 480 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Keyboard keys -->
+                        <g opacity="0.85">
+                            <rect x="100" y="80" width="34" height="32" rx="5" fill="#4A8A6A"/>
+                            <rect x="142" y="80" width="34" height="32" rx="5" fill="#4A8A6A"/>
+                            <rect x="184" y="80" width="34" height="32" rx="5" fill="#4A8A6A"/>
+                            <rect x="226" y="80" width="34" height="32" rx="5" fill="#3A7A5A"/>
+                            <rect x="268" y="80" width="34" height="32" rx="5" fill="#4A8A6A"/>
+                            <rect x="310" y="80" width="34" height="32" rx="5" fill="#4A8A6A"/>
+                            <rect x="352" y="80" width="34" height="32" rx="5" fill="#4A8A6A"/>
+                            <!-- row 2 -->
+                            <rect x="118" y="120" width="34" height="32" rx="5" fill="#5A9A7A" opacity="0.8"/>
+                            <rect x="160" y="120" width="34" height="32" rx="5" fill="#5A9A7A" opacity="0.8"/>
+                            <rect x="202" y="120" width="34" height="32" rx="5" fill="#5A9A7A" opacity="0.8"/>
+                            <rect x="244" y="120" width="34" height="32" rx="5" fill="#5A9A7A" opacity="0.8"/>
+                            <rect x="286" y="120" width="34" height="32" rx="5" fill="#5A9A7A" opacity="0.8"/>
+                            <rect x="328" y="120" width="34" height="32" rx="5" fill="#5A9A7A" opacity="0.8"/>
+                            <!-- space bar -->
+                            <rect x="160" y="160" width="160" height="28" rx="5" fill="#3A7A5A" opacity="0.9"/>
+                        </g>
+                        <!-- letter labels -->
+                        <text x="117" y="101" font-family="sans-serif" font-size="11" fill="white" text-anchor="middle" font-weight="600">H</text>
+                        <text x="159" y="101" font-family="sans-serif" font-size="11" fill="white" text-anchor="middle" font-weight="600">I</text>
+                        <text x="201" y="101" font-family="sans-serif" font-size="11" fill="white" text-anchor="middle" font-weight="600">!</text>
+                        <circle cx="60" cy="60" r="28" fill="white" opacity="0.15"/>
+                        <circle cx="420" cy="170" r="38" fill="white" opacity="0.12"/>
+                    </svg>
+                </div>
+                <div class="card-body">
+                    <div class="card-step-num">Step three</div>
+                    <div class="card-title">Type Your Message</div>
+                    <div class="card-desc">Type any word up to 100 characters. Letters are auto-converted to uppercase for Braille Grade 1. Hit Enter or press Send.</div>
+                    <span class="card-tag">Max 100 characters</span>
+                </div>
             </div>
         </div>
+
+        <!-- STEP 4 -->
+        <div class="card-slot">
+            <div class="step-card" id="card4" style="transform: rotate(1.4deg) translateY(60px);">
+                <div class="card-illustration lilac">
+                    <svg class="illus-svg" viewBox="0 0 480 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Braille display device -->
+                        <rect x="120" y="60" width="240" height="100" rx="12" fill="#6A50A0" opacity="0.5"/>
+                        <rect x="130" y="70" width="220" height="80" rx="8" fill="#5A3A8A" opacity="0.6"/>
+                        <!-- braille dots in 3 cells -->
+                        <!-- cell 1 -->
+                        <circle cx="175" cy="95" r="7" fill="#EEE0FF"/>
+                        <circle cx="195" cy="95" r="7" fill="rgba(238,224,255,0.3)"/>
+                        <circle cx="175" cy="112" r="7" fill="#EEE0FF"/>
+                        <circle cx="195" cy="112" r="7" fill="#EEE0FF"/>
+                        <circle cx="175" cy="129" r="7" fill="rgba(238,224,255,0.3)"/>
+                        <circle cx="195" cy="129" r="7" fill="rgba(238,224,255,0.3)"/>
+                        <!-- cell 2 -->
+                        <circle cx="225" cy="95" r="7" fill="#EEE0FF"/>
+                        <circle cx="245" cy="95" r="7" fill="rgba(238,224,255,0.3)"/>
+                        <circle cx="225" cy="112" r="7" fill="rgba(238,224,255,0.3)"/>
+                        <circle cx="245" cy="112" r="7" fill="rgba(238,224,255,0.3)"/>
+                        <circle cx="225" cy="129" r="7" fill="rgba(238,224,255,0.3)"/>
+                        <circle cx="245" cy="129" r="7" fill="#EEE0FF"/>
+                        <!-- cell 3 -->
+                        <circle cx="275" cy="95" r="7" fill="#EEE0FF"/>
+                        <circle cx="295" cy="95" r="7" fill="#EEE0FF"/>
+                        <circle cx="275" cy="112" r="7" fill="#EEE0FF"/>
+                        <circle cx="295" cy="112" r="7" fill="rgba(238,224,255,0.3)"/>
+                        <circle cx="275" cy="129" r="7" fill="rgba(238,224,255,0.3)"/>
+                        <circle cx="295" cy="129" r="7" fill="rgba(238,224,255,0.3)"/>
+                        <!-- servo motors at bottom -->
+                        <rect x="150" y="170" width="50" height="20" rx="4" fill="#4A2A7A" opacity="0.5"/>
+                        <rect x="215" y="170" width="50" height="20" rx="4" fill="#4A2A7A" opacity="0.5"/>
+                        <rect x="280" y="170" width="50" height="20" rx="4" fill="#4A2A7A" opacity="0.5"/>
+                        <circle cx="80" cy="80" r="30" fill="white" opacity="0.12"/>
+                        <circle cx="400" cy="160" r="40" fill="white" opacity="0.1"/>
+                    </svg>
+                </div>
+                <div class="card-body">
+                    <div class="card-step-num">Step four</div>
+                    <div class="card-title">Feel the Braille</div>
+                    <div class="card-desc">Watch the servo motors move in real time, forming each Braille letter. Each character displays for 4 seconds. Touch and read.</div>
+                    <span class="card-tag">Tactile · Real-time</span>
+                </div>
+            </div>
+        </div>
+
     </div>
+</div>
+<!-- /SCROLL STAGE -->
 
-</div><!-- /SCROLL STAGE -->
-
-<!-- CONVERTER: normal block flow — zero overlap possible -->
+<!-- CONVERTER SECTION -->
 <section class="converter-section" id="converter">
     <div class="converter-inner">
         <div class="converter-left">
             <h2>Try it<br><em style="font-style:italic;">now.</em></h2>
             <p>Connect your Arduino and send any word into the physical world. Type below and watch Braille come to life through touch.</p>
             <button class="connect-btn" id="connectBtn">
-                <span>⊕</span>
+                <span class="connect-icon">⊕</span>
                 <span id="connectLabel">Connect Device</span>
             </button>
         </div>
@@ -443,7 +730,7 @@
     </div>
 </section>
 
-<!-- REQUIREMENTS -->
+<!-- REQUIREMENTS STRIP -->
 <div class="req-strip">
     <div class="req-item">
         <span class="req-num">01</span>
@@ -465,34 +752,38 @@
 <!-- FOOTER -->
 <footer>
     <p>© 2026 Braillino · Words, made accessible by touch</p>
-    <div style="display:flex;gap:24px;">
-        <a href="testhowitworks.html">How It Works</a>
-        <a href="testabout.html">About</a>
+    <div style="display:flex; gap:24px;">
+        <a href="how-it-works.html">How It Works</a>
+        <a href="about.html">About</a>
     </div>
 </footer>
 
 <script>
-// BRAILLE MAP
+// ─── BRAILLE MAP ───
 const BRAILLE = {
-    A:[1,0,0,0,0,0],B:[1,1,0,0,0,0],C:[1,0,0,1,0,0],D:[1,0,0,1,1,0],
-    E:[1,0,0,0,1,0],F:[1,1,0,1,0,0],G:[1,1,0,1,1,0],H:[1,1,0,0,1,0],
-    I:[0,1,0,1,0,0],J:[0,1,0,1,1,0],K:[1,0,1,0,0,0],L:[1,1,1,0,0,0],
-    M:[1,0,1,1,0,0],N:[1,0,1,1,1,0],O:[1,0,1,0,1,0],P:[1,1,1,1,0,0],
-    Q:[1,1,1,1,1,0],R:[1,1,1,0,1,0],S:[0,1,1,1,0,0],T:[0,1,1,1,1,0],
-    U:[1,0,1,0,0,1],V:[1,1,1,0,0,1],W:[0,1,0,1,1,1],X:[1,0,1,1,0,1],
-    Y:[1,0,1,1,1,1],Z:[1,0,1,0,1,1],' ':[0,0,0,0,0,0]
+    A:[1,0,0,0,0,0], B:[1,1,0,0,0,0], C:[1,0,0,1,0,0], D:[1,0,0,1,1,0],
+    E:[1,0,0,0,1,0], F:[1,1,0,1,0,0], G:[1,1,0,1,1,0], H:[1,1,0,0,1,0],
+    I:[0,1,0,1,0,0], J:[0,1,0,1,1,0], K:[1,0,1,0,0,0], L:[1,1,1,0,0,0],
+    M:[1,0,1,1,0,0], N:[1,0,1,1,1,0], O:[1,0,1,0,1,0], P:[1,1,1,1,0,0],
+    Q:[1,1,1,1,1,0], R:[1,1,1,0,1,0], S:[0,1,1,1,0,0], T:[0,1,1,1,1,0],
+    U:[1,0,1,0,0,1], V:[1,1,1,0,0,1], W:[0,1,0,1,1,1], X:[1,0,1,1,0,1],
+    Y:[1,0,1,1,1,1], Z:[1,0,1,0,1,1], ' ':[0,0,0,0,0,0]
 };
 
 function renderBraillePreview(text) {
     const container = document.getElementById('braillePreview');
     container.innerHTML = '';
-    for (const ch of text.toUpperCase().slice(0,14)) {
+    const upper = text.toUpperCase().slice(0, 12);
+    for (const ch of upper) {
         const dots = BRAILLE[ch] || BRAILLE[' '];
         const cell = document.createElement('div');
         cell.className = 'braille-cell';
         const grid = document.createElement('div');
         grid.className = 'braille-char';
-        [0,3,1,4,2,5].forEach(i => {
+        // Braille: dots ordered [1,2,3,4,5,6] = left col top-mid-bot, right col top-mid-bot
+        // Display as 2 columns: [0,3],[1,4],[2,5]
+        const order = [0,3,1,4,2,5];
+        order.forEach(i => {
             const d = document.createElement('div');
             d.className = 'braille-dot' + (dots[i] ? ' raised' : '');
             grid.appendChild(d);
@@ -506,35 +797,29 @@ function renderBraillePreview(text) {
     }
 }
 
-// GIANT WORD: show only while scroll-stage is on screen
-const giantWordEl = document.getElementById('giantWord');
-const stageEl = document.getElementById('stage');
+// ─── SCROLL CARD ANIMATION ───
+const cards = document.querySelectorAll('.step-card');
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+        if (e.isIntersecting) {
+            e.target.classList.add('visible');
+        }
+    });
+}, { threshold: 0.3 });
+cards.forEach(c => observer.observe(c));
 
-function updateGiantWord() {
+// ─── GIANT WORD PARALLAX (subtle horizontal drift) ───
+const giantWord = document.getElementById('giantWord');
+window.addEventListener('scroll', () => {
     const scrollY = window.scrollY;
-    const rect = stageEl.getBoundingClientRect();
-    const stageTop = scrollY + rect.top;
-    const stageBottom = stageTop + stageEl.offsetHeight;
+    const stage = document.getElementById('stage');
+    const stageH = stage.offsetHeight;
+    const progress = Math.min(scrollY / stageH, 1);
+    // Shift text left as we scroll (bitemark effect)
+    giantWord.style.transform = `translateX(${-progress * 12}vw)`;
+}, { passive: true });
 
-    if (scrollY >= stageTop - 94 && scrollY < stageBottom - window.innerHeight) {
-        giantWordEl.classList.remove('hidden');
-        const progress = (scrollY - stageTop + 94) / stageEl.offsetHeight;
-        giantWordEl.style.transform = `translateX(${-Math.max(0,progress) * 10}vw)`;
-    } else {
-        giantWordEl.classList.add('hidden');
-    }
-}
-
-// CARD ANIMATIONS
-const cardObs = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-}, { threshold: 0.2 });
-document.querySelectorAll('.step-card').forEach(c => cardObs.observe(c));
-
-window.addEventListener('scroll', updateGiantWord, { passive: true });
-updateGiantWord();
-
-// WEB SERIAL
+// ─── SERIAL ───
 let port, writer;
 const connectBtn = document.getElementById('connectBtn');
 const connectLabel = document.getElementById('connectLabel');
@@ -551,7 +836,7 @@ textInput.addEventListener('input', () => {
 
 if (!('serial' in navigator)) {
     statusText.textContent = 'Unsupported';
-    connectBtn.title = 'Use Chrome or Edge browser';
+    connectBtn.disabled = true;
 }
 
 connectBtn.addEventListener('click', async () => {
@@ -583,19 +868,19 @@ async function connect() {
         connectBtn.classList.add('connected');
         sendBtn.disabled = false;
         textInput.focus();
-    } catch(err) { console.error('Connection error:', err); }
+    } catch(err) { console.error(err); }
 }
 
 async function disconnect() {
     try {
-        if (writer) { writer.releaseLock(); writer = null; }
+        if (writer) writer.releaseLock();
         if (port) { await port.close(); port = null; }
         statusDot.classList.remove('on');
         statusText.textContent = 'Offline';
         connectLabel.textContent = 'Connect Device';
         connectBtn.classList.remove('connected');
         sendBtn.disabled = true;
-    } catch(err) { console.error('Disconnect error:', err); }
+    } catch(err) { console.error(err); }
 }
 
 async function sendToArduino(text) {
@@ -604,8 +889,11 @@ async function sendToArduino(text) {
         const orig = sendBtn.textContent;
         sendBtn.textContent = 'Sent ✓';
         sendBtn.classList.add('sent');
-        setTimeout(() => { sendBtn.textContent = orig; sendBtn.classList.remove('sent'); }, 1800);
-    } catch(err) { console.error('Send error:', err); }
+        setTimeout(() => {
+            sendBtn.textContent = orig;
+            sendBtn.classList.remove('sent');
+        }, 1800);
+    } catch(err) { console.error(err); }
 }
 
 window.addEventListener('beforeunload', () => { if (port) disconnect(); });
