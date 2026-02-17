@@ -53,54 +53,110 @@
         .ticker-item::after { content: '✦'; font-size: 9px; color: var(--accent); }
         @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
-        /* GIANT WORD — position:fixed so it is NEVER in document flow
-           and can NEVER block any element below it in the DOM */
+        /* GIANT LOGO IMAGE */
         .giant-word-fixed {
             position: fixed;
-            bottom: 24px;
-            left: 40px;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
             z-index: 1;
-            font-family: 'Playfair Display', serif;
-            font-weight: 900;
-            font-size: clamp(100px, 16vw, 200px);
-            line-height: 0.88;
-            letter-spacing: -0.03em;
-            color: var(--dark);
-            white-space: nowrap;
+            width: 100vw;
+            height: auto;
             pointer-events: none;
             user-select: none;
             opacity: 1;
             transition: opacity 0.4s;
+            mix-blend-mode: multiply;
         }
         .giant-word-fixed.hidden { opacity: 0; pointer-events: none; }
 
-        /* SCROLL STAGE — tall div that gives us room to scroll and show cards.
-           NO sticky, NO absolute overlay that could block the converter below. */
+        /* SCROLL STAGE */
         .scroll-stage {
             margin-top: 94px;
             position: relative;
             height: 550vh;
             background: var(--cream);
-            /* overflow hidden so absolutely positioned cards inside don't
-               escape and overlap things outside this container */
             overflow: hidden;
         }
 
+        /* ── NEW EDITORIAL HERO ── */
         .intro-text {
             position: absolute;
-            top: 28vh;
-            left: 50%;
-            transform: translateX(-50%);
-            text-align: center;
-            width: min(580px, 88vw);
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
             pointer-events: none;
-            z-index: 2;
+            z-index: 10;
         }
-        .intro-text p { font-family: 'DM Serif Display', serif; font-style: italic; font-size: clamp(18px, 2.4vw, 23px); line-height: 1.65; color: var(--dark); opacity: 0.7; }
 
-        /* Each card is absolutely positioned at a specific vertical offset
-           within the scroll-stage. The scroll-stage has overflow:hidden so
-           they cannot leak outside of it. */
+        .intro-text img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Braille dot field — rendered in JS into this canvas */
+        .braille-bg-canvas {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.45;
+        }
+
+        .hero-line-top {
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 500;
+            font-size: clamp(13px, 1.5vw, 17px);
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--dark);
+            opacity: 0.65;
+            margin-bottom: 10px;
+        }
+
+        .hero-line-mid {
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 500;
+            font-size: clamp(14px, 1.7vw, 19px);
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--dark);
+            opacity: 0.65;
+            line-height: 1.9;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .hero-line-mid em {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-weight: 700;
+            font-size: clamp(18px, 2.2vw, 26px);
+            letter-spacing: 0.04em;
+            text-transform: none;
+            opacity: 1;
+        }
+
+        .hero-line-big {
+            font-family: 'Playfair Display', serif;
+            font-weight: 900;
+            font-size: clamp(56px, 9vw, 120px);
+            line-height: 0.9;
+            letter-spacing: -0.02em;
+            color: var(--dark);
+            margin-top: 6px;
+            margin-bottom: 0;
+        }
+
+        /* Each card is absolutely positioned at a specific vertical offset */
         .card-slot {
             position: absolute;
             left: 0; right: 0;
@@ -138,9 +194,7 @@
         .card-desc { font-size: 14px; line-height: 1.75; color: var(--muted); }
         .card-tag { display: inline-block; margin-top: 13px; padding: 5px 12px; border: 1px solid rgba(26,20,16,0.2); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dark); font-weight: 500; border-radius: 2px; }
 
-        /* CONVERTER — plain block element, comes after scroll-stage in DOM.
-           Because scroll-stage has overflow:hidden, nothing inside it
-           can overlap this section. Full interactivity guaranteed. */
+        /* CONVERTER */
         .converter-section {
             background: var(--dark);
             padding: 110px 40px;
@@ -234,6 +288,54 @@
         .req-item h3 { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; margin-bottom: 8px; }
         .req-item p { font-size: 14px; color: var(--muted); line-height: 1.7; }
 
+        /* FLOATING CONVERT NOW BUTTON */
+        .float-convert {
+            position: fixed;
+            bottom: 36px;
+            right: 36px;
+            z-index: 300;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 24px;
+            background: var(--dark);
+            color: var(--cream);
+            text-decoration: none;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            border-radius: 40px;
+            box-shadow: 0 4px 24px rgba(26,20,16,0.25), 0 1px 4px rgba(26,20,16,0.15);
+            opacity: 0;
+            transform: translateY(16px);
+            transition: opacity 0.4s ease, transform 0.4s ease, background 0.2s;
+            pointer-events: none;
+        }
+        .float-convert.visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: all;
+        }
+        .float-convert:hover {
+            background: #2D2520;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(26,20,16,0.3);
+        }
+        .float-convert .pulse {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: #90E8B4;
+            box-shadow: 0 0 0 0 rgba(144,232,180,0.5);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(144,232,180,0.5); }
+            70% { box-shadow: 0 0 0 7px rgba(144,232,180,0); }
+            100% { box-shadow: 0 0 0 0 rgba(144,232,180,0); }
+        }
+
         /* FOOTER */
         footer { background: var(--dark); padding: 36px 40px; display: flex; justify-content: space-between; align-items: center; }
         footer p { font-size: 12px; color: rgba(255,255,255,0.3); letter-spacing: 0.05em; }
@@ -247,6 +349,7 @@
             nav { padding: 0 20px; }
             .nav-links { display: none; }
             .giant-word-fixed { font-size: 20vw; left: 16px; }
+            .hero-line-big { font-size: clamp(44px, 12vw, 80px); }
         }
     </style>
 </head>
@@ -258,7 +361,9 @@
         <a href="how-it-works.html">How It Works</a>
         <a href="about.html">About</a>
     </div>
-    <a href="index.html" class="logo">braillino</a>
+<a href="index.html" class="logo">
+  <img src="newbraillino.png" alt="Braillino" style="height:28px;width:auto;display:block;">
+</a>
     <div class="status-pill">
         <div class="dot" id="statusDot"></div>
         <span id="statusText">Offline</span>
@@ -272,14 +377,22 @@
     </div>
 </div>
 
-<!-- GIANT WORD: position:fixed — completely outside document flow -->
-<div class="giant-word-fixed hidden" id="giantWord">Braillino.</div>
+<!-- FLOATING CONVERT NOW -->
+<a class="float-convert" id="floatConvert" href="#converter">
+    <span class="pulse"></span>
+    Convert Now
+    <span style="opacity:0.5;">↓</span>
+</a>
 
-<!-- SCROLL STAGE: overflow:hidden keeps all cards contained inside -->
+<!-- GIANT WORD: position:fixed -->
+<img class="giant-word-fixed" id="giantWord" src="LOGOBRAILLINO.png" alt="Braillino">
+
+<!-- SCROLL STAGE -->
 <div class="scroll-stage" id="stage">
 
+    <!-- ── EDITORIAL HERO IMAGE ── -->
     <div class="intro-text">
-        <p>Words, made accessible by touch.<br>Transform your messages into tactile Braille patterns.</p>
+        <img src="mainpage.png" alt="Words, made accessible by touch. Transform your Messages into tactile Braille Patterns.">
     </div>
 
     <div class="card-slot" style="top: 80vh;">
@@ -413,7 +526,7 @@
 
 </div><!-- /SCROLL STAGE -->
 
-<!-- CONVERTER: normal block flow — zero overlap possible -->
+<!-- CONVERTER -->
 <section class="converter-section" id="converter">
     <div class="converter-inner">
         <div class="converter-left">
@@ -472,7 +585,7 @@
 </footer>
 
 <script>
-// BRAILLE MAP
+// ── BRAILLE MAP ──
 const BRAILLE = {
     A:[1,0,0,0,0,0],B:[1,1,0,0,0,0],C:[1,0,0,1,0,0],D:[1,0,0,1,1,0],
     E:[1,0,0,0,1,0],F:[1,1,0,1,0,0],G:[1,1,0,1,1,0],H:[1,1,0,0,1,0],
@@ -480,14 +593,84 @@ const BRAILLE = {
     M:[1,0,1,1,0,0],N:[1,0,1,1,1,0],O:[1,0,1,0,1,0],P:[1,1,1,1,0,0],
     Q:[1,1,1,1,1,0],R:[1,1,1,0,1,0],S:[0,1,1,1,0,0],T:[0,1,1,1,1,0],
     U:[1,0,1,0,0,1],V:[1,1,1,0,0,1],W:[0,1,0,1,1,1],X:[1,0,1,1,0,1],
-    Y:[1,0,1,1,1,1],Z:[1,0,1,0,1,1],' ':[0,0,0,0,0,0]
+    Y:[1,0,1,1,1,1],Z:[1,0,1,0,1,1],
+    // Numbers
+    '1':[1,0,0,0,0,0],'2':[1,1,0,0,0,0],'3':[1,0,0,1,0,0],'4':[1,0,0,1,1,0],
+    '5':[1,0,0,0,1,0],'6':[1,1,0,1,0,0],'7':[1,1,0,1,1,0],'8':[1,1,0,0,1,0],
+    '9':[0,1,0,1,0,0],'0':[0,1,0,1,1,0],
+    // Punctuation
+    '.':[0,1,0,0,1,1],',':[0,1,0,0,0,0],'?':[0,1,1,0,0,1],'!':[0,1,1,0,1,0],
+    ';':[0,1,1,0,0,0],':':[0,1,0,0,1,0],'-':[0,0,1,0,0,1],"'":[0,0,1,0,0,0],
+    '"':[0,1,1,0,1,1],'(':[0,1,1,0,1,1],')':[0,1,1,1,0,1],
+    '/':[0,0,1,1,0,1],'@':[0,0,0,1,1,0],'#':[0,0,0,1,1,1],
+    ' ':[0,0,0,0,0,0]
 };
 
+// ── FLOATING CONVERT BUTTON ──
+const floatConvert = document.getElementById('floatConvert');
+const converterSection = document.getElementById('converter');
+let btnDismissed = false;
+
+function updateFloatBtn() {
+    if (btnDismissed) return;
+    const scrollY = window.scrollY;
+    const converterTop = converterSection.getBoundingClientRect().top;
+    if (scrollY > window.innerHeight * 0.4 && converterTop > 0) {
+        floatConvert.classList.add('visible');
+    } else {
+        floatConvert.classList.remove('visible');
+    }
+}
+
+floatConvert.addEventListener('click', () => {
+    btnDismissed = true;
+    floatConvert.classList.remove('visible');
+    floatConvert.style.pointerEvents = 'none';
+    floatConvert.style.opacity = '0';
+});
+
+window.addEventListener('scroll', updateFloatBtn, { passive: true });
+updateFloatBtn();
+
+// ── GIANT WORD: show only while scroll-stage is on screen ──
+const giantWordEl = document.getElementById('giantWord');
+const stageEl = document.getElementById('stage');
+
+function updateGiantWord() {
+    const scrollY = window.scrollY;
+    const rect = stageEl.getBoundingClientRect();
+    const stageTop = scrollY + rect.top;
+    const stageBottom = stageTop + stageEl.offsetHeight;
+    const imgH = giantWordEl.offsetHeight;
+
+    if (scrollY >= stageTop - 94 && scrollY < stageBottom - window.innerHeight) {
+        giantWordEl.classList.remove('hidden');
+        // progress 0 = just entered, 1 = near end of stage
+        const progress = (scrollY - (stageTop - 94)) / (stageEl.offsetHeight - window.innerHeight);
+        // Start fully below screen (bottom: -imgH), end fully visible (bottom: 0)
+        const bottomVal = -imgH + (progress * imgH);
+        giantWordEl.style.bottom = Math.min(0, bottomVal) + 'px';
+    } else {
+        giantWordEl.classList.add('hidden');
+    }
+}
+
+// ── CARD ANIMATIONS ──
+const cardObs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.2 });
+document.querySelectorAll('.step-card').forEach(c => cardObs.observe(c));
+
+window.addEventListener('scroll', updateGiantWord, { passive: true });
+updateGiantWord();
+
+// ── BRAILLE PREVIEW ──
 function renderBraillePreview(text) {
     const container = document.getElementById('braillePreview');
     container.innerHTML = '';
-    for (const ch of text.toUpperCase().slice(0,14)) {
-        const dots = BRAILLE[ch] || BRAILLE[' '];
+    for (const ch of text.slice(0,14)) {
+        const upper = ch.toUpperCase();
+        const dots = BRAILLE[upper] || BRAILLE[ch] || BRAILLE[' '];
         const cell = document.createElement('div');
         cell.className = 'braille-cell';
         const grid = document.createElement('div');
@@ -506,35 +689,7 @@ function renderBraillePreview(text) {
     }
 }
 
-// GIANT WORD: show only while scroll-stage is on screen
-const giantWordEl = document.getElementById('giantWord');
-const stageEl = document.getElementById('stage');
-
-function updateGiantWord() {
-    const scrollY = window.scrollY;
-    const rect = stageEl.getBoundingClientRect();
-    const stageTop = scrollY + rect.top;
-    const stageBottom = stageTop + stageEl.offsetHeight;
-
-    if (scrollY >= stageTop - 94 && scrollY < stageBottom - window.innerHeight) {
-        giantWordEl.classList.remove('hidden');
-        const progress = (scrollY - stageTop + 94) / stageEl.offsetHeight;
-        giantWordEl.style.transform = `translateX(${-Math.max(0,progress) * 10}vw)`;
-    } else {
-        giantWordEl.classList.add('hidden');
-    }
-}
-
-// CARD ANIMATIONS
-const cardObs = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-}, { threshold: 0.2 });
-document.querySelectorAll('.step-card').forEach(c => cardObs.observe(c));
-
-window.addEventListener('scroll', updateGiantWord, { passive: true });
-updateGiantWord();
-
-// WEB SERIAL
+// ── WEB SERIAL ──
 let port, writer;
 const connectBtn = document.getElementById('connectBtn');
 const connectLabel = document.getElementById('connectLabel');

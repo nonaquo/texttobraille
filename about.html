@@ -10,242 +10,79 @@
     <style>
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
-            --cream: #F5F0E8;
-            --paper: #EDE7D9;
-            --dark: #1A1410;
-            --muted: #6B5F52;
-            --accent: #C9B99A;
-            --warm: #E8DDD0;
-            --pink: #F2DCE4;
-            --blue: #D4E6F4;
-            --peach: #F4E0CC;
+            --cream: #F5F0E8; --paper: #EDE7D9; --dark: #1A1410;
+            --muted: #6B5F52; --accent: #C9B99A; --warm: #E8DDD0;
+            --pink: #F2DCE4; --blue: #D4E6F4; --peach: #F4E0CC;
         }
         html { scroll-behavior: smooth; }
         body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--dark); overflow-x: hidden; }
 
-        /* NAV */
-        nav {
-            position: sticky; top: 0; left: 0; right: 0;
-            z-index: 200;
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 0 40px; height: 56px;
-            background: var(--dark);
-            border-bottom: 1px solid rgba(255,255,255,0.08);
-        }
+        nav { position: sticky; top: 0; left: 0; right: 0; z-index: 200; display: flex; justify-content: space-between; align-items: center; padding: 0 40px; height: 56px; background: var(--dark); border-bottom: 1px solid rgba(255,255,255,0.08); }
         .nav-links { display: flex; gap: 32px; }
         .nav-links a { color: rgba(255,255,255,0.7); text-decoration: none; font-size: 12px; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 500; transition: color 0.2s; }
         .nav-links a:hover { color: #fff; }
-        .logo { font-family: 'Playfair Display', serif; font-style: italic; font-size: 22px; color: var(--cream); letter-spacing: -0.01em; text-decoration: none; }
+        .logo { display: flex; align-items: center; text-decoration: none; }
 
-        /* TICKER */
         .ticker-wrap { background: var(--paper); border-bottom: 1px solid rgba(26,20,16,0.12); overflow: hidden; height: 38px; display: flex; align-items: center; }
         .ticker-track { display: flex; white-space: nowrap; animation: ticker 18s linear infinite; }
         .ticker-item { display: inline-flex; align-items: center; gap: 24px; padding: 0 40px; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
-        .ticker-item::after { content: '✦'; font-size: 9px; color: var(--accent); }
+        .ticker-item::after { content: "✦"; font-size: 9px; color: var(--accent); }
         @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
-        /* HERO */
-        .hero {
-            background: var(--dark);
-            padding: 120px 40px 100px;
-            position: relative; overflow: hidden;
-        }
-        .hero::before {
-            content: '';
-            position: absolute;
-            width: 500px; height: 500px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(201,185,154,0.12), transparent 70%);
-            top: -100px; right: -100px;
-        }
+        .hero { background: var(--dark); padding: 120px 40px 100px; position: relative; overflow: hidden; }
+        .hero::before { content: ''; position: absolute; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(201,185,154,0.12), transparent 70%); top: -100px; right: -100px; }
         .hero-inner { max-width: 900px; margin: 0 auto; }
         .hero-tag { font-size: 11px; text-transform: uppercase; letter-spacing: 0.18em; color: var(--accent); font-weight: 500; margin-bottom: 24px; }
-        .hero h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(60px, 10vw, 120px);
-            font-weight: 900;
-            color: var(--cream);
-            line-height: 0.95;
-            letter-spacing: -0.04em;
-            margin-bottom: 48px;
-        }
+        .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(60px, 10vw, 120px); font-weight: 900; color: var(--cream); line-height: 0.95; letter-spacing: -0.04em; margin-bottom: 48px; }
         .hero h1 em { font-style: italic; color: var(--accent); }
-        .hero-sub {
-            max-width: 520px;
-            font-size: 18px;
-            line-height: 1.8;
-            color: rgba(245,240,232,0.55);
-        }
+        .hero-sub { max-width: 520px; font-size: 18px; line-height: 1.8; color: rgba(245,240,232,0.55); }
 
-        /* CONTENT */
         .content { max-width: 900px; margin: 0 auto; padding: 100px 40px; }
 
-        /* STORY */
-        .story-block {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 60px;
-            margin-bottom: 100px;
-            align-items: start;
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.8s ease, transform 0.8s ease;
-        }
+        .story-block { display: grid; grid-template-columns: 1fr 2fr; gap: 60px; margin-bottom: 100px; align-items: start; opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
         .story-block.visible { opacity: 1; transform: translateY(0); }
-        .story-label {
-            font-family: 'DM Serif Display', serif;
-            font-style: italic;
-            font-size: 14px;
-            color: var(--muted);
-            letter-spacing: 0.05em;
-            padding-top: 6px;
-            border-top: 1px solid rgba(26,20,16,0.15);
-        }
-        .story-text h2 {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(32px, 4vw, 48px);
-            font-weight: 700;
-            margin-bottom: 24px;
-            line-height: 1.15;
-        }
-        .story-text p {
-            font-size: 16px;
-            line-height: 1.85;
-            color: var(--muted);
-            margin-bottom: 18px;
-        }
+        .story-label { font-family: 'DM Serif Display', serif; font-style: italic; font-size: 14px; color: var(--muted); letter-spacing: 0.05em; padding-top: 6px; border-top: 1px solid rgba(26,20,16,0.15); }
+        .story-text h2 { font-family: 'Playfair Display', serif; font-size: clamp(32px, 4vw, 48px); font-weight: 700; margin-bottom: 24px; line-height: 1.15; }
+        .story-text p { font-size: 16px; line-height: 1.85; color: var(--muted); margin-bottom: 18px; }
         .story-text p:last-child { margin-bottom: 0; }
 
-        /* PULL QUOTE */
-        .pull-quote {
-            background: var(--dark);
-            padding: 80px 60px;
-            margin-bottom: 100px;
-            position: relative;
-            overflow: hidden;
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.8s ease 0.1s, transform 0.8s ease 0.1s;
-        }
+        .pull-quote { background: var(--dark); padding: 80px 60px; margin-bottom: 100px; position: relative; overflow: hidden; opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease 0.1s, transform 0.8s ease 0.1s; }
         .pull-quote.visible { opacity: 1; transform: translateY(0); }
-        .pull-quote::before {
-            content: '"';
-            position: absolute;
-            font-family: 'Playfair Display', serif;
-            font-size: 300px;
-            color: rgba(201,185,154,0.07);
-            line-height: 1;
-            top: -40px; left: 20px;
-            pointer-events: none;
-        }
-        .pull-quote blockquote {
-            font-family: 'Playfair Display', serif;
-            font-style: italic;
-            font-size: clamp(22px, 3vw, 34px);
-            color: var(--cream);
-            line-height: 1.5;
-            max-width: 680px;
-            position: relative; z-index: 1;
-        }
-        .pull-quote cite {
-            display: block;
-            margin-top: 24px;
-            font-family: 'DM Sans', sans-serif;
-            font-style: normal;
-            font-size: 13px;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            color: var(--accent);
-            position: relative; z-index: 1;
-        }
+        .pull-quote::before { content: '"'; position: absolute; font-family: 'Playfair Display', serif; font-size: 300px; color: rgba(201,185,154,0.07); line-height: 1; top: -40px; left: 20px; pointer-events: none; }
+        .pull-quote blockquote { font-family: 'Playfair Display', serif; font-style: italic; font-size: clamp(22px, 3vw, 34px); color: var(--cream); line-height: 1.5; max-width: 680px; position: relative; z-index: 1; }
+        .pull-quote cite { display: block; margin-top: 24px; font-family: 'DM Sans', sans-serif; font-style: normal; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); position: relative; z-index: 1; }
 
-        /* VALUES */
         .values-section { margin-bottom: 100px; }
-        .section-header {
-            display: flex; align-items: baseline; gap: 24px;
-            border-bottom: 1px solid rgba(26,20,16,0.12);
-            padding-bottom: 16px; margin-bottom: 48px;
-        }
-        .section-header h2 {
-            font-family: 'Playfair Display', serif;
-            font-size: 36px; font-weight: 700;
-        }
-        .section-header span {
-            font-size: 12px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted);
-        }
-        .values-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2px;
-            background: rgba(26,20,16,0.1);
-            opacity: 0; transform: translateY(30px);
-            transition: opacity 0.8s ease 0.2s, transform 0.8s ease 0.2s;
-        }
+        .section-header { display: flex; align-items: baseline; gap: 24px; border-bottom: 1px solid rgba(26,20,16,0.12); padding-bottom: 16px; margin-bottom: 48px; }
+        .section-header h2 { font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 700; }
+        .section-header span { font-size: 12px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); }
+        .values-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; background: rgba(26,20,16,0.1); opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease 0.2s, transform 0.8s ease 0.2s; }
         .values-grid.visible { opacity: 1; transform: translateY(0); }
-        .value-card {
-            background: var(--warm);
-            padding: 40px 36px;
-            transition: background 0.3s;
-        }
+        .value-card { background: var(--warm); padding: 40px 36px; transition: background 0.3s; }
         .value-card:hover { background: var(--cream); }
         .value-icon { font-size: 28px; margin-bottom: 16px; display: block; }
         .value-card h3 { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; margin-bottom: 10px; }
         .value-card p { font-size: 14px; color: var(--muted); line-height: 1.75; }
 
-        /* TECH STACK */
-        .tech-section {
-            background: var(--paper);
-            padding: 60px;
-            margin-bottom: 0;
-            opacity: 0; transform: translateY(30px);
-            transition: opacity 0.8s ease 0.3s, transform 0.8s ease 0.3s;
-        }
+        .tech-section { background: var(--paper); padding: 60px; margin-bottom: 0; opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease 0.3s, transform 0.8s ease 0.3s; }
         .tech-section.visible { opacity: 1; transform: translateY(0); }
         .tech-section h2 { font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 700; margin-bottom: 32px; }
         .tech-tags { display: flex; flex-wrap: wrap; gap: 10px; }
-        .tech-tag {
-            padding: 10px 20px;
-            border: 1.5px solid rgba(26,20,16,0.2);
-            font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase;
-            font-weight: 500; color: var(--dark);
-            border-radius: 2px;
-            transition: background 0.2s, border-color 0.2s;
-        }
+        .tech-tag { padding: 10px 20px; border: 1.5px solid rgba(26,20,16,0.2); font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500; color: var(--dark); border-radius: 2px; transition: background 0.2s, border-color 0.2s; }
         .tech-tag:hover { background: var(--dark); color: var(--cream); border-color: var(--dark); }
 
-        /* TEAM */
         .team-section { padding: 100px 40px; background: var(--cream); }
         .team-section-inner { max-width: 900px; margin: 0 auto; }
-        .team-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2px;
-            background: rgba(26,20,16,0.1);
-            margin-top: 48px;
-        }
-        .team-card {
-            background: var(--warm);
-            padding: 36px;
-            text-align: center;
-            transition: background 0.3s;
-            opacity: 0; transform: translateY(20px);
-            transition: opacity 0.6s ease, transform 0.6s ease, background 0.3s;
-        }
+        .team-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; background: rgba(26,20,16,0.1); margin-top: 48px; }
+        .team-card { background: var(--warm); padding: 36px; text-align: center; opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease, background 0.3s; }
         .team-card:hover { background: var(--paper); }
         .team-card.visible { opacity: 1; transform: translateY(0); }
-        .team-photo {
-            width: 100px; height: 100px;
-            border-radius: 50%;
-            overflow: hidden;
-            margin: 0 auto 20px;
-            border: 3px solid rgba(26,20,16,0.12);
-        }
+        .team-photo { width: 100px; height: 100px; border-radius: 50%; overflow: hidden; margin: 0 auto 20px; border: 3px solid rgba(26,20,16,0.12); }
         .team-photo img { width: 100%; height: 100%; object-fit: cover; }
         .team-card h3 { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; margin-bottom: 4px; }
         .team-card .role { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 12px; }
         .team-card .desc { font-size: 13px; color: var(--muted); line-height: 1.7; }
 
-        /* FOOTER */
         footer { background: var(--dark); padding: 40px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.06); }
         footer p { font-size: 12px; color: rgba(255,255,255,0.3); letter-spacing: 0.06em; }
         footer a { color: rgba(255,255,255,0.3); text-decoration: none; }
@@ -269,28 +106,15 @@
         <a href="how-it-works.html">How It Works</a>
         <a href="about.html">About</a>
     </div>
-    <a href="index.html" class="logo">braillino</a>
+  <a href="index.html" class="logo">
+  <img src="newbraillino.png" alt="Braillino" style="height:28px;width:auto;display:block;">
+</a>
     <div style="width: 120px;"></div>
 </nav>
 
 <div class="ticker-wrap">
     <div class="ticker-track">
-        <span class="ticker-item">Our Story</span>
-        <span class="ticker-item">Mission</span>
-        <span class="ticker-item">Values</span>
-        <span class="ticker-item">Team</span>
-        <span class="ticker-item">Our Story</span>
-        <span class="ticker-item">Mission</span>
-        <span class="ticker-item">Values</span>
-        <span class="ticker-item">Team</span>
-        <span class="ticker-item">Our Story</span>
-        <span class="ticker-item">Mission</span>
-        <span class="ticker-item">Values</span>
-        <span class="ticker-item">Team</span>
-        <span class="ticker-item">Our Story</span>
-        <span class="ticker-item">Mission</span>
-        <span class="ticker-item">Values</span>
-        <span class="ticker-item">Team</span>
+        <span class="ticker-item">Our Story</span><span class="ticker-item">Mission</span><span class="ticker-item">Values</span><span class="ticker-item">Team</span><span class="ticker-item">Our Story</span><span class="ticker-item">Mission</span><span class="ticker-item">Values</span><span class="ticker-item">Team</span><span class="ticker-item">Our Story</span><span class="ticker-item">Mission</span><span class="ticker-item">Values</span><span class="ticker-item">Team</span><span class="ticker-item">Our Story</span><span class="ticker-item">Mission</span><span class="ticker-item">Values</span><span class="ticker-item">Team</span>
     </div>
 </div>
 
@@ -303,114 +127,75 @@
 </section>
 
 <div class="content">
-
-    <!-- STORY -->
     <div class="story-block" id="sb1">
         <div class="story-label">Our Story</div>
         <div class="story-text">
             <h2>A classmate's story changed everything</h2>
             <p>During the pandemic, students were deprived of the liberty to socialize and experience the outside world. However, technology shed light on these dark times. Many relied on technology, social media, and other online activities to stay connected with others and tend to their academic responsibilities.</p>
             <p>Although effective, it left a lasting impact on their eyesight. A classmate of ours shared his personal experience. Throughout his high school years, he noticed his vision was gradually worsening. From minor inconveniences such as having to reread food packaging labels, to completely losing the ability to read without prescription glasses.</p>
-            <p>As he simply put it, “I could not read without it, and I don’t know what I would do without it.” Our subjects, namely, Practical Research, Capstone, and Inquiries, Immersion, and Investigation has provided us an opportunity to make a difference.</p>
+            <p>As he simply put it, "I could not read without it, and I don't know what I would do without it." Our subjects, namely, Practical Research, Capstone, and Inquiries, Immersion, and Investigation has provided us an opportunity to make a difference.</p>
         </div>
     </div>
 
-    <!-- PULL QUOTE -->
     <div class="pull-quote" id="pq">
-        <blockquote>
-            "I could not read without it, and I don't know what I would do without it."
-        </blockquote>
+        <blockquote>"I could not read without it, and I don't know what I would do without it."</blockquote>
         <cite>— A classmate, on losing his vision through screens</cite>
     </div>
 
-    <!-- VALUES -->
     <div class="values-section">
-        <div class="section-header">
-            <h2>What we stand for</h2>
-            <span>Core values</span>
-        </div>
+        <div class="section-header"><h2>What we stand for</h2><span>Core values</span></div>
         <div class="values-grid" id="valGrid">
-            <div class="value-card">
-                <span class="value-icon">✦</span>
-                <h3>Accessibility</h3>
-                <p>Information should reach everyone — regardless of how they experience the world.</p>
-            </div>
-            <div class="value-card">
-                <span class="value-icon">◎</span>
-                <h3>Simplicity</h3>
-                <p>Complex technology should feel effortless and intuitive in every interaction.</p>
-            </div>
-            <div class="value-card">
-                <span class="value-icon">❋</span>
-                <h3>Innovation</h3>
-                <p>Combining hardware and software to create entirely new ways of interacting with text.</p>
-            </div>
+            <div class="value-card"><span class="value-icon">✦</span><h3>Accessibility</h3><p>Information should reach everyone — regardless of how they experience the world.</p></div>
+            <div class="value-card"><span class="value-icon">◎</span><h3>Simplicity</h3><p>Complex technology should feel effortless and intuitive in every interaction.</p></div>
+            <div class="value-card"><span class="value-icon">❋</span><h3>Innovation</h3><p>Combining hardware and software to create entirely new ways of interacting with text.</p></div>
         </div>
     </div>
 
-    <!-- TECH STACK -->
     <div class="tech-section" id="techSec">
         <h2>Built with</h2>
         <div class="tech-tags">
-            <span class="tech-tag">Arduino</span>
-            <span class="tech-tag">Web Serial API</span>
-            <span class="tech-tag">HTML & CSS</span>
-            <span class="tech-tag">JavaScript</span>
-            <span class="tech-tag">Servo Motors</span>
-            <span class="tech-tag">Braille Grade 1</span>
+            <span class="tech-tag">Arduino</span><span class="tech-tag">Web Serial API</span><span class="tech-tag">HTML & CSS</span><span class="tech-tag">JavaScript</span><span class="tech-tag">Servo Motors</span><span class="tech-tag">Braille Grade 1</span>
         </div>
     </div>
-
 </div>
 
-<!-- TEAM -->
 <section class="team-section">
     <div class="team-section-inner">
-        <div class="section-header">
-            <h2>The team</h2>
-            <span>The people behind Braillino</span>
-        </div>
+        <div class="section-header"><h2>The team</h2><span>The people behind Braillino</span></div>
         <div class="team-grid">
             <div class="team-card" id="tm1">
                 <div class="team-photo"><img src="basto.jpg" alt="Daniel Basto" onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><rect fill=\'%23C9B99A\' width=\'100\' height=\'100\'/><text y=\'55\' x=\'50\' text-anchor=\'middle\' font-size=\'36\' fill=\'white\'>DB</text></svg>'"></div>
-                <h3>Daniel Basto</h3>
-                <div class="role">Team Leader</div>
+                <h3>Daniel Basto</h3><div class="role">Team Leader</div>
                 <div class="desc">Led the team and coordinated overall progress. Assisted in documentation, coding and paper preparation.</div>
             </div>
             <div class="team-card" id="tm2">
                 <div class="team-photo"><img src="asuncion.jpeg" alt="Franchesca Asuncion" onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><rect fill=\'%23C9B99A\' width=\'100\' height=\'100\'/><text y=\'55\' x=\'50\' text-anchor=\'middle\' font-size=\'36\' fill=\'white\'>FA</text></svg>'"></div>
-                <h3>Franchesca Asuncion</h3>
-                <div class="role">Asst. Leader & Lead Dev</div>
+                <h3>Franchesca Asuncion</h3><div class="role">Asst. Leader & Lead Dev</div>
                 <div class="desc">Lead coder for the project. Contributed to the physical prototype case and research paper writing.</div>
             </div>
             <div class="team-card" id="tm3">
                 <div class="team-photo"><img src="serenio.jpg" alt="Ephraim Serenio" onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><rect fill=\'%23C9B99A\' width=\'100\' height=\'100\'/><text y=\'55\' x=\'50\' text-anchor=\'middle\' font-size=\'36\' fill=\'white\'>ES</text></svg>'"></div>
-                <h3>Ephraim Serenio</h3>
-                <div class="role">Lead Dev & Web Editor</div>
+                <h3>Ephraim Serenio</h3><div class="role">Lead Dev & Web Editor</div>
                 <div class="desc">Lead coder and website content manager. Assisted in paper development.</div>
             </div>
             <div class="team-card" id="tm4">
                 <div class="team-photo"><img src="gomba.jpeg" alt="Zhen Gomba" onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><rect fill=\'%23C9B99A\' width=\'100\' height=\'100\'/><text y=\'55\' x=\'50\' text-anchor=\'middle\' font-size=\'36\' fill=\'white\'>ZG</text></svg>'"></div>
-                <h3>Zhen Gomba</h3>
-                <div class="role">Prototype & Docs</div>
+                <h3>Zhen Gomba</h3><div class="role">Prototype & Docs</div>
                 <div class="desc">Supported building and refining the physical prototype. Contributed to research papers.</div>
             </div>
             <div class="team-card" id="tm5">
                 <div class="team-photo"><img src="mazaredo.jpeg" alt="Marc Mazaredo" onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><rect fill=\'%23C9B99A\' width=\'100\' height=\'100\'/><text y=\'55\' x=\'50\' text-anchor=\'middle\' font-size=\'36\' fill=\'white\'>MM</text></svg>'"></div>
-                <h3>Marc Mazaredo</h3>
-                <div class="role">Prototype & Docs</div>
+                <h3>Marc Mazaredo</h3><div class="role">Prototype & Docs</div>
                 <div class="desc">Assisted in assembling the physical prototype and contributed to research documentation.</div>
             </div>
             <div class="team-card" id="tm6">
                 <div class="team-photo"><img src="reyes.jpeg" alt="Keisha Reyes" onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><rect fill=\'%23C9B99A\' width=\'100\' height=\'100\'/><text y=\'55\' x=\'50\' text-anchor=\'middle\' font-size=\'36\' fill=\'white\'>KR</text></svg>'"></div>
-                <h3>Keisha Reyes</h3>
-                <div class="role">Prototype & Docs</div>
+                <h3>Keisha Reyes</h3><div class="role">Prototype & Docs</div>
                 <div class="desc">Contributed to construction of the prototype. Assisted in organizing the research papers.</div>
             </div>
             <div class="team-card" id="tm7" style="grid-column: 2;">
                 <div class="team-photo"><img src="mendoza.jpeg" alt="Mharc Mendoza" onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><rect fill=\'%23C9B99A\' width=\'100\' height=\'100\'/><text y=\'55\' x=\'50\' text-anchor=\'middle\' font-size=\'36\' fill=\'white\'>MM</text></svg>'"></div>
-                <h3>Mharc Mendoza</h3>
-                <div class="role">Supporting Contributor</div>
+                <h3>Mharc Mendoza</h3><div class="role">Supporting Contributor</div>
                 <div class="desc">Provided support with paper preparation and assisted the team in selected tasks.</div>
             </div>
         </div>

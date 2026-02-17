@@ -9,28 +9,19 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-        :root {
-            --cream: #F5F0E8; --paper: #EDE7D9; --dark: #1A1410;
-            --muted: #6B5F52; --accent: #C9B99A; --warm: #E8DDD0;
-        }
+        :root { --cream: #F5F0E8; --paper: #EDE7D9; --dark: #1A1410; --muted: #6B5F52; --accent: #C9B99A; --warm: #E8DDD0; }
         html { scroll-behavior: smooth; }
         body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--dark); overflow-x: hidden; }
-
-        /* NAV */
         nav { position: sticky; top: 0; z-index: 200; display: flex; justify-content: space-between; align-items: center; padding: 0 40px; height: 56px; background: var(--dark); border-bottom: 1px solid rgba(255,255,255,0.08); }
         .nav-links { display: flex; gap: 32px; }
         .nav-links a { color: rgba(255,255,255,0.7); text-decoration: none; font-size: 12px; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 500; transition: color 0.2s; }
         .nav-links a:hover { color: #fff; }
-        .logo { font-family: 'Playfair Display', serif; font-style: italic; font-size: 22px; color: var(--cream); letter-spacing: -0.01em; text-decoration: none; }
-
-        /* TICKER */
+        .logo { display: flex; align-items: center; text-decoration: none; }
         .ticker-wrap { background: var(--paper); border-bottom: 1px solid rgba(26,20,16,0.12); overflow: hidden; height: 38px; display: flex; align-items: center; }
         .ticker-track { display: flex; white-space: nowrap; animation: ticker 18s linear infinite; }
         .ticker-item { display: inline-flex; align-items: center; gap: 24px; padding: 0 40px; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
-        .ticker-item::after { content: '✦'; font-size: 9px; color: var(--accent); }
+        .ticker-item::after { content: '\2736'; font-size: 9px; color: var(--accent); }
         @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-
-        /* HERO */
         .hero { background: var(--dark); padding: 120px 40px 100px; position: relative; overflow: hidden; }
         .hero::before { content: ''; position: absolute; width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(201,185,154,0.1), transparent 70%); top: -80px; left: -80px; }
         .hero-inner { max-width: 900px; margin: 0 auto; }
@@ -38,136 +29,46 @@
         .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(60px, 10vw, 120px); font-weight: 900; color: var(--cream); line-height: 0.95; letter-spacing: -0.04em; margin-bottom: 48px; }
         .hero h1 em { font-style: italic; color: var(--accent); }
         .hero-sub { max-width: 520px; font-size: 18px; line-height: 1.8; color: rgba(245,240,232,0.55); }
-
-        /* SCROLL STAGE — sticky giant step numbers */
         .steps-stage { position: relative; background: var(--cream); }
-
-        .step-segment {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            min-height: 100vh;
-            border-bottom: 1px solid rgba(26,20,16,0.1);
-        }
+        .step-segment { display: grid; grid-template-columns: 1fr 1fr; min-height: 100vh; border-bottom: 1px solid rgba(26,20,16,0.1); }
         .step-segment:nth-child(even) { direction: rtl; }
         .step-segment:nth-child(even) > * { direction: ltr; }
-
-        .step-number-col {
-            position: sticky;
-            top: 94px;
-            height: calc(100vh - 94px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--paper);
-            overflow: hidden;
-        }
+        .step-number-col { position: sticky; top: 94px; height: calc(100vh - 94px); display: flex; align-items: center; justify-content: center; background: var(--paper); overflow: hidden; }
         .step-segment:nth-child(2) .step-number-col { background: #F0E4D4; }
         .step-segment:nth-child(3) .step-number-col { background: #D8EAE0; }
         .step-segment:nth-child(4) .step-number-col { background: #E4D8EE; }
-
-        .step-num-big {
-            font-family: 'Playfair Display', serif;
-            font-weight: 900;
-            font-size: 30vw;
-            line-height: 1;
-            color: rgba(26,20,16,0.08);
-            user-select: none;
-            pointer-events: none;
-            letter-spacing: -0.05em;
-        }
-        .step-num-label {
-            position: absolute;
-            font-family: 'Playfair Display', serif;
-            font-style: italic;
-            font-size: 18px;
-            color: var(--muted);
-        }
-
-        .step-content-col {
-            padding: 100px 60px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .step-tag {
-            font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em;
-            color: var(--accent); font-weight: 500; margin-bottom: 20px;
-        }
-        .step-content-col h2 {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(32px, 4vw, 52px);
-            font-weight: 700;
-            line-height: 1.1;
-            margin-bottom: 24px;
-        }
-        .step-content-col .step-body {
-            font-size: 16px; line-height: 1.85;
-            color: var(--muted); margin-bottom: 32px;
-        }
-
-        /* Step illustration box */
-        .step-illus {
-            width: 100%;
-            max-width: 340px;
-            border: 1.5px solid rgba(26,20,16,0.12);
-            border-radius: 4px;
-            overflow: hidden;
-            box-shadow: 0 8px 30px rgba(26,20,16,0.08);
-            margin-bottom: 32px;
-        }
-        .illus-bg {
-            height: 180px;
-            display: flex; align-items: center; justify-content: center;
-        }
-        .illus-bg.blue { background: #C8DEF2; }
-        .illus-bg.peach { background: #F2D4BE; }
-        .illus-bg.mint { background: #C4E8D4; }
-        .illus-bg.lilac { background: #DDD0F0; }
-
+        .step-num-big { font-family: 'Playfair Display', serif; font-weight: 900; font-size: 30vw; line-height: 1; color: rgba(26,20,16,0.08); user-select: none; pointer-events: none; letter-spacing: -0.05em; }
+        .step-num-label { position: absolute; font-family: 'Playfair Display', serif; font-style: italic; font-size: 18px; color: var(--muted); }
+        .step-content-col { padding: 100px 60px; display: flex; flex-direction: column; justify-content: center; opacity: 0; transform: translateX(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
+        .step-segment:nth-child(even) .step-content-col { transform: translateX(-30px); }
+        .step-content-col.visible { opacity: 1; transform: translateX(0); }
+        .step-tag { font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--accent); font-weight: 500; margin-bottom: 20px; }
+        .step-content-col h2 { font-family: 'Playfair Display', serif; font-size: clamp(32px, 4vw, 52px); font-weight: 700; line-height: 1.1; margin-bottom: 24px; }
+        .step-content-col .step-body { font-size: 16px; line-height: 1.85; color: var(--muted); margin-bottom: 32px; }
+        .step-illus { width: 100%; max-width: 340px; border: 1.5px solid rgba(26,20,16,0.12); border-radius: 4px; overflow: hidden; box-shadow: 0 8px 30px rgba(26,20,16,0.08); margin-bottom: 32px; }
+        .illus-bg { height: 180px; display: flex; align-items: center; justify-content: center; }
+        .illus-bg.blue { background: #C8DEF2; } .illus-bg.peach { background: #F2D4BE; } .illus-bg.mint { background: #C4E8D4; } .illus-bg.lilac { background: #DDD0F0; }
         .checklist { list-style: none; padding: 0; }
-        .checklist li {
-            display: flex; align-items: flex-start; gap: 14px;
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(26,20,16,0.08);
-            font-size: 15px; color: var(--muted);
-        }
+        .checklist li { display: flex; align-items: flex-start; gap: 14px; padding: 12px 0; border-bottom: 1px solid rgba(26,20,16,0.08); font-size: 15px; color: var(--muted); }
         .checklist li:last-child { border-bottom: none; }
         .check-icon { flex-shrink: 0; width: 20px; height: 20px; border: 1.5px solid var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-top: 2px; }
         .check-icon svg { width: 10px; height: 10px; }
-
-        /* Fade in */
-        .step-content-col {
-            opacity: 0; transform: translateX(30px);
-            transition: opacity 0.8s ease, transform 0.8s ease;
-        }
-        .step-segment:nth-child(even) .step-content-col {
-            transform: translateX(-30px);
-        }
-        .step-content-col.visible { opacity: 1; transform: translateX(0); }
-
-        /* REQUIREMENTS */
         .req-strip { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid rgba(26,20,16,0.1); }
         .req-item { padding: 56px 48px; border-right: 1px solid rgba(26,20,16,0.1); }
         .req-item:last-child { border-right: none; }
         .req-num { font-family: 'Playfair Display', serif; font-style: italic; font-size: 40px; color: var(--accent); margin-bottom: 12px; display: block; }
         .req-item h3 { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; margin-bottom: 8px; }
         .req-item p { font-size: 14px; color: var(--muted); line-height: 1.7; }
-
-        /* CTA */
         .cta-section { background: var(--dark); padding: 120px 40px; text-align: center; position: relative; overflow: hidden; }
         .cta-section::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 50% 70% at 50% 50%, rgba(201,185,154,0.08), transparent); }
         .cta-section h2 { font-family: 'Playfair Display', serif; font-size: clamp(48px, 8vw, 96px); font-weight: 900; color: var(--cream); letter-spacing: -0.04em; line-height: 1; margin-bottom: 32px; position: relative; z-index: 1; }
         .cta-section h2 em { font-style: italic; color: var(--accent); }
         .cta-btn { display: inline-block; padding: 18px 48px; background: var(--cream); color: var(--dark); text-decoration: none; font-size: 13px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; border-radius: 2px; transition: background 0.2s, transform 0.2s; position: relative; z-index: 1; }
         .cta-btn:hover { background: #fff; transform: translateY(-2px); }
-
-        /* FOOTER */
         footer { background: var(--dark); padding: 40px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.06); }
         footer p { font-size: 12px; color: rgba(255,255,255,0.3); letter-spacing: 0.06em; }
         footer a { color: rgba(255,255,255,0.3); text-decoration: none; }
         footer a:hover { color: rgba(255,255,255,0.6); }
-
         @media (max-width: 900px) {
             .step-segment { grid-template-columns: 1fr; direction: ltr !important; min-height: auto; }
             .step-number-col { position: relative; top: auto; height: 140px; }
@@ -181,120 +82,77 @@
     </style>
 </head>
 <body>
-
 <nav>
     <div class="nav-links">
         <a href="how-it-works.html">How It Works</a>
         <a href="about.html">About</a>
     </div>
-    <a href="index.html" class="logo">braillino</a>
-    <div style="width: 120px;"></div>
+      <a href="index.html" class="logo">
+  <img src="newbraillino.png" alt="Braillino" style="height:28px;width:auto;display:block;">
+</a>
+    <div style="width:120px;"></div>
 </nav>
-
 <div class="ticker-wrap">
     <div class="ticker-track">
-        <span class="ticker-item">Step 1</span>
-        <span class="ticker-item">Upload</span>
-        <span class="ticker-item">Step 2</span>
-        <span class="ticker-item">Connect</span>
-        <span class="ticker-item">Step 3</span>
-        <span class="ticker-item">Type</span>
-        <span class="ticker-item">Step 4</span>
-        <span class="ticker-item">Feel</span>
-        <span class="ticker-item">Step 1</span>
-        <span class="ticker-item">Upload</span>
-        <span class="ticker-item">Step 2</span>
-        <span class="ticker-item">Connect</span>
-        <span class="ticker-item">Step 3</span>
-        <span class="ticker-item">Type</span>
-        <span class="ticker-item">Step 4</span>
-        <span class="ticker-item">Feel</span>
+        <span class="ticker-item">Step 1</span><span class="ticker-item">Upload</span><span class="ticker-item">Step 2</span><span class="ticker-item">Connect</span><span class="ticker-item">Step 3</span><span class="ticker-item">Type</span><span class="ticker-item">Step 4</span><span class="ticker-item">Feel</span><span class="ticker-item">Step 1</span><span class="ticker-item">Upload</span><span class="ticker-item">Step 2</span><span class="ticker-item">Connect</span><span class="ticker-item">Step 3</span><span class="ticker-item">Type</span><span class="ticker-item">Step 4</span><span class="ticker-item">Feel</span>
     </div>
 </div>
-
 <section class="hero">
     <div class="hero-inner">
         <div class="hero-tag">How It Works</div>
         <h1>Four steps<br>to <em>touch</em><br>your words.</h1>
-        <p class="hero-sub">From uploading the Arduino sketch to feeling Braille patterns on your fingertips — here's exactly how Braillino works.</p>
+        <p class="hero-sub">From uploading the Arduino sketch to feeling Braille patterns on your fingertips &mdash; here's exactly how Braillino works.</p>
     </div>
 </section>
-
 <div class="steps-stage">
-
-    <!-- STEP 1 -->
     <div class="step-segment">
-        <div class="step-number-col">
-            <div class="step-num-big">1</div>
-            <div class="step-num-label">Upload</div>
-        </div>
+        <div class="step-number-col"><div class="step-num-big">1</div><div class="step-num-label">Upload</div></div>
         <div class="step-content-col" id="sc1">
             <div class="step-tag">Step one</div>
             <h2>Upload the Arduino Code</h2>
-
-            <div class="step-illus">
-                <div class="illus-bg blue">
-                    <svg viewBox="0 0 320 180" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
-                        <rect x="60" y="50" width="200" height="120" rx="8" fill="#2D4A6E" opacity="0.5"/>
-                        <rect x="60" y="50" width="200" height="32" rx="8" fill="#1A3A5C" opacity="0.7"/>
-                        <circle cx="82" cy="66" r="6" fill="#E87060" opacity="0.8"/>
-                        <circle cx="100" cy="66" r="6" fill="#F0B060" opacity="0.8"/>
-                        <circle cx="118" cy="66" r="6" fill="#80C080" opacity="0.8"/>
-                        <rect x="80" y="98" width="160" height="8" rx="4" fill="rgba(255,255,255,0.25)"/>
-                        <rect x="80" y="114" width="120" height="6" rx="3" fill="rgba(255,255,255,0.15)"/>
-                        <rect x="80" y="128" width="140" height="6" rx="3" fill="rgba(255,255,255,0.15)"/>
-                        <rect x="80" y="142" width="100" height="6" rx="3" fill="rgba(255,255,255,0.15)"/>
-                        <!-- upload arrow -->
-                        <circle cx="246" cy="138" r="18" fill="#4A9EFF" opacity="0.8"/>
-                        <path d="M246 132v12M240 137l6-5 6 5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <circle cx="40" cy="40" r="24" fill="white" opacity="0.1"/>
-                    </svg>
-                </div>
-            </div>
-
+            <div class="step-illus"><div class="illus-bg blue">
+                <svg viewBox="0 0 320 180" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+                    <rect x="60" y="50" width="200" height="120" rx="8" fill="#2D4A6E" opacity="0.5"/>
+                    <rect x="60" y="50" width="200" height="32" rx="8" fill="#1A3A5C" opacity="0.7"/>
+                    <circle cx="82" cy="66" r="6" fill="#E87060" opacity="0.8"/>
+                    <circle cx="100" cy="66" r="6" fill="#F0B060" opacity="0.8"/>
+                    <circle cx="118" cy="66" r="6" fill="#80C080" opacity="0.8"/>
+                    <rect x="80" y="98" width="160" height="8" rx="4" fill="rgba(255,255,255,0.25)"/>
+                    <rect x="80" y="114" width="120" height="6" rx="3" fill="rgba(255,255,255,0.15)"/>
+                    <rect x="80" y="128" width="140" height="6" rx="3" fill="rgba(255,255,255,0.15)"/>
+                    <rect x="80" y="142" width="100" height="6" rx="3" fill="rgba(255,255,255,0.15)"/>
+                    <circle cx="246" cy="138" r="18" fill="#4A9EFF" opacity="0.8"/>
+                    <path d="M246 132v12M240 137l6-5 6 5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div></div>
             <p class="step-body">Open the Arduino IDE on your computer, paste in the Braillino .ino sketch, and configure your board settings before uploading.</p>
             <ul class="checklist">
                 <li><div class="check-icon"><svg viewBox="0 0 10 10"><polyline points="2,5 4,7 8,3" stroke="#C9B99A" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg></div>Open Arduino IDE on your computer</li>
                 <li><div class="check-icon"><svg viewBox="0 0 10 10"><polyline points="2,5 4,7 8,3" stroke="#C9B99A" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg></div>Copy and paste the provided .ino code</li>
-                <li><div class="check-icon"><svg viewBox="0 0 10 10"><polyline points="2,5 4,7 8,3" stroke="#C9B99A" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg></div>Select your board type (Tools → Board)</li>
-                <li><div class="check-icon"><svg viewBox="0 0 10 10"><polyline points="2,5 4,7 8,3" stroke="#C9B99A" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg></div>Select the correct port (Tools → Port)</li>
+                <li><div class="check-icon"><svg viewBox="0 0 10 10"><polyline points="2,5 4,7 8,3" stroke="#C9B99A" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg></div>Select your board type (Tools &rarr; Board)</li>
+                <li><div class="check-icon"><svg viewBox="0 0 10 10"><polyline points="2,5 4,7 8,3" stroke="#C9B99A" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg></div>Select the correct port (Tools &rarr; Port)</li>
                 <li><div class="check-icon"><svg viewBox="0 0 10 10"><polyline points="2,5 4,7 8,3" stroke="#C9B99A" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg></div>Click upload and wait for "Done uploading"</li>
             </ul>
         </div>
     </div>
-
-    <!-- STEP 2 -->
     <div class="step-segment">
-        <div class="step-number-col">
-            <div class="step-num-big">2</div>
-            <div class="step-num-label">Connect</div>
-        </div>
+        <div class="step-number-col"><div class="step-num-big">2</div><div class="step-num-label">Connect</div></div>
         <div class="step-content-col" id="sc2">
             <div class="step-tag">Step two</div>
             <h2>Connect Your Device</h2>
-
-            <div class="step-illus">
-                <div class="illus-bg peach">
-                    <svg viewBox="0 0 320 180" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
-                        <rect x="50" y="40" width="220" height="100" rx="10" fill="#C4855A" opacity="0.3"/>
-                        <rect x="50" y="40" width="220" height="26" rx="10" fill="#C4855A" opacity="0.5"/>
-                        <circle cx="68" cy="53" r="5" fill="#E87060" opacity="0.8"/>
-                        <circle cx="82" cy="53" r="5" fill="#F0B060" opacity="0.8"/>
-                        <circle cx="96" cy="53" r="5" fill="#80C080" opacity="0.8"/>
-                        <!-- connect button -->
-                        <rect x="90" y="92" width="140" height="32" rx="4" fill="#C4855A" opacity="0.8"/>
-                        <text x="160" y="113" font-family="sans-serif" font-size="11" fill="white" text-anchor="middle" font-weight="600">Connect Device</text>
-                        <!-- green badge -->
-                        <circle cx="235" cy="76" r="6" fill="#90E8B4"/>
-                        <text x="249" y="80" font-family="sans-serif" font-size="9" fill="#4A7A5A" font-weight="700">CONNECTED</text>
-                        <!-- USB -->
-                        <rect x="130" y="148" width="60" height="10" rx="3" fill="#8A6A4A" opacity="0.6"/>
-                        <rect x="145" y="158" width="30" height="16" rx="2" fill="#6A4A2A" opacity="0.5"/>
-                        <circle cx="56" cy="160" r="20" fill="white" opacity="0.12"/>
-                    </svg>
-                </div>
-            </div>
-
+            <div class="step-illus"><div class="illus-bg peach">
+                <svg viewBox="0 0 320 180" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+                    <rect x="50" y="40" width="220" height="100" rx="10" fill="#C4855A" opacity="0.3"/>
+                    <rect x="50" y="40" width="220" height="26" rx="10" fill="#C4855A" opacity="0.5"/>
+                    <circle cx="68" cy="53" r="5" fill="#E87060" opacity="0.8"/>
+                    <circle cx="82" cy="53" r="5" fill="#F0B060" opacity="0.8"/>
+                    <circle cx="96" cy="53" r="5" fill="#80C080" opacity="0.8"/>
+                    <rect x="90" y="92" width="140" height="32" rx="4" fill="#C4855A" opacity="0.8"/>
+                    <text x="160" y="113" font-family="sans-serif" font-size="11" fill="white" text-anchor="middle" font-weight="600">Connect Device</text>
+                    <circle cx="235" cy="76" r="6" fill="#90E8B4"/>
+                    <text x="249" y="80" font-family="sans-serif" font-size="9" fill="#4A7A5A" font-weight="700">CONNECTED</text>
+                </svg>
+            </div></div>
             <p class="step-body">Keep your Arduino plugged in via USB, then connect the web app to your device using Chrome or Edge's built-in Web Serial API.</p>
             <ul class="checklist">
                 <li><div class="check-icon"><svg viewBox="0 0 10 10"><polyline points="2,5 4,7 8,3" stroke="#C9B99A" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg></div>Keep your Arduino connected via USB</li>
@@ -305,90 +163,53 @@
             </ul>
         </div>
     </div>
-
-    <!-- STEP 3 -->
     <div class="step-segment">
-        <div class="step-number-col">
-            <div class="step-num-big">3</div>
-            <div class="step-num-label">Type</div>
-        </div>
+        <div class="step-number-col"><div class="step-num-big">3</div><div class="step-num-label">Type</div></div>
         <div class="step-content-col" id="sc3">
             <div class="step-tag">Step three</div>
             <h2>Type Your Message</h2>
-
-            <div class="step-illus">
-                <div class="illus-bg mint">
-                    <svg viewBox="0 0 320 180" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
-                        <rect x="50" y="40" width="220" height="100" rx="8" fill="rgba(74,138,106,0.3)"/>
-                        <!-- text cursor blink -->
-                        <rect x="70" y="60" width="120" height="14" rx="3" fill="rgba(74,138,106,0.4)"/>
-                        <rect x="70" y="82" width="80" height="14" rx="3" fill="rgba(74,138,106,0.3)"/>
-                        <rect x="196" y="82" width="2" height="14" fill="#3A7A5A" opacity="0.9"/>
-                        <!-- send button -->
-                        <rect x="186" y="114" width="74" height="18" rx="3" fill="#3A7A5A" opacity="0.8"/>
-                        <text x="223" y="127" font-family="sans-serif" font-size="9" fill="white" text-anchor="middle" font-weight="600">Send →</text>
-                        <!-- char counter -->
-                        <text x="70" y="126" font-family="sans-serif" font-size="9" fill="#4A8A6A" opacity="0.7">24 / 100</text>
-                        <circle cx="280" cy="50" r="22" fill="white" opacity="0.12"/>
-                    </svg>
-                </div>
-            </div>
-
+            <div class="step-illus"><div class="illus-bg mint">
+                <svg viewBox="0 0 320 180" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+                    <rect x="50" y="40" width="220" height="100" rx="8" fill="rgba(74,138,106,0.3)"/>
+                    <rect x="70" y="60" width="120" height="14" rx="3" fill="rgba(74,138,106,0.4)"/>
+                    <rect x="70" y="82" width="80" height="14" rx="3" fill="rgba(74,138,106,0.3)"/>
+                    <rect x="196" y="82" width="2" height="14" fill="#3A7A5A" opacity="0.9"/>
+                    <rect x="186" y="114" width="74" height="18" rx="3" fill="#3A7A5A" opacity="0.8"/>
+                    <text x="223" y="127" font-family="sans-serif" font-size="9" fill="white" text-anchor="middle" font-weight="600">Send</text>
+                    <text x="70" y="126" font-family="sans-serif" font-size="9" fill="#4A8A6A" opacity="0.7">24 / 100</text>
+                </svg>
+            </div></div>
             <p class="step-body">With your device connected, type any word or sentence. Text is automatically uppercased and displayed as Braille Grade 1.</p>
             <ul class="checklist">
-                <li><div class="check-icon"><svg viewBox="0 0 10 10"><polyline points="2,5 4,7 8,3" stroke="#C9B99A" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg></div>Type any word or sentence (A–Z, spaces)</li>
+                <li><div class="check-icon"><svg viewBox="0 0 10 10"><polyline points="2,5 4,7 8,3" stroke="#C9B99A" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg></div>Type any word or sentence (A&ndash;Z, spaces)</li>
                 <li><div class="check-icon"><svg viewBox="0 0 10 10"><polyline points="2,5 4,7 8,3" stroke="#C9B99A" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg></div>Maximum 100 characters per message</li>
                 <li><div class="check-icon"><svg viewBox="0 0 10 10"><polyline points="2,5 4,7 8,3" stroke="#C9B99A" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg></div>Text is auto-converted to uppercase</li>
                 <li><div class="check-icon"><svg viewBox="0 0 10 10"><polyline points="2,5 4,7 8,3" stroke="#C9B99A" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg></div>Press Enter or click "Send to Braille"</li>
             </ul>
         </div>
     </div>
-
-    <!-- STEP 4 -->
     <div class="step-segment">
-        <div class="step-number-col">
-            <div class="step-num-big">4</div>
-            <div class="step-num-label">Feel</div>
-        </div>
+        <div class="step-number-col"><div class="step-num-big">4</div><div class="step-num-label">Feel</div></div>
         <div class="step-content-col" id="sc4">
             <div class="step-tag">Step four</div>
             <h2>Experience Braille</h2>
-
-            <div class="step-illus">
-                <div class="illus-bg lilac">
-                    <svg viewBox="0 0 320 180" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
-                        <rect x="70" y="40" width="180" height="80" rx="10" fill="#5A3A8A" opacity="0.45"/>
-                        <!-- braille cells -->
-                        <circle cx="110" cy="65" r="7" fill="#EEE0FF"/>
-                        <circle cx="128" cy="65" r="7" fill="rgba(238,224,255,0.3)"/>
-                        <circle cx="110" cy="80" r="7" fill="#EEE0FF"/>
-                        <circle cx="128" cy="80" r="7" fill="#EEE0FF"/>
-                        <circle cx="110" cy="95" r="7" fill="rgba(238,224,255,0.3)"/>
-                        <circle cx="128" cy="95" r="7" fill="rgba(238,224,255,0.3)"/>
-
-                        <circle cx="165" cy="65" r="7" fill="#EEE0FF"/>
-                        <circle cx="183" cy="65" r="7" fill="rgba(238,224,255,0.3)"/>
-                        <circle cx="165" cy="80" r="7" fill="rgba(238,224,255,0.3)"/>
-                        <circle cx="183" cy="80" r="7" fill="rgba(238,224,255,0.3)"/>
-                        <circle cx="165" cy="95" r="7" fill="rgba(238,224,255,0.3)"/>
-                        <circle cx="183" cy="95" r="7" fill="#EEE0FF"/>
-
-                        <circle cx="218" cy="65" r="7" fill="#EEE0FF"/>
-                        <circle cx="236" cy="65" r="7" fill="#EEE0FF"/>
-                        <circle cx="218" cy="80" r="7" fill="#EEE0FF"/>
-                        <circle cx="236" cy="80" r="7" fill="rgba(238,224,255,0.3)"/>
-                        <circle cx="218" cy="95" r="7" fill="rgba(238,224,255,0.3)"/>
-                        <circle cx="236" cy="95" r="7" fill="rgba(238,224,255,0.3)"/>
-                        <!-- motors -->
-                        <rect x="90" y="130" width="44" height="14" rx="4" fill="#4A2A7A" opacity="0.4"/>
-                        <rect x="148" y="130" width="44" height="14" rx="4" fill="#4A2A7A" opacity="0.4"/>
-                        <rect x="200" y="130" width="44" height="14" rx="4" fill="#4A2A7A" opacity="0.4"/>
-                        <circle cx="55" cy="55" r="22" fill="white" opacity="0.1"/>
-                        <circle cx="280" cy="155" r="28" fill="white" opacity="0.08"/>
-                    </svg>
-                </div>
-            </div>
-
+            <div class="step-illus"><div class="illus-bg lilac">
+                <svg viewBox="0 0 320 180" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+                    <rect x="70" y="40" width="180" height="80" rx="10" fill="#5A3A8A" opacity="0.45"/>
+                    <circle cx="110" cy="65" r="7" fill="#EEE0FF"/><circle cx="128" cy="65" r="7" fill="rgba(238,224,255,0.3)"/>
+                    <circle cx="110" cy="80" r="7" fill="#EEE0FF"/><circle cx="128" cy="80" r="7" fill="#EEE0FF"/>
+                    <circle cx="110" cy="95" r="7" fill="rgba(238,224,255,0.3)"/><circle cx="128" cy="95" r="7" fill="rgba(238,224,255,0.3)"/>
+                    <circle cx="165" cy="65" r="7" fill="#EEE0FF"/><circle cx="183" cy="65" r="7" fill="rgba(238,224,255,0.3)"/>
+                    <circle cx="165" cy="80" r="7" fill="rgba(238,224,255,0.3)"/><circle cx="183" cy="80" r="7" fill="rgba(238,224,255,0.3)"/>
+                    <circle cx="165" cy="95" r="7" fill="rgba(238,224,255,0.3)"/><circle cx="183" cy="95" r="7" fill="#EEE0FF"/>
+                    <circle cx="218" cy="65" r="7" fill="#EEE0FF"/><circle cx="236" cy="65" r="7" fill="#EEE0FF"/>
+                    <circle cx="218" cy="80" r="7" fill="#EEE0FF"/><circle cx="236" cy="80" r="7" fill="rgba(238,224,255,0.3)"/>
+                    <circle cx="218" cy="95" r="7" fill="rgba(238,224,255,0.3)"/><circle cx="236" cy="95" r="7" fill="rgba(238,224,255,0.3)"/>
+                    <rect x="90" y="130" width="44" height="14" rx="4" fill="#4A2A7A" opacity="0.4"/>
+                    <rect x="148" y="130" width="44" height="14" rx="4" fill="#4A2A7A" opacity="0.4"/>
+                    <rect x="200" y="130" width="44" height="14" rx="4" fill="#4A2A7A" opacity="0.4"/>
+                </svg>
+            </div></div>
             <p class="step-body">Watch and feel the Arduino servo motors move in real time, forming each Braille letter under your fingertips, one character at a time.</p>
             <ul class="checklist">
                 <li><div class="check-icon"><svg viewBox="0 0 10 10"><polyline points="2,5 4,7 8,3" stroke="#C9B99A" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg></div>Servos move to form each letter in Braille</li>
@@ -398,42 +219,20 @@
             </ul>
         </div>
     </div>
-
 </div>
-
-<!-- REQUIREMENTS -->
 <div class="req-strip">
-    <div class="req-item">
-        <span class="req-num">01</span>
-        <h3>Hardware</h3>
-        <p>Arduino Uno or Nano with 2 servo motors connected to pins 9 and 10</p>
-    </div>
-    <div class="req-item">
-        <span class="req-num">02</span>
-        <h3>Software</h3>
-        <p>Arduino IDE for uploading the Braillino sketch to your board</p>
-    </div>
-    <div class="req-item">
-        <span class="req-num">03</span>
-        <h3>Browser</h3>
-        <p>Chrome or Edge — required for Web Serial API support</p>
-    </div>
+    <div class="req-item"><span class="req-num">01</span><h3>Hardware</h3><p>Arduino Uno or Nano with 2 servo motors connected to pins 9 and 10</p></div>
+    <div class="req-item"><span class="req-num">02</span><h3>Software</h3><p>Arduino IDE for uploading the Braillino sketch to your board</p></div>
+    <div class="req-item"><span class="req-num">03</span><h3>Browser</h3><p>Chrome or Edge &mdash; required for Web Serial API support</p></div>
 </div>
-
-<!-- CTA -->
 <div class="cta-section">
     <h2>Ready to<br><em>feel</em> it?</h2>
     <a href="index.html" class="cta-btn">Start Converting</a>
 </div>
-
 <footer>
-    <p>© 2026 Braillino · Making text accessible through touch</p>
-    <div style="display:flex; gap:24px;">
-        <a href="about.html">About</a>
-        <a href="index.html">Home</a>
-    </div>
+    <p>&copy; 2026 Braillino &middot; Making text accessible through touch</p>
+    <div style="display:flex;gap:24px;"><a href="about.html">About</a><a href="index.html">Home</a></div>
 </footer>
-
 <script>
 const stepCols = document.querySelectorAll('.step-content-col');
 const obs = new IntersectionObserver((entries) => {
