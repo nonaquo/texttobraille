@@ -12,468 +12,201 @@
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
         :root { --cream: #F5F0E8; --paper: #EDE7D9; --dark: #1A1410; --muted: #6B5F52; --accent: #C9B99A; --warm: #E8DDD0; }
         
-        html, body { 
-            height: 100%; 
-            overflow: hidden; 
-            font-family: 'DM Sans', sans-serif; 
-            background: var(--cream); 
-            color: var(--dark); 
-        }
+        html, body { height: 100%; overflow: hidden; font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--dark); }
 
-        /* WATERMARK LOGO */
-        .logo-watermark {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 80vw;
-            max-width: 1200px;
-            height: auto;
-            opacity: 0.08;
-            z-index: 0;
-            pointer-events: none;
-            mix-blend-mode: multiply;
-        }
+        .logo-watermark { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80vw; max-width: 1200px; height: auto; opacity: 0.08; z-index: 0; pointer-events: none; mix-blend-mode: multiply; }
 
-        /* NAV */
-        nav {
-            position: fixed;
-            top: 0; left: 0; right: 0;
-            z-index: 200;
-            height: 56px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 40px;
-            background: var(--cream);
-            border-bottom: 2px solid var(--dark);
-        }
+        nav { position: fixed; top: 0; left: 0; right: 0; z-index: 200; height: 56px; display: flex; justify-content: space-between; align-items: center; padding: 0 40px; background: var(--cream); border-bottom: 2px solid var(--dark); }
         .nav-links { display: flex; gap: 32px; }
-        .nav-links a { 
-            color: var(--dark); 
-            text-decoration: none; 
-            font-size: 12px; 
-            text-transform: uppercase; 
-            letter-spacing: 0.12em; 
-            font-weight: 500; 
-            transition: opacity 0.2s;
-            position: relative;
-            padding-bottom: 2px;
-        }
-        .nav-links a:hover::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: var(--dark);
-        }
-        .logo-text { 
-            font-family: 'Playfair Display', serif; 
-            font-style: italic; 
-            font-size: 22px; 
-            color: var(--dark); 
-            text-decoration: none; 
-        }
-        .status-pill { 
-            display: flex; 
-            align-items: center; 
-            gap: 7px; 
-            font-size: 11px; 
-            letter-spacing: 0.1em; 
-            text-transform: uppercase; 
-            color: var(--dark); 
-            background: rgba(26,20,16,0.08); 
-            padding: 6px 14px; 
-            border-radius: 20px; 
-        }
-        .dot { 
-            width: 6px; 
-            height: 6px; 
-            border-radius: 50%; 
-            background: rgba(26,20,16,0.3); 
-            transition: all 0.4s; 
-        }
-        .dot.on { 
-            background: #90E8B4; 
-            box-shadow: 0 0 8px #90E8B4; 
-        }
+        .nav-links a { color: var(--dark); text-decoration: none; font-size: 12px; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 500; transition: opacity 0.2s; position: relative; padding-bottom: 2px; }
+        .nav-links a:hover::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px; background: var(--dark); }
+        .logo-text { display: flex; align-items: center; text-decoration: none; }
+        .status-pill { display: flex; align-items: center; gap: 7px; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dark); background: rgba(26,20,16,0.08); padding: 6px 14px; border-radius: 20px; }
+        .dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(26,20,16,0.3); transition: all 0.4s; }
+        .dot.on { background: #90E8B4; box-shadow: 0 0 8px #90E8B4; }
 
-        /* TICKER */
-        .ticker-wrap { 
-            position: fixed; 
-            top: 56px; 
-            left: 0; 
-            right: 0; 
-            z-index: 199; 
-            background: var(--paper); 
-            border-bottom: 1px solid rgba(26,20,16,0.12); 
-            overflow: hidden; 
-            height: 38px; 
-            display: flex; 
-            align-items: center; 
-        }
-        .ticker-track { 
-            display: flex; 
-            white-space: nowrap; 
-            animation: ticker 18s linear infinite; 
-        }
-        .ticker-item { 
-            display: inline-flex; 
-            align-items: center; 
-            gap: 24px; 
-            padding: 0 40px; 
-            font-size: 11px; 
-            letter-spacing: 0.12em; 
-            text-transform: uppercase; 
-            color: var(--muted); 
-            font-weight: 500; 
-        }
-        .ticker-item::after { 
-            content: '✦'; 
-            font-size: 9px; 
-            color: var(--accent); 
-        }
-        @keyframes ticker { 
-            0% { transform: translateX(0); } 
-            100% { transform: translateX(-50%); } 
-        }
+        .ticker-wrap { position: fixed; top: 56px; left: 0; right: 0; z-index: 199; background: var(--paper); border-bottom: 1px solid rgba(26,20,16,0.12); overflow: hidden; height: 38px; display: flex; align-items: center; }
+        .ticker-track { display: flex; white-space: nowrap; animation: ticker 18s linear infinite; }
+        .ticker-item { display: inline-flex; align-items: center; gap: 24px; padding: 0 40px; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+        .ticker-item::after { content: '✦'; font-size: 9px; color: var(--accent); }
+        @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
-        /* MAIN LAYOUT */
-        .main-container {
-            position: fixed;
-            top: 94px; /* 56px nav + 38px ticker */
-            left: 0;
-            right: 0;
-            bottom: 0;
-            display: grid;
-            grid-template-columns: 1fr 1.2fr;
-            gap: 0;
-            overflow: hidden;
-        }
+        .main-container { position: fixed; top: 94px; left: 0; right: 0; bottom: 0; display: grid; grid-template-columns: 1fr 1.2fr; overflow: hidden; }
 
-        /* LEFT PANEL - CONVERTER */
-        .converter-panel {
-            background: var(--dark);
-            padding: 60px 48px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            position: relative;
-            z-index: 1;
-            overflow-y: auto;
-        }
+        .converter-panel { background: var(--dark); padding: 100px 80px; display: flex; flex-direction: column; justify-content: center; position: relative; z-index: 1; overflow-y: auto; }
+        .converter-panel h1 { font-family: 'Playfair Display', serif; font-size: clamp(40px, 4.8vw, 62px); font-weight: 900; color: var(--cream); line-height: 1.25; letter-spacing: -0.02em; margin-bottom: 28px; }
+        .converter-panel h1 .line1 { display: block; }
+        .converter-panel h1 em { font-style: italic; color: var(--accent); }
+        .converter-panel .subtitle { font-size: 15px; line-height: 1.7; color: rgba(245,240,232,0.6); margin-bottom: 48px; }
 
-        .converter-panel h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(36px, 5vw, 56px);
-            font-weight: 900;
-            color: var(--cream);
-            line-height: 1.1;
-            margin-bottom: 16px;
-        }
-
-        .converter-panel h1 em {
-            font-style: italic;
-            color: var(--accent);
-        }
-
-        .converter-panel .subtitle {
-            font-size: 15px;
-            line-height: 1.7;
-            color: rgba(245,240,232,0.55);
-            margin-bottom: 32px;
-            max-width: 450px;
-        }
-
-        .connect-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 14px 28px;
-            background: var(--cream);
-            color: var(--dark);
-            border: none;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 13px;
-            font-weight: 500;
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
-            cursor: pointer;
-            border-radius: 2px;
-            transition: background 0.2s, transform 0.2s;
-            margin-bottom: 28px;
-            width: fit-content;
-        }
+        .connect-btn { display: inline-flex; align-items: center; gap: 10px; padding: 14px 32px; background: var(--cream); color: var(--dark); border: none; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; border-radius: 2px; transition: background 0.2s, transform 0.2s; margin-bottom: 36px; width: fit-content; }
         .connect-btn:hover { background: #fff; transform: translateY(-1px); }
         .connect-btn.connected { background: #90E8B4; color: #0A2018; }
 
-        .input-box {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(245,240,232,0.14);
-            border-radius: 4px;
-            transition: border-color 0.3s;
-            margin-bottom: 14px;
-        }
+        .input-box { background: rgba(255,255,255,0.05); border: 1px solid rgba(245,240,232,0.14); border-radius: 4px; transition: border-color 0.3s; margin-bottom: 18px; }
         .input-box:focus-within { border-color: rgba(245,240,232,0.35); }
-
-        textarea {
-            width: 100%;
-            min-height: 140px;
-            padding: 18px;
-            background: transparent;
-            border: none;
-            outline: none;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 16px;
-            color: var(--cream);
-            resize: none;
-            line-height: 1.6;
-        }
-        textarea::placeholder { color: rgba(245,240,232,0.25); font-style: italic; }
-
-        .input-footer { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            padding: 10px 16px; 
-            border-top: 1px solid rgba(245,240,232,0.08); 
-        }
-        .char-count { font-size: 12px; color: rgba(245,240,232,0.3); }
-
-        .send-btn {
-            padding: 9px 20px;
-            background: var(--cream);
-            color: var(--dark);
-            border: none;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 12px;
-            font-weight: 500;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            cursor: pointer;
-            border-radius: 2px;
-            transition: all 0.2s;
-        }
+        textarea { width: 100%; min-height: 140px; padding: 20px; background: transparent; border: none; outline: none; font-family: 'DM Sans', sans-serif; font-size: 16px; color: var(--cream); resize: none; line-height: 1.6; }
+        textarea::placeholder { color: rgba(245,240,232,0.3); font-style: italic; }
+        .input-footer { display: flex; justify-content: space-between; align-items: center; padding: 12px 18px; border-top: 1px solid rgba(245,240,232,0.08); }
+        .char-count { font-size: 12px; color: rgba(245,240,232,0.35); }
+        .send-btn { padding: 10px 24px; background: var(--cream); color: var(--dark); border: none; font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; border-radius: 2px; transition: all 0.2s; }
         .send-btn:hover:not(:disabled) { background: #fff; }
         .send-btn:disabled { opacity: 0.3; cursor: not-allowed; }
         .send-btn.sent { background: #90E8B4; color: #0A2018; }
 
-        .braille-preview { 
-            display: flex; 
-            gap: 10px; 
-            flex-wrap: wrap; 
-            min-height: 48px; 
-            align-items: center; 
-        }
+        .braille-preview { display: flex; gap: 12px; flex-wrap: wrap; min-height: 52px; align-items: center; }
         .braille-char { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 3px; }
-        .braille-dot { 
-            width: 9px; 
-            height: 9px; 
-            border-radius: 50%; 
-            background: rgba(245,240,232,0.15); 
-            transition: background 0.3s; 
-        }
+        .braille-dot { width: 9px; height: 9px; border-radius: 50%; background: rgba(245,240,232,0.15); transition: background 0.3s; }
         .braille-dot.raised { background: var(--cream); }
-        .braille-label { 
-            font-size: 10px; 
-            color: rgba(245,240,232,0.3); 
-            text-align: center; 
-            margin-top: 3px; 
-        }
+        .braille-label { font-size: 10px; color: rgba(245,240,232,0.35); text-align: center; margin-top: 3px; }
         .braille-cell { display: flex; flex-direction: column; align-items: center; }
 
-        /* RIGHT PANEL - INSTRUCTIONS */
-        .instructions-panel {
-            background: var(--cream);
-            padding: 40px;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            z-index: 1;
-            overflow-y: auto;
-        }
+        .instructions-panel { background: var(--cream); padding: 40px; display: flex; flex-direction: column; position: relative; z-index: 1; overflow-y: auto; }
+        .instructions-header { text-align: center; margin-bottom: 32px; }
+        .instructions-header h2 { font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 700; margin-bottom: 8px; }
+        .instructions-header p { font-size: 14px; color: var(--muted); letter-spacing: 0.05em; }
 
-        .instructions-header {
-            text-align: center;
-            margin-bottom: 32px;
-        }
-
-        .instructions-header h2 {
-            font-family: 'Playfair Display', serif;
-            font-size: 32px;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-
-        .instructions-header p {
-            font-size: 14px;
-            color: var(--muted);
-            letter-spacing: 0.05em;
-        }
-
-        .steps-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 16px;
-            flex: 1;
-        }
-
-        .step-card {
-            background: var(--warm);
-            border: 1.5px solid rgba(26,20,16,0.12);
-            border-radius: 4px;
-            padding: 24px;
-            display: flex;
-            flex-direction: column;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .step-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(26,20,16,0.12);
-        }
-
+        .steps-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; flex: 1; }
+        .step-card { background: var(--warm); border: 1.5px solid rgba(26,20,16,0.12); border-radius: 4px; padding: 24px; display: flex; flex-direction: column; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
+        .step-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(26,20,16,0.15); }
         .step-card:nth-child(1) { background: #C8DEF2; }
         .step-card:nth-child(2) { background: #F2D4BE; }
         .step-card:nth-child(3) { background: #C4E8D4; }
         .step-card:nth-child(4) { background: #DDD0F0; }
 
-        .step-header {
+        /* ════════════════════════════
+           MODAL — SMOOTH ANIMATION
+        ════════════════════════════ */
+
+        /* Overlay: always in DOM, hidden via opacity + pointer-events */
+        .step-detail-view {
             display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 16px;
-            padding-bottom: 12px;
-            border-bottom: 2px solid rgba(26,20,16,0.15);
-        }
-
-        .step-number {
-            font-family: 'Playfair Display', serif;
-            font-weight: 900;
-            font-size: 48px;
-            line-height: 1;
-            color: rgba(26,20,16,0.25);
-        }
-
-        .step-title-group h3 {
-            font-family: 'Playfair Display', serif;
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 2px;
-        }
-
-        .step-label {
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--muted);
-            font-weight: 500;
-        }
-
-        .step-video {
-            width: 100%;
-            height: 0;
-            padding-bottom: 75%; /* 4:3 aspect ratio */
-            background: rgba(26,20,16,0.08);
-            border-radius: 3px;
-            margin-bottom: 12px;
-            display: flex;
+            position: fixed;
+            inset: 0;
+            z-index: 500;
+            padding: 60px 40px;
             align-items: center;
             justify-content: center;
-            color: var(--muted);
-            font-size: 12px;
-            font-style: italic;
-            overflow: hidden;
-            position: relative;
+            cursor: pointer;
+
+            /* start: invisible, no blur */
+            opacity: 0;
+            pointer-events: none;
+            background: rgba(26, 20, 16, 0);
+            backdrop-filter: blur(0px);
+            -webkit-backdrop-filter: blur(0px);
+
+            transition:
+                opacity 0.4s ease,
+                background 0.4s ease,
+                backdrop-filter 0.4s ease,
+                -webkit-backdrop-filter 0.4s ease;
         }
 
-        .step-video video {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+        /* OPEN state */
+        .step-detail-view.active {
+            opacity: 1;
+            pointer-events: all;
+            background: rgba(26, 20, 16, 0.78);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
 
-        .step-desc {
-            font-size: 13px;
-            line-height: 1.6;
-            color: var(--dark);
+        /* CLOSING state — mirrors start */
+        .step-detail-view.closing {
+            opacity: 0 !important;
+            pointer-events: none !important;
+            background: rgba(26, 20, 16, 0) !important;
+            backdrop-filter: blur(0px) !important;
+            -webkit-backdrop-filter: blur(0px) !important;
         }
 
-        .requirements-footer {
-            margin-top: 24px;
-            padding-top: 24px;
-            border-top: 2px solid rgba(26,20,16,0.1);
+        /* Modal card */
+        .detail-container {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
+            grid-template-columns: 1fr 1fr;
+            width: 100%;
+            max-width: 1400px;
+            height: 72vh;
+            max-height: 820px;
+            background: var(--cream);
+            overflow: hidden;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.5);
+            cursor: default;
+
+            /* start: scaled down + shifted */
+            opacity: 0;
+            transform: scale(0.88) translateY(32px);
+            transition:
+                opacity 0.4s ease,
+                transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .req-item {
-            text-align: center;
+        /* Card open */
+        .step-detail-view.active .detail-container {
+            opacity: 1;
+            transform: scale(1) translateY(0);
         }
 
-        .req-num {
-            font-family: 'Playfair Display', serif;
-            font-style: italic;
-            font-size: 24px;
-            color: var(--accent);
-            display: block;
-            margin-bottom: 6px;
+        /* Card close — quicker, eases IN (feels snappy) */
+        .step-detail-view.closing .detail-container {
+            opacity: 0 !important;
+            transform: scale(0.93) translateY(16px) !important;
+            transition: opacity 0.28s ease, transform 0.28s cubic-bezier(0.4, 0, 1, 1) !important;
         }
 
-        .req-item h4 {
-            font-size: 13px;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
+        .detail-video-panel { background: var(--dark); overflow: hidden; }
+        .detail-video-wrapper { width: 100%; height: 100%; position: relative; }
+        .detail-video-wrapper video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
 
-        .req-item p {
-            font-size: 11px;
-            color: var(--muted);
-            line-height: 1.5;
-        }
+        .detail-content-panel { background: var(--cream); padding: 72px 56px; overflow-y: auto; }
+        .detail-header { margin-bottom: 28px; }
+        .detail-step-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--muted); font-weight: 500; margin-bottom: 8px; }
+        .detail-title { font-family: 'Playfair Display', serif; font-size: 34px; font-weight: 700; margin-bottom: 14px; line-height: 1.2; }
+        .detail-intro { font-size: 15px; line-height: 1.75; color: var(--muted); margin-bottom: 28px; }
 
-        /* RESPONSIVE */
+        .detail-section { margin-bottom: 28px; }
+        .detail-section h4 { font-family: 'Playfair Display', serif; font-size: 19px; font-weight: 700; margin-bottom: 14px; }
+        .detail-steps-list { list-style: none; }
+        .detail-steps-list li { display: flex; align-items: flex-start; gap: 14px; padding: 13px 0; border-bottom: 1px solid rgba(26,20,16,0.07); font-size: 14px; line-height: 1.7; color: var(--dark); }
+        .detail-steps-list li:last-child { border-bottom: none; }
+        .step-number-badge { flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%; background: var(--dark); color: var(--cream); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; margin-top: 3px; }
+        .detail-tips { background: rgba(26,20,16,0.04); padding: 18px 22px; border-left: 3px solid var(--accent); }
+        .detail-tips h5 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 10px; color: var(--dark); font-weight: 600; }
+        .detail-tips p { font-size: 13px; line-height: 1.7; color: var(--muted); }
+
+        .step-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 2px solid rgba(26,20,16,0.15); }
+        .step-number { font-family: 'Playfair Display', serif; font-weight: 900; font-size: 48px; line-height: 1; color: rgba(26,20,16,0.25); }
+        .step-title-group h3 { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; margin-bottom: 2px; }
+        .step-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); font-weight: 500; }
+        .step-video { width: 100%; height: 0; padding-bottom: 75%; background: rgba(26,20,16,0.08); border-radius: 3px; margin-bottom: 12px; position: relative; overflow: hidden; }
+        .step-video video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+        .step-desc { font-size: 13px; line-height: 1.6; color: var(--dark); }
+
+        .requirements-footer { margin-top: 24px; padding-top: 24px; border-top: 2px solid rgba(26,20,16,0.1); display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .req-item { text-align: center; }
+        .req-num { font-family: 'Playfair Display', serif; font-style: italic; font-size: 24px; color: var(--accent); display: block; margin-bottom: 6px; }
+        .req-item h4 { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+        .req-item p { font-size: 11px; color: var(--muted); line-height: 1.5; }
+
         @media (max-width: 1024px) {
-            .main-container {
-                grid-template-columns: 1fr;
-                grid-template-rows: auto 1fr;
-            }
-            
-            .converter-panel {
-                padding: 32px 24px;
-                overflow-y: visible;
-            }
-
-            .instructions-panel {
-                padding: 24px;
-            }
-
-            .steps-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .requirements-footer {
-                grid-template-columns: 1fr;
-                gap: 16px;
-            }
-
+            .main-container { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
+            .converter-panel { padding: 40px 28px; }
+            .instructions-panel { padding: 24px; }
+            .steps-grid { grid-template-columns: 1fr; }
+            .requirements-footer { grid-template-columns: 1fr; gap: 16px; }
             nav { padding: 0 20px; }
             .nav-links { display: none; }
+            .step-detail-view { padding: 20px; }
+            .detail-container { grid-template-columns: 1fr; max-height: 92vh; }
+            .detail-content-panel { padding: 32px 24px; }
         }
     </style>
 </head>
 <body>
 
-<!-- WATERMARK LOGO -->
 <img src="LOGOBRAILLINO.png" alt="Braillino" class="logo-watermark">
 
-<!-- NAV -->
 <nav>
     <div class="nav-links">
         <a href="resources.html">Resources</a>
@@ -488,7 +221,6 @@
     </div>
 </nav>
 
-<!-- TICKER -->
 <div class="ticker-wrap">
     <div class="ticker-track">
         <span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span><span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span><span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span><span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span>
@@ -496,155 +228,168 @@
     </div>
 </div>
 
-<!-- MAIN CONTAINER -->
 <div class="main-container">
-    
-    <!-- LEFT: CONVERTER -->
+
     <div class="converter-panel">
-        <h1>Words, made<br><em>accessible</em><br>by touch.</h1>
+        <h1>
+            <span class="line1">Words made</span> <em>accessible</em> by touch.
+        </h1>
         <p class="subtitle">Connect your Arduino and transform any text into tactile Braille patterns. Type below and bring words to life.</p>
-        
         <button class="connect-btn" id="connectBtn">
             <span>⊕</span>
             <span id="connectLabel">Connect Device</span>
         </button>
-
         <div class="input-box">
-            <textarea
-                id="textInput"
-                placeholder="Type your message here…"
-                maxlength="100"
-                spellcheck="false"
-            ></textarea>
+            <textarea id="textInput" placeholder="Type your message here…" maxlength="100" spellcheck="false"></textarea>
             <div class="input-footer">
                 <span class="char-count"><span id="charCount">0</span> / 100</span>
                 <button class="send-btn" id="sendBtn" disabled>Send to Braille →</button>
             </div>
         </div>
-
         <div class="braille-preview" id="braillePreview"></div>
     </div>
 
-    <!-- RIGHT: INSTRUCTIONS -->
     <div class="instructions-panel">
         <div class="instructions-header">
             <h2>How It Works</h2>
-            <p>Four simple steps to get started</p>
+            <p>Click any step to learn more</p>
         </div>
 
         <div class="steps-grid">
-            <!-- Step 1 -->
-            <div class="step-card">
+            <div class="step-card" onclick="openStepDetail(1)">
                 <div class="step-header">
                     <div class="step-number">1</div>
-                    <div class="step-title-group">
-                        <div class="step-label">Step One</div>
-                        <h3>Upload Code</h3>
-                    </div>
+                    <div class="step-title-group"><div class="step-label">Step One</div><h3>Upload Code</h3></div>
                 </div>
-                <div class="step-video">
-                    <video src="step1braillino.mp4" muted loop playsinline></video>
-                </div>
+                <div class="step-video"><video src="step1braillino.mp4" muted loop playsinline></video></div>
                 <p class="step-desc">Open Arduino IDE, paste the .ino sketch, select your board and port, then upload.</p>
             </div>
-
-            <!-- Step 2 -->
-            <div class="step-card">
+            <div class="step-card" onclick="openStepDetail(2)">
                 <div class="step-header">
                     <div class="step-number">2</div>
-                    <div class="step-title-group">
-                        <div class="step-label">Step Two</div>
-                        <h3>Connect Device</h3>
-                    </div>
+                    <div class="step-title-group"><div class="step-label">Step Two</div><h3>Connect Device</h3></div>
                 </div>
-                <div class="step-video">
-                    <video src="step2braillino.mp4" muted loop playsinline></video>
-                </div>
+                <div class="step-video"><video src="step2braillino.mp4" muted loop playsinline></video></div>
                 <p class="step-desc">Plug in your Arduino via USB and click "Connect Device" in Chrome or Edge.</p>
             </div>
-
-            <!-- Step 3 -->
-            <div class="step-card">
+            <div class="step-card" onclick="openStepDetail(3)">
                 <div class="step-header">
                     <div class="step-number">3</div>
-                    <div class="step-title-group">
-                        <div class="step-label">Step Three</div>
-                        <h3>Type Message</h3>
-                    </div>
+                    <div class="step-title-group"><div class="step-label">Step Three</div><h3>Type Message</h3></div>
                 </div>
-                <div class="step-video">
-                    <video src="step3braillino.mp4" muted loop playsinline></video>
-                </div>
+                <div class="step-video"><video src="step3braillino.mp4" muted loop playsinline></video></div>
                 <p class="step-desc">Type any text (up to 100 characters). It auto-converts to Braille Grade 1.</p>
             </div>
-
-            <!-- Step 4 -->
-            <div class="step-card">
+            <div class="step-card" onclick="openStepDetail(4)">
                 <div class="step-header">
                     <div class="step-number">4</div>
-                    <div class="step-title-group">
-                        <div class="step-label">Step Four</div>
-                        <h3>Feel Braille</h3>
-                    </div>
+                    <div class="step-title-group"><div class="step-label">Step Four</div><h3>Feel Braille</h3></div>
                 </div>
-                <div class="step-video">
-                    <video src="step4braillino.mp4" muted loop playsinline></video>
-                </div>
+                <div class="step-video"><video src="step4braillino.mp4" muted loop playsinline></video></div>
                 <p class="step-desc">Watch servos form each Braille letter. Each character displays for 4 seconds.</p>
             </div>
         </div>
 
-        <!-- Requirements -->
+        <!-- MODAL -->
+        <div class="step-detail-view" id="stepDetailView">
+            <div class="detail-container" id="detailContainer">
+                <div class="detail-video-panel">
+                    <div class="detail-video-wrapper">
+                        <video id="detailVideo" muted loop autoplay playsinline></video>
+                    </div>
+                </div>
+                <div class="detail-content-panel">
+                    <div id="detailContent"></div>
+                </div>
+            </div>
+        </div>
+
         <div class="requirements-footer">
-            <div class="req-item">
-                <span class="req-num">01</span>
-                <h4>Hardware</h4>
-                <p>Arduino with 2 servos (pins 9 & 10)</p>
-            </div>
-            <div class="req-item">
-                <span class="req-num">02</span>
-                <h4>Software</h4>
-                <p>Arduino IDE for uploading sketch</p>
-            </div>
-            <div class="req-item">
-                <span class="req-num">03</span>
-                <h4>Browser</h4>
-                <p>Chrome or Edge (Web Serial API)</p>
-            </div>
+            <div class="req-item"><span class="req-num">01</span><h4>Hardware</h4><p>Arduino with 2 servos (pins 9 & 10)</p></div>
+            <div class="req-item"><span class="req-num">02</span><h4>Software</h4><p>Arduino IDE for uploading sketch</p></div>
+            <div class="req-item"><span class="req-num">03</span><h4>Browser</h4><p>Chrome or Edge (Web Serial API)</p></div>
         </div>
     </div>
 
 </div>
 
 <script>
-// ── BRAILLE MAP ──
 const BRAILLE = {
-    A:[1,0,0,0,0,0],B:[1,1,0,0,0,0],C:[1,0,0,1,0,0],D:[1,0,0,1,1,0],
-    E:[1,0,0,0,1,0],F:[1,1,0,1,0,0],G:[1,1,0,1,1,0],H:[1,1,0,0,1,0],
-    I:[0,1,0,1,0,0],J:[0,1,0,1,1,0],K:[1,0,1,0,0,0],L:[1,1,1,0,0,0],
-    M:[1,0,1,1,0,0],N:[1,0,1,1,1,0],O:[1,0,1,0,1,0],P:[1,1,1,1,0,0],
-    Q:[1,1,1,1,1,0],R:[1,1,1,0,1,0],S:[0,1,1,1,0,0],T:[0,1,1,1,1,0],
-    U:[1,0,1,0,0,1],V:[1,1,1,0,0,1],W:[0,1,0,1,1,1],X:[1,0,1,1,0,1],
-    Y:[1,0,1,1,1,1],Z:[1,0,1,0,1,1],
-    '1':[1,0,0,0,0,0],'2':[1,1,0,0,0,0],'3':[1,0,0,1,0,0],'4':[1,0,0,1,1,0],
-    '5':[1,0,0,0,1,0],'6':[1,1,0,1,0,0],'7':[1,1,0,1,1,0],'8':[1,1,0,0,1,0],
-    '9':[0,1,0,1,0,0],'0':[0,1,0,1,1,0],
-    '.':[0,1,0,0,1,1],',':[0,1,0,0,0,0],'?':[0,1,1,0,0,1],'!':[0,1,1,0,1,0],
-    ';':[0,1,1,0,0,0],':':[0,1,0,0,1,0],'-':[0,0,1,0,0,1],"'":[0,0,1,0,0,0],
-    '"':[0,1,1,0,1,1],'(':[0,1,1,0,1,1],')':[0,1,1,1,0,1],
-    '/':[0,0,1,1,0,1],'@':[0,0,0,1,1,0],'#':[0,0,0,1,1,1],
-    ' ':[0,0,0,0,0,0]
+    A:[1,0,0,0,0,0],B:[1,1,0,0,0,0],C:[1,0,0,1,0,0],D:[1,0,0,1,1,0],E:[1,0,0,0,1,0],F:[1,1,0,1,0,0],G:[1,1,0,1,1,0],H:[1,1,0,0,1,0],I:[0,1,0,1,0,0],J:[0,1,0,1,1,0],K:[1,0,1,0,0,0],L:[1,1,1,0,0,0],M:[1,0,1,1,0,0],N:[1,0,1,1,1,0],O:[1,0,1,0,1,0],P:[1,1,1,1,0,0],Q:[1,1,1,1,1,0],R:[1,1,1,0,1,0],S:[0,1,1,1,0,0],T:[0,1,1,1,1,0],U:[1,0,1,0,0,1],V:[1,1,1,0,0,1],W:[0,1,0,1,1,1],X:[1,0,1,1,0,1],Y:[1,0,1,1,1,1],Z:[1,0,1,0,1,1],
+    '1':[1,0,0,0,0,0],'2':[1,1,0,0,0,0],'3':[1,0,0,1,0,0],'4':[1,0,0,1,1,0],'5':[1,0,0,0,1,0],'6':[1,1,0,1,0,0],'7':[1,1,0,1,1,0],'8':[1,1,0,0,1,0],'9':[0,1,0,1,0,0],'0':[0,1,0,1,1,0],
+    '.':[0,1,0,0,1,1],',':[0,1,0,0,0,0],'?':[0,1,1,0,0,1],'!':[0,1,1,0,1,0],';':[0,1,1,0,0,0],':':[0,1,0,0,1,0],'-':[0,0,1,0,0,1],"'":[0,0,1,0,0,0],'"':[0,1,1,0,1,1],'(':[0,1,1,0,1,1],')':[0,1,1,1,0,1],'/':[0,0,1,1,0,1],'@':[0,0,0,1,1,0],'#':[0,0,0,1,1,1],' ':[0,0,0,0,0,0]
 };
 
-// ── AUTO-PLAY VIDEOS ON HOVER ──
+const stepDetails = {
+    1: { label:'Step One', title:'Upload the Arduino Code', video:'step1braillino.mp4', intro:'Before you can use Braillino, you need to upload the Arduino sketch to your board. This code tells the Arduino how to control the servos and communicate with the web interface.', steps:['Download the Braillino .ino file from the Resources page','Open Arduino IDE on your computer (download from arduino.cc if needed)','Click File → Open and select the braillino_fixed.ino file','Connect your Arduino to your computer via USB cable','Go to Tools → Board and select your Arduino model (Uno or Nano)','Go to Tools → Port and select the port your Arduino is connected to','Click the Upload button (right arrow icon) in the toolbar','Wait for "Done uploading" message to appear at the bottom'], tips:'Make sure you have the correct board selected! Arduino Uno and Nano use different settings. If upload fails, try unplugging and reconnecting your Arduino.' },
+    2: { label:'Step Two', title:'Connect Your Device', video:'step2braillino.mp4', intro:'Once the code is uploaded, keep your Arduino plugged in and connect it to the Braillino web app using the Web Serial API.', steps:["Keep your Arduino connected via USB (don't unplug it)",'Open Chrome or Edge browser (Safari and Firefox don\'t support Web Serial)','Navigate to the Braillino website','Look at the top-right corner for the status indicator (should say "Offline")','Click the "Connect Device" button on the left side','A popup will appear showing available serial devices','Select your Arduino from the list (usually shows as "Arduino Uno" or similar)','Click "Connect" in the popup','The status indicator will turn green and say "Connected"'], tips:"If you don't see your Arduino in the list, make sure it's plugged in and the code was uploaded successfully. Try refreshing the page or using a different USB port." },
+    3: { label:'Step Three', title:'Type Your Message', video:'step3braillino.mp4', intro:'With your device connected, you can now type any message and see it converted to Braille in real-time.', steps:['Click in the text area that says "Type your message here..."','Type any text using letters A-Z, numbers 0-9, and supported punctuation','Watch as the Braille preview updates in real-time below the text box','Keep your message under 100 characters (shown in the character counter)','Press Enter on your keyboard OR click the "Send to Braille →" button','The message will be sent to your Arduino immediately'], tips:"Text is automatically converted to uppercase for Braille Grade 1. Supported punctuation includes: . , ? ! ; : - ' \" ( ) / @ #" },
+    4: { label:'Step Four', title:'Feel the Braille', video:'step4braillino.mp4', intro:'Watch and feel as your Arduino displays each character in Braille, one letter at a time.', steps:['The servos will begin moving to form the first character','Each character is displayed for 4 seconds',"If the same letter appears twice in a row, there's a short 400ms pause between them",'Watch the servo positions to see the Braille pattern forming','Place your finger on the device to feel the raised dots','The device will cycle through your entire message once','Type a new message to display more text'], tips:'The servos display patterns using 6 dots arranged in 2 columns of 3 dots each. Left servo controls dots 1-3, right servo controls dots 4-6.' }
+};
+
+// Video hover on cards
 document.querySelectorAll('.step-video video').forEach(video => {
     const card = video.closest('.step-card');
     card.addEventListener('mouseenter', () => video.play());
-    card.addEventListener('mouseleave', () => {
-        video.pause();
-        video.currentTime = 0;
-    });
+    card.addEventListener('mouseleave', () => { video.pause(); video.currentTime = 0; });
 });
+
+// ── MODAL LOGIC ──
+let closeTimer = null;
+const detailView = document.getElementById('stepDetailView');
+const detailContainer = document.getElementById('detailContainer');
+const detailVideo = document.getElementById('detailVideo');
+const detailContent = document.getElementById('detailContent');
+
+function openStepDetail(stepNum) {
+    // Cancel any in-progress close
+    if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
+    detailView.classList.remove('closing');
+
+    const d = stepDetails[stepNum];
+    detailVideo.src = d.video;
+    detailVideo.play();
+
+    detailContent.innerHTML = `
+        <div class="detail-header">
+            <div class="detail-step-label">${d.label}</div>
+            <h2 class="detail-title">${d.title}</h2>
+            <p class="detail-intro">${d.intro}</p>
+        </div>
+        <div class="detail-section">
+            <h4>Step-by-Step Instructions</h4>
+            <ul class="detail-steps-list">
+                ${d.steps.map((s,i) => `<li><div class="step-number-badge">${i+1}</div><div>${s}</div></li>`).join('')}
+            </ul>
+        </div>
+        <div class="detail-section">
+            <div class="detail-tips"><h5>💡 Pro Tip</h5><p>${d.tips}</p></div>
+        </div>`;
+
+    // Use two rAFs to ensure the browser has painted the initial state before transitioning
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+        detailView.classList.add('active');
+    }));
+}
+
+function closeStepDetail() {
+    detailView.classList.add('closing');
+    detailView.classList.remove('active');
+    closeTimer = setTimeout(() => {
+        detailView.classList.remove('closing');
+        detailVideo.pause();
+        detailVideo.currentTime = 0;
+        detailVideo.src = '';
+        closeTimer = null;
+    }, 320);
+}
+
+// Backdrop click closes
+detailView.addEventListener('click', e => { if (e.target === detailView) closeStepDetail(); });
+// Prevent card click from bubbling to backdrop
+detailContainer.addEventListener('click', e => e.stopPropagation());
+// ESC key
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeStepDetail(); });
 
 // ── BRAILLE PREVIEW ──
 function renderBraillePreview(text) {
@@ -653,21 +398,11 @@ function renderBraillePreview(text) {
     for (const ch of text.slice(0,14)) {
         const upper = ch.toUpperCase();
         const dots = BRAILLE[upper] || BRAILLE[ch] || BRAILLE[' '];
-        const cell = document.createElement('div');
-        cell.className = 'braille-cell';
-        const grid = document.createElement('div');
-        grid.className = 'braille-char';
-        [0,1,2,3,4,5].forEach(i => {
-            const d = document.createElement('div');
-            d.className = 'braille-dot' + (dots[i] ? ' raised' : '');
-            grid.appendChild(d);
-        });
-        const lbl = document.createElement('div');
-        lbl.className = 'braille-label';
-        lbl.textContent = ch === ' ' ? '·' : ch;
-        cell.appendChild(grid);
-        cell.appendChild(lbl);
-        container.appendChild(cell);
+        const cell = document.createElement('div'); cell.className = 'braille-cell';
+        const grid = document.createElement('div'); grid.className = 'braille-char';
+        [0,1,2,3,4,5].forEach(i => { const d = document.createElement('div'); d.className = 'braille-dot' + (dots[i] ? ' raised' : ''); grid.appendChild(d); });
+        const lbl = document.createElement('div'); lbl.className = 'braille-label'; lbl.textContent = ch === ' ' ? '·' : ch;
+        cell.appendChild(grid); cell.appendChild(lbl); container.appendChild(cell);
     }
 }
 
@@ -681,70 +416,39 @@ const statusDot = document.getElementById('statusDot');
 const statusText = document.getElementById('statusText');
 const charCount = document.getElementById('charCount');
 
-textInput.addEventListener('input', () => {
-    charCount.textContent = textInput.value.length;
-    renderBraillePreview(textInput.value);
-});
-
-if (!('serial' in navigator)) {
-    statusText.textContent = 'Unsupported';
-    connectBtn.title = 'Use Chrome or Edge browser';
-}
-
-connectBtn.addEventListener('click', async () => {
-    if (port && port.readable) await disconnect();
-    else await connect();
-});
-
-sendBtn.addEventListener('click', async () => {
-    const text = textInput.value.trim().toUpperCase();
-    if (!text) return;
-    await sendToArduino(text);
-});
-
-textInput.addEventListener('keypress', async (e) => {
-    if (e.key === 'Enter' && !e.shiftKey && port && port.readable) {
-        e.preventDefault();
-        sendBtn.click();
-    }
-});
+textInput.addEventListener('input', () => { charCount.textContent = textInput.value.length; renderBraillePreview(textInput.value); });
+if (!('serial' in navigator)) { statusText.textContent = 'Unsupported'; connectBtn.title = 'Use Chrome or Edge browser'; }
+connectBtn.addEventListener('click', async () => { if (port && port.readable) await disconnect(); else await connect(); });
+sendBtn.addEventListener('click', async () => { const text = textInput.value.trim().toUpperCase(); if (!text) return; await sendToArduino(text); });
+textInput.addEventListener('keypress', async e => { if (e.key === 'Enter' && !e.shiftKey && port && port.readable) { e.preventDefault(); sendBtn.click(); } });
 
 async function connect() {
     try {
         port = await navigator.serial.requestPort();
         await port.open({ baudRate: 9600 });
         writer = port.writable.getWriter();
-        statusDot.classList.add('on');
-        statusText.textContent = 'Connected';
-        connectLabel.textContent = 'Disconnect';
-        connectBtn.classList.add('connected');
-        sendBtn.disabled = false;
-        textInput.focus();
+        statusDot.classList.add('on'); statusText.textContent = 'Connected';
+        connectLabel.textContent = 'Disconnect'; connectBtn.classList.add('connected');
+        sendBtn.disabled = false; textInput.focus();
     } catch(err) { console.error('Connection error:', err); }
 }
-
 async function disconnect() {
     try {
         if (writer) { writer.releaseLock(); writer = null; }
         if (port) { await port.close(); port = null; }
-        statusDot.classList.remove('on');
-        statusText.textContent = 'Offline';
-        connectLabel.textContent = 'Connect Device';
-        connectBtn.classList.remove('connected');
+        statusDot.classList.remove('on'); statusText.textContent = 'Offline';
+        connectLabel.textContent = 'Connect Device'; connectBtn.classList.remove('connected');
         sendBtn.disabled = true;
     } catch(err) { console.error('Disconnect error:', err); }
 }
-
 async function sendToArduino(text) {
     try {
         await writer.write(new TextEncoder().encode(text + '\n'));
         const orig = sendBtn.textContent;
-        sendBtn.textContent = 'Sent ✓';
-        sendBtn.classList.add('sent');
+        sendBtn.textContent = 'Sent ✓'; sendBtn.classList.add('sent');
         setTimeout(() => { sendBtn.textContent = orig; sendBtn.classList.remove('sent'); }, 1800);
     } catch(err) { console.error('Send error:', err); }
 }
-
 window.addEventListener('beforeunload', () => { if (port) disconnect(); });
 </script>
 </body>

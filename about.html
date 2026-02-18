@@ -4,15 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>braillino</title>
-      <link rel="icon" type="image/png" href="apple-touch-icon.png">
-    <!-- Open Graph / Facebook -->
+    <link rel="icon" type="image/png" href="apple-touch-icon.png">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://nonaquo.github.io/texttobraille/">
     <meta property="og:title" content="braillino">
     <meta property="og:description" content="Transform your text into tactile Braille patterns. Connect your Arduino and bring words to life through touch.">
     <meta property="og:image" content="https://nonaquo.github.io/texttobraille/previewimagebraillino.jpg">
-
-    <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://nonaquo.github.io/texttobraille/">
     <meta property="twitter:title" content="braillino">
@@ -27,9 +24,45 @@
             --cream: #F5F0E8; --paper: #EDE7D9; --dark: #1A1410;
             --muted: #6B5F52; --accent: #C9B99A; --warm: #E8DDD0;
             --pink: #F2DCE4; --blue: #D4E6F4; --peach: #F4E0CC;
+            --green: #C4E8D4; --lavender: #DDD0F0; --yellow: #F5EAC8;
         }
         html { scroll-behavior: smooth; }
         body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--dark); overflow-x: hidden; }
+
+        /* ── DECORATIVE SIDE ELEMENTS ── */
+        .side-deco {
+            position: fixed;
+            top: 0; bottom: 0;
+            width: 32px;
+            z-index: 50;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+        }
+        .side-deco.left { left: 0; }
+        .side-deco.right { right: 0; }
+        .side-stripe {
+            width: 100%;
+            flex: 1;
+        }
+        /* Left: dark → accent → cream tones, repeating */
+        .side-deco.left .side-stripe:nth-child(1) { background: #1A1410; }
+        .side-deco.left .side-stripe:nth-child(2) { background: #C9B99A; }
+        .side-deco.left .side-stripe:nth-child(3) { background: #EDE7D9; }
+        .side-deco.left .side-stripe:nth-child(4) { background: #2D2520; }
+        .side-deco.left .side-stripe:nth-child(5) { background: #C9B99A; }
+        .side-deco.left .side-stripe:nth-child(6) { background: #1A1410; }
+
+        /* Right: reversed */
+        .side-deco.right .side-stripe:nth-child(1) { background: #1A1410; }
+        .side-deco.right .side-stripe:nth-child(2) { background: #C9B99A; }
+        .side-deco.right .side-stripe:nth-child(3) { background: #EDE7D9; }
+        .side-deco.right .side-stripe:nth-child(4) { background: #2D2520; }
+        .side-deco.right .side-stripe:nth-child(5) { background: #C9B99A; }
+        .side-deco.right .side-stripe:nth-child(6) { background: #1A1410; }
 
         /* NAV */
         nav {
@@ -46,73 +79,60 @@
         }
         .nav-links { display: flex; gap: 32px; }
         .nav-links a { 
-            color: var(--dark); 
-            text-decoration: none; 
-            font-size: 12px; 
-            text-transform: uppercase; 
-            letter-spacing: 0.12em; 
-            font-weight: 500; 
-            transition: opacity 0.2s;
-            position: relative;
-            padding-bottom: 2px;
+            color: var(--dark); text-decoration: none; font-size: 12px; 
+            text-transform: uppercase; letter-spacing: 0.12em; font-weight: 500; 
+            transition: opacity 0.2s; position: relative; padding-bottom: 2px;
         }
-        .nav-links a:hover::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: var(--dark);
-        }
-        .nav-links a.active {
-            font-weight: 600;
-            opacity: 1;
-        }
-        .nav-links a.active::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: var(--dark);
-        }
+        .nav-links a:hover::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px; background: var(--dark); }
+        .nav-links a.active { font-weight: 600; }
+        .nav-links a.active::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: var(--dark); }
         .logo { display: flex; align-items: center; text-decoration: none; }
 
+        /* TICKER */
         .ticker-wrap { 
-            position: fixed;
-            top: 56px;
-            left: 0;
-            right: 0;
-            z-index: 199;
-            background: var(--paper); 
-            border-bottom: 1px solid rgba(26,20,16,0.12); 
-            overflow: hidden; 
-            height: 38px; 
-            display: flex; 
-            align-items: center; 
+            position: fixed; top: 56px; left: 0; right: 0; z-index: 199;
+            background: var(--paper); border-bottom: 1px solid rgba(26,20,16,0.12); 
+            overflow: hidden; height: 38px; display: flex; align-items: center; 
         }
         .ticker-track { display: flex; white-space: nowrap; animation: ticker 18s linear infinite; }
         .ticker-item { display: inline-flex; align-items: center; gap: 24px; padding: 0 40px; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
         .ticker-item::after { content: "✦"; font-size: 9px; color: var(--accent); }
         @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
+        /* HERO */
         .hero { 
-            background: var(--dark); 
-            padding: 120px 40px 100px; 
-            position: relative; 
-            overflow: hidden;
-            margin-top: 94px;
+            background: var(--dark); padding: 120px 40px 100px; 
+            position: relative; overflow: hidden; margin-top: 94px;
         }
         .hero::before { content: ''; position: absolute; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(201,185,154,0.12), transparent 70%); top: -100px; right: -100px; }
+
+        /* ── ACCENT LINE IN HERO ── */
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 200px; height: 4px;
+            background: linear-gradient(90deg, #C9B99A, transparent);
+        }
+
         .hero-inner { max-width: 900px; margin: 0 auto; }
         .hero-tag { font-size: 11px; text-transform: uppercase; letter-spacing: 0.18em; color: var(--accent); font-weight: 500; margin-bottom: 24px; }
         .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(60px, 10vw, 120px); font-weight: 900; color: var(--cream); line-height: 0.95; letter-spacing: -0.04em; margin-bottom: 48px; }
         .hero h1 em { font-style: italic; color: var(--accent); }
         .hero-sub { max-width: 520px; font-size: 18px; line-height: 1.8; color: rgba(245,240,232,0.55); }
 
+        /* CONTENT */
         .content { max-width: 900px; margin: 0 auto; padding: 100px 40px; }
+
+        /* ── COLOR BAR ── */
+        .color-bar {
+            height: 5px;
+            background: linear-gradient(90deg, #1A1410, #C9B99A, #EDE7D9, #C9B99A, #1A1410);
+            margin-bottom: 100px;
+            opacity: 0;
+            animation: fadeIn 1s 0.5s forwards;
+        }
+        @keyframes fadeIn { to { opacity: 1; } }
 
         .story-block { display: grid; grid-template-columns: 1fr 2fr; gap: 60px; margin-bottom: 100px; align-items: start; opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
         .story-block.visible { opacity: 1; transform: translateY(0); }
@@ -121,9 +141,20 @@
         .story-text p { font-size: 16px; line-height: 1.85; color: var(--muted); margin-bottom: 18px; }
         .story-text p:last-child { margin-bottom: 0; }
 
-        .pull-quote { background: var(--dark); padding: 80px 60px; margin-bottom: 100px; position: relative; overflow: hidden; opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease 0.1s, transform 0.8s ease 0.1s; }
+        /* ── COLORFUL HIGHLIGHT PILL ── */
+        .story-text .highlight-pill {
+            display: inline-block;
+            background: #C8DEF2;
+            border-radius: 2px;
+            padding: 2px 8px;
+            font-style: italic;
+        }
+
+        .pull-quote { background: var(--dark); padding: 80px 60px; margin-bottom: 0; position: relative; overflow: hidden; opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease 0.1s, transform 0.8s ease 0.1s; }
         .pull-quote.visible { opacity: 1; transform: translateY(0); }
         .pull-quote::before { content: '"'; position: absolute; font-family: 'Playfair Display', serif; font-size: 300px; color: rgba(201,185,154,0.07); line-height: 1; top: -40px; left: 20px; pointer-events: none; }
+        /* ── ACCENT STRIPE ON PULL QUOTE ── */
+        .pull-quote::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #C9B99A, #EDE7D9, #C9B99A); }
         .pull-quote blockquote { font-family: 'Playfair Display', serif; font-style: italic; font-size: clamp(22px, 3vw, 34px); color: var(--cream); line-height: 1.5; max-width: 680px; position: relative; z-index: 1; }
         .pull-quote cite { display: block; margin-top: 24px; font-family: 'DM Sans', sans-serif; font-style: normal; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); position: relative; z-index: 1; }
 
@@ -133,31 +164,214 @@
         .section-header span { font-size: 12px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); }
         .values-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; background: rgba(26,20,16,0.1); opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease 0.2s, transform 0.8s ease 0.2s; }
         .values-grid.visible { opacity: 1; transform: translateY(0); }
-        .value-card { background: var(--warm); padding: 40px 36px; transition: background 0.3s; }
-        .value-card:hover { background: var(--cream); }
+
+        /* ── VALUE CARDS in site tones ── */
+        .value-card { padding: 40px 36px; transition: filter 0.3s, transform 0.2s; }
+        .value-card:hover { filter: brightness(0.95); transform: translateY(-2px); }
+        .value-card:nth-child(1) { background: #E8DDD0; }
+        .value-card:nth-child(2) { background: #C9B99A; }
+        .value-card:nth-child(3) { background: #EDE7D9; }
         .value-icon { font-size: 28px; margin-bottom: 16px; display: block; }
         .value-card h3 { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; margin-bottom: 10px; }
-        .value-card p { font-size: 14px; color: var(--muted); line-height: 1.75; }
+        .value-card p { font-size: 14px; color: rgba(26,20,16,0.65); line-height: 1.75; }
 
-        .tech-section { background: var(--paper); padding: 60px; margin-bottom: 0; opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease 0.3s, transform 0.8s ease 0.3s; }
+        .tech-section { background: var(--paper); padding: 60px; margin-bottom: 0; opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease 0.3s, transform 0.8s ease 0.3s; position: relative; overflow: hidden; }
+        .tech-section::before { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #1A1410, #C9B99A, #EDE7D9, #C9B99A, #1A1410); }
         .tech-section.visible { opacity: 1; transform: translateY(0); }
         .tech-section h2 { font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 700; margin-bottom: 32px; }
         .tech-tags { display: flex; flex-wrap: wrap; gap: 10px; }
-        .tech-tag { padding: 10px 20px; border: 1.5px solid rgba(26,20,16,0.2); font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500; color: var(--dark); border-radius: 2px; transition: background 0.2s, border-color 0.2s; }
-        .tech-tag:hover { background: var(--dark); color: var(--cream); border-color: var(--dark); }
 
-        .team-section { padding: 100px 40px; background: var(--cream); }
-        .team-section-inner { max-width: 900px; margin: 0 auto; }
-        .team-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; background: rgba(26,20,16,0.1); margin-top: 48px; }
-        .team-card { background: var(--warm); padding: 36px; text-align: center; opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease, background 0.3s; }
-        .team-card:hover { background: var(--paper); }
-        .team-card.visible { opacity: 1; transform: translateY(0); }
-        .team-photo { width: 100px; height: 100px; border-radius: 50%; overflow: hidden; margin: 0 auto 20px; border: 3px solid rgba(26,20,16,0.12); }
-        .team-photo img { width: 100%; height: 100%; object-fit: cover; }
-        .team-card h3 { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; margin-bottom: 4px; }
-        .team-card .role { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 12px; }
-        .team-card .desc { font-size: 13px; color: var(--muted); line-height: 1.7; }
+        /* ── TECH TAGS in site tones ── */
+        .tech-tag { padding: 10px 20px; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500; color: var(--dark); border-radius: 2px; transition: transform 0.2s, background 0.2s, color 0.2s; border: 1.5px solid rgba(26,20,16,0.2); background: transparent; }
+        .tech-tag:hover { transform: translateY(-2px); background: var(--dark); color: var(--cream); border-color: var(--dark); }
 
+        /* ══════════════════════════════════════
+           TEAM SPOTLIGHT SECTION
+        ══════════════════════════════════════ */
+        .team-section {
+            padding: 0;
+            background: var(--dark);
+            position: relative;
+            overflow: hidden;
+        }
+        .team-section::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #1A1410, #C9B99A, #EDE7D9, #C9B99A, #1A1410);
+            z-index: 10;
+        }
+        .team-section-inner { width: 100%; }
+
+        .team-section .section-header {
+            border-bottom-color: rgba(255,255,255,0.1);
+            padding: 48px 60px 24px;
+            margin-bottom: 0;
+        }
+        .team-section .section-header h2 { color: var(--cream); }
+        .team-section .section-header span { color: rgba(245,240,232,0.4); }
+
+        /* SPOTLIGHT — full width, tall */
+        .team-spotlight {
+            position: relative;
+            width: 100%;
+            height: 75vh;
+            min-height: 500px;
+            overflow: hidden;
+        }
+
+        .spotlight-member {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            opacity: 0;
+            transition: opacity 0.6s ease;
+            pointer-events: none;
+        }
+        .spotlight-member.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .spotlight-bg {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+        }
+
+        /* Photo fills entire spotlight area */
+        .spotlight-photo-large {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center top;
+            border-radius: 0;
+            border: none;
+            filter: none;
+            position: absolute;
+            top: 0; left: 0;
+            transform: none;
+        }
+
+        /* Dark overlay so text stays readable */
+        .spotlight-bg::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(20,14,10,0.92) 0%, rgba(20,14,10,0.4) 40%, rgba(20,14,10,0.1) 100%);
+        }
+
+        /* Spotlight backgrounds fallback */
+        .spotlight-member:nth-child(1) .spotlight-bg { background: #1A1410; }
+        .spotlight-member:nth-child(2) .spotlight-bg { background: #221a14; }
+        .spotlight-member:nth-child(3) .spotlight-bg { background: #1e1710; }
+        .spotlight-member:nth-child(4) .spotlight-bg { background: #1a1410; }
+        .spotlight-member:nth-child(5) .spotlight-bg { background: #251c12; }
+        .spotlight-member:nth-child(6) .spotlight-bg { background: #201510; }
+        .spotlight-member:nth-child(7) .spotlight-bg { background: #1a1410; }
+
+        .spotlight-info {
+            position: relative;
+            z-index: 2;
+            padding: 0 60px 32px;
+            width: 100%;
+        }
+
+        .spotlight-role {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--accent);
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
+
+        .spotlight-name {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(32px, 5vw, 56px);
+            font-weight: 900;
+            color: var(--cream);
+            line-height: 1;
+            margin-bottom: 10px;
+        }
+
+        .spotlight-desc {
+            font-size: 14px;
+            color: rgba(245,240,232,0.6);
+            line-height: 1.7;
+            max-width: 520px;
+            margin-bottom: 32px;
+        }
+
+        /* COLOR ACCENT BAR ON SPOTLIGHT */
+        .spotlight-accent {
+            position: absolute;
+            top: 0; left: 0;
+            width: 5px;
+            height: 100%;
+            z-index: 3;
+        }
+        .spotlight-member:nth-child(1) .spotlight-accent { background: #C9B99A; }
+        .spotlight-member:nth-child(2) .spotlight-accent { background: #C9B99A; }
+        .spotlight-member:nth-child(3) .spotlight-accent { background: #C9B99A; }
+        .spotlight-member:nth-child(4) .spotlight-accent { background: #C9B99A; }
+        .spotlight-member:nth-child(5) .spotlight-accent { background: #C9B99A; }
+        .spotlight-member:nth-child(6) .spotlight-accent { background: #C9B99A; }
+        .spotlight-member:nth-child(7) .spotlight-accent { background: #C9B99A; }
+
+        /* AVATAR ROW — floats INSIDE the spotlight at the bottom */
+        .team-avatars {
+            position: relative;
+            z-index: 3;
+            display: flex;
+            justify-content: flex-start;
+            gap: 12px;
+            flex-wrap: wrap;
+            padding: 0 60px 48px;
+        }
+
+        .avatar-btn {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid rgba(201,185,154,0.3);
+            transition: border-color 0.3s, transform 0.2s, box-shadow 0.3s;
+            background: rgba(26,20,16,0.6);
+            flex-shrink: 0;
+            padding: 0;
+        }
+
+        .avatar-btn img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(60%) brightness(0.8);
+            transition: filter 0.3s;
+        }
+
+        .avatar-btn:hover img,
+        .avatar-btn.active img {
+            filter: grayscale(0%) brightness(1);
+        }
+
+        .avatar-btn:hover {
+            transform: translateY(-3px);
+            border-color: rgba(201,185,154,0.7);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+        }
+
+        .avatar-btn.active {
+            transform: translateY(-5px);
+            border-color: #C9B99A;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+        }
+
+        /* FOOTER */
         footer { background: var(--dark); padding: 40px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.06); }
         footer p { font-size: 12px; color: rgba(255,255,255,0.3); letter-spacing: 0.06em; }
         footer a { color: rgba(255,255,255,0.3); text-decoration: none; }
@@ -165,30 +379,54 @@
 
         @media (max-width: 768px) {
             .story-block { grid-template-columns: 1fr; gap: 24px; }
-            .values-grid, .team-grid { grid-template-columns: 1fr; }
+            .values-grid { grid-template-columns: 1fr; }
             .pull-quote { padding: 40px 28px; }
             nav { padding: 0 20px; }
             .nav-links { display: none; }
             .hero { padding: 80px 24px 60px; }
             .content { padding: 60px 24px; }
+            .side-deco { display: none; }
+            .team-spotlight { height: 340px; }
+            .spotlight-name { font-size: 26px; }
+            .team-avatars { gap: 10px; }
+            .avatar-btn { width: 52px; height: 52px; }
         }
     </style>
 </head>
 <body>
+
+<!-- COLORFUL SIDE BARS -->
+<div class="side-deco left">
+    <div class="side-stripe"></div>
+    <div class="side-stripe"></div>
+    <div class="side-stripe"></div>
+    <div class="side-stripe"></div>
+    <div class="side-stripe"></div>
+    <div class="side-stripe"></div>
+</div>
+<div class="side-deco right">
+    <div class="side-stripe"></div>
+    <div class="side-stripe"></div>
+    <div class="side-stripe"></div>
+    <div class="side-stripe"></div>
+    <div class="side-stripe"></div>
+    <div class="side-stripe"></div>
+</div>
 
 <nav>
     <div class="nav-links">
         <a href="resources.html">Resources</a>
         <a href="about.html" class="active">About</a>
     </div>
-  <a href="index.html" class="logo">
-  <img src="LOGOBRAILLINO.png" alt="Braillino" style="height:28px;width:auto;display:block;">
-</a>
+    <a href="index.html" class="logo">
+        <img src="LOGOBRAILLINO.png" alt="Braillino" style="height:28px;width:auto;display:block;">
+    </a>
     <div style="width: 120px;"></div>
 </nav>
 
 <div class="ticker-wrap">
     <div class="ticker-track">
+        <span class="ticker-item">Our Story</span><span class="ticker-item">Mission</span><span class="ticker-item">Values</span><span class="ticker-item">Team</span><span class="ticker-item">Our Story</span><span class="ticker-item">Mission</span><span class="ticker-item">Values</span><span class="ticker-item">Team</span><span class="ticker-item">Our Story</span><span class="ticker-item">Mission</span><span class="ticker-item">Values</span><span class="ticker-item">Team</span><span class="ticker-item">Our Story</span><span class="ticker-item">Mission</span><span class="ticker-item">Values</span><span class="ticker-item">Team</span>
         <span class="ticker-item">Our Story</span><span class="ticker-item">Mission</span><span class="ticker-item">Values</span><span class="ticker-item">Team</span><span class="ticker-item">Our Story</span><span class="ticker-item">Mission</span><span class="ticker-item">Values</span><span class="ticker-item">Team</span><span class="ticker-item">Our Story</span><span class="ticker-item">Mission</span><span class="ticker-item">Values</span><span class="ticker-item">Team</span><span class="ticker-item">Our Story</span><span class="ticker-item">Mission</span><span class="ticker-item">Values</span><span class="ticker-item">Team</span>
     </div>
 </div>
@@ -202,6 +440,9 @@
 </section>
 
 <div class="content">
+
+    <div class="color-bar"></div>
+
     <div class="story-block" id="sb1">
         <div class="story-label">Our Story</div>
         <div class="story-text">
@@ -217,6 +458,8 @@
         <cite>— A classmate, on losing his vision through screens</cite>
     </div>
 
+    <div style="margin-bottom: 100px;"></div>
+
     <div class="values-section">
         <div class="section-header"><h2>What we stand for</h2><span>Core values</span></div>
         <div class="values-grid" id="valGrid">
@@ -229,51 +472,152 @@
     <div class="tech-section" id="techSec">
         <h2>Built with</h2>
         <div class="tech-tags">
-            <span class="tech-tag">Arduino</span><span class="tech-tag">Web Serial API</span><span class="tech-tag">HTML & CSS</span><span class="tech-tag">JavaScript</span><span class="tech-tag">Servo Motors</span><span class="tech-tag">Braille Grade 1</span>
+            <span class="tech-tag">Arduino</span>
+            <span class="tech-tag">Web Serial API</span>
+            <span class="tech-tag">HTML & CSS</span>
+            <span class="tech-tag">JavaScript</span>
+            <span class="tech-tag">Servo Motors</span>
+            <span class="tech-tag">Braille Grade 1</span>
         </div>
     </div>
 </div>
 
+<!-- ══ TEAM SPOTLIGHT ══ -->
 <section class="team-section">
     <div class="team-section-inner">
-        <div class="section-header"><h2>The team</h2><span>The people behind Braillino</span></div>
-        <div class="team-grid">
-            <div class="team-card" id="tm1">
-                <div class="team-photo"><img src="basto.jpg" alt="Daniel Basto" onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><rect fill=\'%23C9B99A\' width=\'100\' height=\'100\'/><text y=\'55\' x=\'50\' text-anchor=\'middle\' font-size=\'36\' fill=\'white\'>DB</text></svg>'"></div>
-                <h3>Daniel Basto</h3><div class="role">Team Leader</div>
-                <div class="desc">Led the team and coordinated overall progress. Assisted in documentation, coding and paper preparation.</div>
-            </div>
-            <div class="team-card" id="tm2">
-                <div class="team-photo"><img src="asuncion.jpeg" alt="Franchesca Asuncion" onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><rect fill=\'%23C9B99A\' width=\'100\' height=\'100\'/><text y=\'55\' x=\'50\' text-anchor=\'middle\' font-size=\'36\' fill=\'white\'>FA</text></svg>'"></div>
-                <h3>Franchesca Asuncion</h3><div class="role">Asst. Leader & Lead Dev</div>
-                <div class="desc">Lead coder for the project. Contributed to the physical prototype case and research paper writing.</div>
-            </div>
-            <div class="team-card" id="tm3">
-                <div class="team-photo"><img src="serenio.jpg" alt="Ephraim Serenio" onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><rect fill=\'%23C9B99A\' width=\'100\' height=\'100\'/><text y=\'55\' x=\'50\' text-anchor=\'middle\' font-size=\'36\' fill=\'white\'>ES</text></svg>'"></div>
-                <h3>Ephraim Serenio</h3><div class="role">Lead Dev & Web Editor</div>
-                <div class="desc">Lead coder and website content manager. Assisted in paper development.</div>
-            </div>
-            <div class="team-card" id="tm4">
-                <div class="team-photo"><img src="gomba.jpeg" alt="Zhen Gomba" onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><rect fill=\'%23C9B99A\' width=\'100\' height=\'100\'/><text y=\'55\' x=\'50\' text-anchor=\'middle\' font-size=\'36\' fill=\'white\'>ZG</text></svg>'"></div>
-                <h3>Zhen Gomba</h3><div class="role">Prototype & Docs</div>
-                <div class="desc">Supported building and refining the physical prototype. Contributed to research papers.</div>
-            </div>
-            <div class="team-card" id="tm5">
-                <div class="team-photo"><img src="mazaredo.jpeg" alt="Marc Mazaredo" onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><rect fill=\'%23C9B99A\' width=\'100\' height=\'100\'/><text y=\'55\' x=\'50\' text-anchor=\'middle\' font-size=\'36\' fill=\'white\'>MM</text></svg>'"></div>
-                <h3>Marc Mazaredo</h3><div class="role">Prototype & Docs</div>
-                <div class="desc">Assisted in assembling the physical prototype and contributed to research documentation.</div>
-            </div>
-            <div class="team-card" id="tm6">
-                <div class="team-photo"><img src="reyes.jpeg" alt="Keisha Reyes" onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><rect fill=\'%23C9B99A\' width=\'100\' height=\'100\'/><text y=\'55\' x=\'50\' text-anchor=\'middle\' font-size=\'36\' fill=\'white\'>KR</text></svg>'"></div>
-                <h3>Keisha Reyes</h3><div class="role">Prototype & Docs</div>
-                <div class="desc">Contributed to construction of the prototype. Assisted in organizing the research papers.</div>
-            </div>
-            <div class="team-card" id="tm7" style="grid-column: 2;">
-                <div class="team-photo"><img src="mendoza.jpeg" alt="Mharc Mendoza" onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><rect fill=\'%23C9B99A\' width=\'100\' height=\'100\'/><text y=\'55\' x=\'50\' text-anchor=\'middle\' font-size=\'36\' fill=\'white\'>MM</text></svg>'"></div>
-                <h3>Mharc Mendoza</h3><div class="role">Supporting Contributor</div>
-                <div class="desc">Provided support with paper preparation and assisted the team in selected tasks.</div>
-            </div>
+        <div class="section-header">
+            <h2>The team</h2>
+            <span>Click a photo to meet us</span>
         </div>
+
+        <!-- SPOTLIGHT DISPLAY -->
+        <div class="team-spotlight" id="teamSpotlight">
+
+            <div class="spotlight-member active" data-index="0">
+                <div class="spotlight-accent"></div>
+                <div class="spotlight-bg">
+                    <img class="spotlight-photo-large" src="IMG_9444.JPG" alt="Daniel Basto"
+                         onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 260 260\'><rect fill=\'%23C8DEF2\' width=\'260\' height=\'260\' rx=\'130\'/><text y=\'145\' x=\'130\' text-anchor=\'middle\' font-size=\'80\' fill=\'%231A1410\' font-family=\'serif\'>DB</text></svg>'">
+                </div>
+                <div class="spotlight-info">
+                    <div class="spotlight-role">Team Leader</div>
+                    <div class="spotlight-name">Daniel Basto</div>
+                    <div class="spotlight-desc">Led the team and coordinated overall progress. Assisted in documentation, coding and paper preparation.</div>
+                </div>
+            </div>
+
+            <div class="spotlight-member" data-index="1">
+                <div class="spotlight-accent"></div>
+                <div class="spotlight-bg">
+                    <img class="spotlight-photo-large" src="asuncion.jpeg" alt="Franchesca Asuncion"
+                         onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 260 260\'><rect fill=\'%23F2D4BE\' width=\'260\' height=\'260\' rx=\'130\'/><text y=\'145\' x=\'130\' text-anchor=\'middle\' font-size=\'80\' fill=\'%231A1410\' font-family=\'serif\'>FA</text></svg>'">
+                </div>
+                <div class="spotlight-info">
+                    <div class="spotlight-role">Asst. Leader & Lead Developer</div>
+                    <div class="spotlight-name">Franchesca Asuncion</div>
+                    <div class="spotlight-desc">Lead coder for the project. Contributed to the physical prototype case and research paper writing.</div>
+                </div>
+            </div>
+
+            <div class="spotlight-member" data-index="2">
+                <div class="spotlight-accent"></div>
+                <div class="spotlight-bg">
+                    <img class="spotlight-photo-large" src="serenio.jpg" alt="Ephraim Serenio"
+                         onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 260 260\'><rect fill=\'%23C4E8D4\' width=\'260\' height=\'260\' rx=\'130\'/><text y=\'145\' x=\'130\' text-anchor=\'middle\' font-size=\'80\' fill=\'%231A1410\' font-family=\'serif\'>ES</text></svg>'">
+                </div>
+                <div class="spotlight-info">
+                    <div class="spotlight-role">Lead Dev & Web Editor</div>
+                    <div class="spotlight-name">Ephraim Serenio</div>
+                    <div class="spotlight-desc">Lead coder and website content manager. Assisted in paper development.</div>
+                </div>
+            </div>
+
+            <div class="spotlight-member" data-index="3">
+                <div class="spotlight-accent"></div>
+                <div class="spotlight-bg">
+                    <img class="spotlight-photo-large" src="gomba.jpeg" alt="Zhen Gomba"
+                         onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 260 260\'><rect fill=\'%23DDD0F0\' width=\'260\' height=\'260\' rx=\'130\'/><text y=\'145\' x=\'130\' text-anchor=\'middle\' font-size=\'80\' fill=\'%231A1410\' font-family=\'serif\'>ZG</text></svg>'">
+                </div>
+                <div class="spotlight-info">
+                    <div class="spotlight-role">Prototype & Docs</div>
+                    <div class="spotlight-name">Zhen Gomba</div>
+                    <div class="spotlight-desc">Supported building and refining the physical prototype. Contributed to research papers.</div>
+                </div>
+            </div>
+
+            <div class="spotlight-member" data-index="4">
+                <div class="spotlight-accent"></div>
+                <div class="spotlight-bg">
+                    <img class="spotlight-photo-large" src="mazaredo.jpeg" alt="Marc Mazaredo"
+                         onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 260 260\'><rect fill=\'%23F5EAC8\' width=\'260\' height=\'260\' rx=\'130\'/><text y=\'145\' x=\'130\' text-anchor=\'middle\' font-size=\'80\' fill=\'%231A1410\' font-family=\'serif\'>MM</text></svg>'">
+                </div>
+                <div class="spotlight-info">
+                    <div class="spotlight-role">Prototype & Docs</div>
+                    <div class="spotlight-name">Marc Mazaredo</div>
+                    <div class="spotlight-desc">Assisted in assembling the physical prototype and contributed to research documentation.</div>
+                </div>
+            </div>
+
+            <div class="spotlight-member" data-index="5">
+                <div class="spotlight-accent"></div>
+                <div class="spotlight-bg">
+                    <img class="spotlight-photo-large" src="reyes.jpeg" alt="Keisha Reyes"
+                         onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 260 260\'><rect fill=\'%23F2DCE4\' width=\'260\' height=\'260\' rx=\'130\'/><text y=\'145\' x=\'130\' text-anchor=\'middle\' font-size=\'80\' fill=\'%231A1410\' font-family=\'serif\'>KR</text></svg>'">
+                </div>
+                <div class="spotlight-info">
+                    <div class="spotlight-role">Prototype & Docs</div>
+                    <div class="spotlight-name">Keisha Reyes</div>
+                    <div class="spotlight-desc">Contributed to construction of the prototype. Assisted in organizing the research papers.</div>
+                </div>
+            </div>
+
+            <div class="spotlight-member" data-index="6">
+                <div class="spotlight-accent"></div>
+                <div class="spotlight-bg">
+                    <img class="spotlight-photo-large" src="mendoza.jpeg" alt="Mharc Mendoza"
+                         onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 260 260\'><rect fill=\'%23C8DEF2\' width=\'260\' height=\'260\' rx=\'130\'/><text y=\'145\' x=\'130\' text-anchor=\'middle\' font-size=\'80\' fill=\'%231A1410\' font-family=\'serif\'>MM</text></svg>'">
+                </div>
+                <div class="spotlight-info">
+                    <div class="spotlight-role">Supporting Contributor</div>
+                    <div class="spotlight-name">Mharc Mendoza</div>
+                    <div class="spotlight-desc">Provided support with paper preparation and assisted the team in selected tasks.</div>
+                </div>
+            </div>
+
+        </div><!-- end spotlight -->
+
+        <!-- AVATAR PICKER ROW -->
+        <div class="team-avatars" id="teamAvatars">
+            <button class="avatar-btn active" data-index="0" title="Daniel Basto">
+                <img src="basto.jpg" alt="Daniel Basto"
+                     onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 68 68\'><rect fill=\'%23C8DEF2\' width=\'68\' height=\'68\' rx=\'34\'/><text y=\'40\' x=\'34\' text-anchor=\'middle\' font-size=\'22\' fill=\'%231A1410\' font-family=\'serif\'>DB</text></svg>'">
+            </button>
+            <button class="avatar-btn" data-index="1" title="Franchesca Asuncion">
+                <img src="asuncion.jpeg" alt="Franchesca Asuncion"
+                     onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 68 68\'><rect fill=\'%23F2D4BE\' width=\'68\' height=\'68\' rx=\'34\'/><text y=\'40\' x=\'34\' text-anchor=\'middle\' font-size=\'22\' fill=\'%231A1410\' font-family=\'serif\'>FA</text></svg>'">
+            </button>
+            <button class="avatar-btn" data-index="2" title="Ephraim Serenio">
+                <img src="serenio.jpg" alt="Ephraim Serenio"
+                     onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 68 68\'><rect fill=\'%23C4E8D4\' width=\'68\' height=\'68\' rx=\'34\'/><text y=\'40\' x=\'34\' text-anchor=\'middle\' font-size=\'22\' fill=\'%231A1410\' font-family=\'serif\'>ES</text></svg>'">
+            </button>
+            <button class="avatar-btn" data-index="3" title="Zhen Gomba">
+                <img src="gomba.jpeg" alt="Zhen Gomba"
+                     onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 68 68\'><rect fill=\'%23DDD0F0\' width=\'68\' height=\'68\' rx=\'34\'/><text y=\'40\' x=\'34\' text-anchor=\'middle\' font-size=\'22\' fill=\'%231A1410\' font-family=\'serif\'>ZG</text></svg>'">
+            </button>
+            <button class="avatar-btn" data-index="4" title="Marc Mazaredo">
+                <img src="mazaredo.jpeg" alt="Marc Mazaredo"
+                     onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 68 68\'><rect fill=\'%23F5EAC8\' width=\'68\' height=\'68\' rx=\'34\'/><text y=\'40\' x=\'34\' text-anchor=\'middle\' font-size=\'22\' fill=\'%231A1410\' font-family=\'serif\'>MM</text></svg>'">
+            </button>
+            <button class="avatar-btn" data-index="5" title="Keisha Reyes">
+                <img src="reyes.jpeg" alt="Keisha Reyes"
+                     onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 68 68\'><rect fill=\'%23F2DCE4\' width=\'68\' height=\'68\' rx=\'34\'/><text y=\'40\' x=\'34\' text-anchor=\'middle\' font-size=\'22\' fill=\'%231A1410\' font-family=\'serif\'>KR</text></svg>'">
+            </button>
+            <button class="avatar-btn" data-index="6" title="Mharc Mendoza">
+                <img src="mendoza.jpeg" alt="Mharc Mendoza"
+                     onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 68 68\'><rect fill=\'%23C8DEF2\' width=\'68\' height=\'68\' rx=\'34\'/><text y=\'40\' x=\'34\' text-anchor=\'middle\' font-size=\'22\' fill=\'%231A1410\' font-family=\'serif\'>MM</text></svg>'">
+            </button>
+        </div>
+
     </div>
 </section>
 
@@ -286,11 +630,30 @@
 </footer>
 
 <script>
-const scrollEls = document.querySelectorAll('.story-block, .pull-quote, .values-grid, .tech-section, .team-card');
+// ── SCROLL ANIMATIONS ──
+const scrollEls = document.querySelectorAll('.story-block, .pull-quote, .values-grid, .tech-section');
 const obs = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
 }, { threshold: 0.15 });
 scrollEls.forEach(el => obs.observe(el));
+
+// ── TEAM SPOTLIGHT SWITCHER ──
+const avatarBtns = document.querySelectorAll('.avatar-btn');
+const spotlightMembers = document.querySelectorAll('.spotlight-member');
+
+avatarBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        const idx = parseInt(btn.dataset.index);
+
+        // Update avatars
+        avatarBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        // Update spotlight
+        spotlightMembers.forEach(m => m.classList.remove('active'));
+        spotlightMembers[idx].classList.add('active');
+    });
+});
 </script>
 </body>
 </html>
