@@ -4,20 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>braillino</title>
-      <link rel="icon" type="image/png" href="apple-touch-icon.png">
-          <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://nonaquo.github.io/texttobraille/">
-    <meta property="og:title" content="braillino">
-    <meta property="og:description" content="Transform your text into tactile Braille patterns. Connect your Arduino and bring words to life through touch.">
-    <meta property="og:image" content="https://nonaquo.github.io/texttobraille/previewimagebraillino.jpg">
-
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://nonaquo.github.io/texttobraille/">
-    <meta property="twitter:title" content="braillino">
-    <meta property="twitter:description" content="Transform your text into tactile Braille patterns. Connect your Arduino and bring words to life through touch.">
-    <meta property="twitter:image" content="https://nonaquo.github.io/texttobraille/previewimagebraillino.jpg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
@@ -40,7 +26,7 @@
             overflow-x: hidden;
         }
 
-        /* NAV */
+                /* NAV */
         nav {
             position: fixed;
             top: 0; left: 0; right: 0;
@@ -50,19 +36,79 @@
             justify-content: space-between;
             align-items: center;
             padding: 0 40px;
-            background: var(--dark);
+            background: var(--cream);
+            border-bottom: 2px solid var(--dark);
         }
         .nav-links { display: flex; gap: 32px; }
-        .nav-links a { color: rgba(255,255,255,0.7); text-decoration: none; font-size: 12px; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 500; transition: color 0.2s; }
-        .nav-links a:hover { color: #fff; }
-        .logo { font-family: 'Playfair Display', serif; font-style: italic; font-size: 22px; color: var(--cream); text-decoration: none; }
-        .status-pill { display: flex; align-items: center; gap: 7px; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.55); background: rgba(255,255,255,0.07); padding: 6px 14px; border-radius: 20px; }
-        .dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.3); transition: all 0.4s; }
-        .dot.on { background: #90E8B4; box-shadow: 0 0 8px #90E8B4; }
+        .nav-links a { 
+            color: var(--dark); 
+            text-decoration: none; 
+            font-size: 12px; 
+            text-transform: uppercase; 
+            letter-spacing: 0.12em; 
+            font-weight: 500; 
+            transition: opacity 0.2s;
+            position: relative;
+            padding-bottom: 2px;
+        }
+        .nav-links a:hover::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--dark);
+        }
+        .nav-links a.active {
+            font-weight: 600;
+            opacity: 1;
+        }
+        .nav-links a.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--dark);
+        }
+        .logo { 
+            font-family: 'Playfair Display', serif; 
+            font-style: italic; 
+            font-size: 22px; 
+            color: var(--dark); 
+            text-decoration: none; 
+            display: flex;
+            align-items: center;
+        }
+        .status-pill { 
+            display: flex; 
+            align-items: center; 
+            gap: 7px; 
+            font-size: 11px; 
+            letter-spacing: 0.1em; 
+            text-transform: uppercase; 
+            color: var(--dark); 
+            background: rgba(26,20,16,0.08); 
+            padding: 6px 14px; 
+            border-radius: 20px; 
+        }
+        .dot { 
+            width: 6px; 
+            height: 6px; 
+            border-radius: 50%; 
+            background: rgba(26,20,16,0.3); 
+            transition: all 0.4s; 
+        }
+        .dot.on { 
+            background: #90E8B4; 
+            box-shadow: 0 0 8px #90E8B4; 
+        }
 
         /* TICKER */
         .ticker-wrap { position: fixed; top: 56px; left: 0; right: 0; z-index: 199; background: var(--paper); border-bottom: 1px solid rgba(26,20,16,0.12); overflow: hidden; height: 38px; display: flex; align-items: center; }
-        .ticker-track { display: flex; white-space: nowrap; animation: ticker 18s linear infinite; }
+        .ticker-track { display: flex; white-space: nowrap; animation: ticker 12s linear infinite; }
         .ticker-item { display: inline-flex; align-items: center; gap: 24px; padding: 0 40px; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
         .ticker-item::after { content: '✦'; font-size: 9px; color: var(--accent); }
         @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
@@ -375,9 +421,7 @@
         <a href="how-it-works.html">How It Works</a>
         <a href="about.html">About</a>
     </div>
-<a href="index.html" class="logo">
-  <img src="newbraillino.png" alt="Braillino" style="height:28px;width:auto;display:block;">
-</a>
+    <a href="index.html" class="logo"><img src="LOGOBRAILLINO.png" alt="Braillino" style="height:28px;width:auto;display:block;"></a>
     <div class="status-pill">
         <div class="dot" id="statusDot"></div>
         <span id="statusText">Offline</span>
@@ -387,7 +431,9 @@
 <!-- TICKER -->
 <div class="ticker-wrap">
     <div class="ticker-track">
-        <span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span><span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span><span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span><span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span>
+        <span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span><span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span><span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span><span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span><span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span><span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span><span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span><span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span>
+    <span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span><span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span><span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span><span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span>
+    <span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span><span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span><span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span><span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span>
     </div>
 </div>
 
@@ -689,7 +735,9 @@ function renderBraillePreview(text) {
         cell.className = 'braille-cell';
         const grid = document.createElement('div');
         grid.className = 'braille-char';
-        [0,3,1,4,2,5].forEach(i => {
+        // Arduino layout: [L_TOP, L_MID, L_BOT, R_TOP, R_MID, R_BOT]
+        // Display order: Left column (0,1,2) then Right column (3,4,5)
+        [0,1,2,3,4,5].forEach(i => {
             const d = document.createElement('div');
             d.className = 'braille-dot' + (dots[i] ? ' raised' : '');
             grid.appendChild(d);
