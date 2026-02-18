@@ -3,44 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>braillino</title>
-       <link rel="icon" type="image/png" href="apple-touch-icon.png">
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://nonaquo.github.io/texttobraille/">
-    <meta property="og:title" content="braillino">
-    <meta property="og:description" content="Transform your text into tactile Braille patterns. Connect your Arduino and bring words to life through touch.">
-    <meta property="og:image" content="https://nonaquo.github.io/texttobraille/previewimagebraillino.jpg">
-
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://nonaquo.github.io/texttobraille/">
-    <meta property="twitter:title" content="braillino">
-    <meta property="twitter:description" content="Transform your text into tactile Braille patterns. Connect your Arduino and bring words to life through touch.">
-    <meta property="twitter:image" content="https://nonaquo.github.io/texttobraille/previewimagebraillino.jpg">
+    <title>Braillino - Text to Braille Converter</title>
+    <link rel="icon" type="image/png" href="apple-touch-icon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-        :root {
-            --cream: #F5F0E8;
-            --paper: #EDE7D9;
-            --dark: #1A1410;
-            --muted: #6B5F52;
-            --accent: #C9B99A;
-            --warm: #E8DDD0;
+        :root { --cream: #F5F0E8; --paper: #EDE7D9; --dark: #1A1410; --muted: #6B5F52; --accent: #C9B99A; --warm: #E8DDD0; }
+        
+        html, body { 
+            height: 100%; 
+            overflow: hidden; 
+            font-family: 'DM Sans', sans-serif; 
+            background: var(--cream); 
+            color: var(--dark); 
         }
 
-        body {
-            font-family: 'DM Sans', sans-serif;
-            background: var(--cream);
-            color: var(--dark);
-            overflow-x: hidden;
+        /* WATERMARK LOGO */
+        .logo-watermark {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80vw;
+            max-width: 1200px;
+            height: auto;
+            opacity: 0.08;
+            z-index: 0;
+            pointer-events: none;
+            mix-blend-mode: multiply;
         }
 
-                /* NAV */
+        /* NAV */
         nav {
             position: fixed;
             top: 0; left: 0; right: 0;
@@ -74,27 +69,12 @@
             height: 1px;
             background: var(--dark);
         }
-        .nav-links a.active {
-            font-weight: 600;
-            opacity: 1;
-        }
-        .nav-links a.active::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: var(--dark);
-        }
-        .logo { 
+        .logo-text { 
             font-family: 'Playfair Display', serif; 
             font-style: italic; 
             font-size: 22px; 
             color: var(--dark); 
             text-decoration: none; 
-            display: flex;
-            align-items: center;
         }
         .status-pill { 
             display: flex; 
@@ -121,162 +101,91 @@
         }
 
         /* TICKER */
-        .ticker-wrap { position: fixed; top: 56px; left: 0; right: 0; z-index: 199; background: var(--paper); border-bottom: 1px solid rgba(26,20,16,0.12); overflow: hidden; height: 38px; display: flex; align-items: center; }
-        .ticker-track { display: flex; white-space: nowrap; animation: ticker 12s linear infinite; }
-        .ticker-item { display: inline-flex; align-items: center; gap: 24px; padding: 0 40px; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
-        .ticker-item::after { content: '✦'; font-size: 9px; color: var(--accent); }
-        @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        .ticker-wrap { 
+            position: fixed; 
+            top: 56px; 
+            left: 0; 
+            right: 0; 
+            z-index: 199; 
+            background: var(--paper); 
+            border-bottom: 1px solid rgba(26,20,16,0.12); 
+            overflow: hidden; 
+            height: 38px; 
+            display: flex; 
+            align-items: center; 
+        }
+        .ticker-track { 
+            display: flex; 
+            white-space: nowrap; 
+            animation: ticker 18s linear infinite; 
+        }
+        .ticker-item { 
+            display: inline-flex; 
+            align-items: center; 
+            gap: 24px; 
+            padding: 0 40px; 
+            font-size: 11px; 
+            letter-spacing: 0.12em; 
+            text-transform: uppercase; 
+            color: var(--muted); 
+            font-weight: 500; 
+        }
+        .ticker-item::after { 
+            content: '✦'; 
+            font-size: 9px; 
+            color: var(--accent); 
+        }
+        @keyframes ticker { 
+            0% { transform: translateX(0); } 
+            100% { transform: translateX(-50%); } 
+        }
 
-        /* GIANT LOGO IMAGE */
-        .giant-word-fixed {
+        /* MAIN LAYOUT */
+        .main-container {
             position: fixed;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1;
-            width: 100vw;
-            height: auto;
-            pointer-events: none;
-            user-select: none;
-            opacity: 1;
-            transition: opacity 0.4s;
-            mix-blend-mode: multiply;
-        }
-        .giant-word-fixed.hidden { opacity: 0; pointer-events: none; }
-
-        /* SCROLL STAGE */
-        .scroll-stage {
-            margin-top: 94px;
-            position: relative;
-            height: 550vh;
-            background: var(--cream);
-            overflow: hidden;
-        }
-
-        /* ── NEW EDITORIAL HERO ── */
-        .intro-text {
-            position: absolute;
-            top: 0;
+            top: 94px; /* 56px nav + 38px ticker */
             left: 0;
-            width: 100%;
-            height: 100vh;
-            pointer-events: none;
-            z-index: 10;
-        }
-
-        .intro-text img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        /* Braille dot field — rendered in JS into this canvas */
-        .braille-bg-canvas {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%;
-            height: 100vh;
-            pointer-events: none;
-            z-index: 1;
-            opacity: 0.45;
-        }
-
-        .hero-line-top {
-            font-family: 'DM Sans', sans-serif;
-            font-weight: 500;
-            font-size: clamp(13px, 1.5vw, 17px);
-            letter-spacing: 0.22em;
-            text-transform: uppercase;
-            color: var(--dark);
-            opacity: 0.65;
-            margin-bottom: 10px;
-        }
-
-        .hero-line-mid {
-            font-family: 'DM Sans', sans-serif;
-            font-weight: 500;
-            font-size: clamp(14px, 1.7vw, 19px);
-            letter-spacing: 0.18em;
-            text-transform: uppercase;
-            color: var(--dark);
-            opacity: 0.65;
-            line-height: 1.9;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .hero-line-mid em {
-            font-family: 'Playfair Display', serif;
-            font-style: italic;
-            font-weight: 700;
-            font-size: clamp(18px, 2.2vw, 26px);
-            letter-spacing: 0.04em;
-            text-transform: none;
-            opacity: 1;
-        }
-
-        .hero-line-big {
-            font-family: 'Playfair Display', serif;
-            font-weight: 900;
-            font-size: clamp(56px, 9vw, 120px);
-            line-height: 0.9;
-            letter-spacing: -0.02em;
-            color: var(--dark);
-            margin-top: 6px;
-            margin-bottom: 0;
-        }
-
-        /* Each card is absolutely positioned at a specific vertical offset */
-        .card-slot {
-            position: absolute;
-            left: 0; right: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            height: 100vh;
-        }
-
-        .step-card {
-            background: var(--warm);
-            border: 1.5px solid rgba(26,20,16,0.15);
-            border-radius: 4px;
-            width: min(460px, 90vw);
+            right: 0;
+            bottom: 0;
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 0;
             overflow: hidden;
-            box-shadow: 0 2px 4px rgba(26,20,16,0.06), 0 12px 40px rgba(26,20,16,0.14), 0 30px 60px rgba(26,20,16,0.08);
-            opacity: 0;
-            transform: translateY(50px) rotate(-1.5deg);
-            transition: opacity 0.75s ease, transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .step-card.alt { transform: translateY(50px) rotate(1.5deg); }
-        .step-card.visible { opacity: 1; transform: translateY(0) rotate(-1.5deg); }
-        .step-card.alt.visible { transform: translateY(0) rotate(1.5deg); }
 
-        .card-illustration { height: 195px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-        .card-illustration.blue  { background: #C8DEF2; }
-        .card-illustration.peach { background: #F2D4BE; }
-        .card-illustration.mint  { background: #C4E8D4; }
-        .card-illustration.lilac { background: #DDD0F0; }
-
-        .card-body { padding: 24px 28px 28px; background: var(--cream); }
-        .card-step-num { font-family: 'DM Serif Display', serif; font-style: italic; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
-        .card-title { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; margin-bottom: 9px; line-height: 1.2; }
-        .card-desc { font-size: 14px; line-height: 1.75; color: var(--muted); }
-        .card-tag { display: inline-block; margin-top: 13px; padding: 5px 12px; border: 1px solid rgba(26,20,16,0.2); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dark); font-weight: 500; border-radius: 2px; }
-
-        /* CONVERTER */
-        .converter-section {
+        /* LEFT PANEL - CONVERTER */
+        .converter-panel {
             background: var(--dark);
-            padding: 110px 40px;
+            padding: 60px 48px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+            overflow-y: auto;
         }
-        .converter-inner { max-width: 900px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
 
-        .converter-left h2 { font-family: 'Playfair Display', serif; font-size: clamp(42px, 6vw, 72px); font-weight: 900; color: var(--cream); line-height: 1.0; letter-spacing: -0.03em; margin-bottom: 20px; }
-        .converter-left p { font-size: 15px; line-height: 1.8; color: rgba(245,240,232,0.5); margin-bottom: 28px; }
+        .converter-panel h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(36px, 5vw, 56px);
+            font-weight: 900;
+            color: var(--cream);
+            line-height: 1.1;
+            margin-bottom: 16px;
+        }
+
+        .converter-panel h1 em {
+            font-style: italic;
+            color: var(--accent);
+        }
+
+        .converter-panel .subtitle {
+            font-size: 15px;
+            line-height: 1.7;
+            color: rgba(245,240,232,0.55);
+            margin-bottom: 32px;
+            max-width: 450px;
+        }
 
         .connect-btn {
             display: inline-flex;
@@ -294,39 +203,43 @@
             cursor: pointer;
             border-radius: 2px;
             transition: background 0.2s, transform 0.2s;
+            margin-bottom: 28px;
+            width: fit-content;
         }
         .connect-btn:hover { background: #fff; transform: translateY(-1px); }
         .connect-btn.connected { background: #90E8B4; color: #0A2018; }
-
-        .converter-right { display: flex; flex-direction: column; gap: 14px; }
 
         .input-box {
             background: rgba(255,255,255,0.05);
             border: 1px solid rgba(245,240,232,0.14);
             border-radius: 4px;
             transition: border-color 0.3s;
+            margin-bottom: 14px;
         }
         .input-box:focus-within { border-color: rgba(245,240,232,0.35); }
 
         textarea {
             width: 100%;
-            min-height: 180px;
-            padding: 20px;
+            min-height: 140px;
+            padding: 18px;
             background: transparent;
             border: none;
             outline: none;
             font-family: 'DM Sans', sans-serif;
-            font-size: 17px;
+            font-size: 16px;
             color: var(--cream);
             resize: none;
             line-height: 1.6;
-            display: block;
-            -webkit-user-select: text;
-            user-select: text;
         }
         textarea::placeholder { color: rgba(245,240,232,0.25); font-style: italic; }
 
-        .input-footer { display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; border-top: 1px solid rgba(245,240,232,0.08); }
+        .input-footer { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 10px 16px; 
+            border-top: 1px solid rgba(245,240,232,0.08); 
+        }
         .char-count { font-size: 12px; color: rgba(245,240,232,0.3); }
 
         .send-btn {
@@ -347,95 +260,228 @@
         .send-btn:disabled { opacity: 0.3; cursor: not-allowed; }
         .send-btn.sent { background: #90E8B4; color: #0A2018; }
 
-        .braille-preview { display: flex; gap: 12px; flex-wrap: wrap; min-height: 56px; align-items: center; }
-        .braille-char { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; padding: 4px; }
-        .braille-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(245,240,232,0.15); transition: background 0.3s; }
+        .braille-preview { 
+            display: flex; 
+            gap: 10px; 
+            flex-wrap: wrap; 
+            min-height: 48px; 
+            align-items: center; 
+        }
+        .braille-char { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 3px; }
+        .braille-dot { 
+            width: 9px; 
+            height: 9px; 
+            border-radius: 50%; 
+            background: rgba(245,240,232,0.15); 
+            transition: background 0.3s; 
+        }
         .braille-dot.raised { background: var(--cream); }
-        .braille-label { font-size: 11px; color: rgba(245,240,232,0.3); text-align: center; margin-top: 3px; }
+        .braille-label { 
+            font-size: 10px; 
+            color: rgba(245,240,232,0.3); 
+            text-align: center; 
+            margin-top: 3px; 
+        }
         .braille-cell { display: flex; flex-direction: column; align-items: center; }
 
-        /* REQUIREMENTS */
-        .req-strip { display: grid; grid-template-columns: repeat(3, 1fr); background: var(--cream); }
-        .req-item { padding: 56px 48px; border-right: 1px solid rgba(26,20,16,0.1); }
-        .req-item:last-child { border-right: none; }
-        .req-num { font-family: 'Playfair Display', serif; font-style: italic; font-size: 40px; color: var(--accent); margin-bottom: 12px; display: block; }
-        .req-item h3 { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; margin-bottom: 8px; }
-        .req-item p { font-size: 14px; color: var(--muted); line-height: 1.7; }
+        /* RIGHT PANEL - INSTRUCTIONS */
+        .instructions-panel {
+            background: var(--cream);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            z-index: 1;
+            overflow-y: auto;
+        }
 
-        /* FLOATING CONVERT NOW BUTTON */
-        .float-convert {
-            position: fixed;
-            bottom: 36px;
-            right: 36px;
-            z-index: 300;
+        .instructions-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .instructions-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .instructions-header p {
+            font-size: 14px;
+            color: var(--muted);
+            letter-spacing: 0.05em;
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            flex: 1;
+        }
+
+        .step-card {
+            background: var(--warm);
+            border: 1.5px solid rgba(26,20,16,0.12);
+            border-radius: 4px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .step-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(26,20,16,0.12);
+        }
+
+        .step-card:nth-child(1) { background: #C8DEF2; }
+        .step-card:nth-child(2) { background: #F2D4BE; }
+        .step-card:nth-child(3) { background: #C4E8D4; }
+        .step-card:nth-child(4) { background: #DDD0F0; }
+
+        .step-header {
             display: flex;
             align-items: center;
-            gap: 10px;
-            padding: 14px 24px;
-            background: var(--dark);
-            color: var(--cream);
-            text-decoration: none;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 12px;
-            font-weight: 500;
-            letter-spacing: 0.1em;
+            gap: 12px;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid rgba(26,20,16,0.15);
+        }
+
+        .step-number {
+            font-family: 'Playfair Display', serif;
+            font-weight: 900;
+            font-size: 48px;
+            line-height: 1;
+            color: rgba(26,20,16,0.25);
+        }
+
+        .step-title-group h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .step-label {
+            font-size: 10px;
             text-transform: uppercase;
-            border-radius: 40px;
-            box-shadow: 0 4px 24px rgba(26,20,16,0.25), 0 1px 4px rgba(26,20,16,0.15);
-            opacity: 0;
-            transform: translateY(16px);
-            transition: opacity 0.4s ease, transform 0.4s ease, background 0.2s;
-            pointer-events: none;
-        }
-        .float-convert.visible {
-            opacity: 1;
-            transform: translateY(0);
-            pointer-events: all;
-        }
-        .float-convert:hover {
-            background: #2D2520;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 32px rgba(26,20,16,0.3);
-        }
-        .float-convert .pulse {
-            width: 8px; height: 8px;
-            border-radius: 50%;
-            background: #90E8B4;
-            box-shadow: 0 0 0 0 rgba(144,232,180,0.5);
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(144,232,180,0.5); }
-            70% { box-shadow: 0 0 0 7px rgba(144,232,180,0); }
-            100% { box-shadow: 0 0 0 0 rgba(144,232,180,0); }
+            letter-spacing: 0.1em;
+            color: var(--muted);
+            font-weight: 500;
         }
 
-        /* FOOTER */
-        footer { background: var(--dark); padding: 36px 40px; display: flex; justify-content: space-between; align-items: center; }
-        footer p { font-size: 12px; color: rgba(255,255,255,0.3); letter-spacing: 0.05em; }
-        footer a { color: rgba(255,255,255,0.3); text-decoration: none; }
-        footer a:hover { color: rgba(255,255,255,0.6); }
+        .step-video {
+            width: 100%;
+            height: 0;
+            padding-bottom: 75%; /* 4:3 aspect ratio */
+            background: rgba(26,20,16,0.08);
+            border-radius: 3px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--muted);
+            font-size: 12px;
+            font-style: italic;
+            overflow: hidden;
+            position: relative;
+        }
 
-        @media (max-width: 768px) {
-            .converter-inner { grid-template-columns: 1fr; gap: 36px; }
-            .req-strip { grid-template-columns: 1fr; }
-            .req-item { border-right: none; border-bottom: 1px solid rgba(26,20,16,0.1); }
+        .step-video video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .step-desc {
+            font-size: 13px;
+            line-height: 1.6;
+            color: var(--dark);
+        }
+
+        .requirements-footer {
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 2px solid rgba(26,20,16,0.1);
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .req-item {
+            text-align: center;
+        }
+
+        .req-num {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 24px;
+            color: var(--accent);
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .req-item h4 {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .req-item p {
+            font-size: 11px;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            .main-container {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto 1fr;
+            }
+            
+            .converter-panel {
+                padding: 32px 24px;
+                overflow-y: visible;
+            }
+
+            .instructions-panel {
+                padding: 24px;
+            }
+
+            .steps-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .requirements-footer {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
             nav { padding: 0 20px; }
             .nav-links { display: none; }
-            .giant-word-fixed { font-size: 20vw; left: 16px; }
-            .hero-line-big { font-size: clamp(44px, 12vw, 80px); }
         }
     </style>
 </head>
 <body>
 
+<!-- WATERMARK LOGO -->
+<img src="LOGOBRAILLINO.png" alt="Braillino" class="logo-watermark">
+
 <!-- NAV -->
 <nav>
     <div class="nav-links">
-        <a href="how-it-works.html">How It Works</a>
+        <a href="resources.html">Resources</a>
         <a href="about.html">About</a>
     </div>
-    <a href="index.html" class="logo"><img src="LOGOBRAILLINO.png" alt="Braillino" style="height:28px;width:auto;display:block;"></a>
+    <a href="index.html" class="logo-text">
+        <img src="LOGOBRAILLINO.png" alt="Braillino" style="height:28px;width:auto;display:block;">
+    </a>
     <div class="status-pill">
         <div class="dot" id="statusDot"></div>
         <span id="statusText">Offline</span>
@@ -445,218 +491,130 @@
 <!-- TICKER -->
 <div class="ticker-wrap">
     <div class="ticker-track">
-        <span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span><span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span><span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span><span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span><span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span><span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span><span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span><span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span>
-    <span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span><span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span><span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span><span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span>
-    <span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span><span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span><span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span><span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span>
+        <span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span><span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span><span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span><span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span>
+        <span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span><span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span><span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span><span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span>
     </div>
 </div>
 
-<!-- FLOATING CONVERT NOW -->
-<a class="float-convert" id="floatConvert" href="#converter">
-    <span class="pulse"></span>
-    Convert Now
-    <span style="opacity:0.5;">↓</span>
-</a>
+<!-- MAIN CONTAINER -->
+<div class="main-container">
+    
+    <!-- LEFT: CONVERTER -->
+    <div class="converter-panel">
+        <h1>Words, made<br><em>accessible</em><br>by touch.</h1>
+        <p class="subtitle">Connect your Arduino and transform any text into tactile Braille patterns. Type below and bring words to life.</p>
+        
+        <button class="connect-btn" id="connectBtn">
+            <span>⊕</span>
+            <span id="connectLabel">Connect Device</span>
+        </button>
 
-<!-- GIANT WORD: position:fixed -->
-<img class="giant-word-fixed" id="giantWord" src="LOGOBRAILLINO.png" alt="Braillino">
-
-<!-- SCROLL STAGE -->
-<div class="scroll-stage" id="stage">
-
-    <!-- ── EDITORIAL HERO IMAGE ── -->
-    <div class="intro-text">
-        <img src="mainpage.png" alt="Words, made accessible by touch. Transform your Messages into tactile Braille Patterns.">
-    </div>
-
-    <div class="card-slot" style="top: 80vh;">
-        <div class="step-card" id="card1">
-            <div class="card-illustration blue">
-                <svg viewBox="0 0 480 195" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
-                    <circle cx="100" cy="50" r="30" fill="white" opacity="0.15"/>
-                    <circle cx="400" cy="170" r="45" fill="white" opacity="0.12"/>
-                    <rect x="160" y="75" width="80" height="50" rx="8" fill="#3A5F8A" opacity="0.8"/>
-                    <rect x="195" y="55" width="10" height="20" fill="#2D4A6E"/>
-                    <rect x="225" y="55" width="10" height="20" fill="#2D4A6E"/>
-                    <rect x="240" y="95" width="80" height="4" rx="2" fill="#2D4A6E" opacity="0.6"/>
-                    <rect x="315" y="80" width="50" height="34" rx="6" fill="#1A3A5C" opacity="0.9"/>
-                    <circle cx="330" cy="97" r="8" fill="#4A9EFF" opacity="0.8"/>
-                    <circle cx="175" cy="97" r="4" fill="#7BBFFF" opacity="0.5"/>
-                    <circle cx="190" cy="97" r="4" fill="#7BBFFF" opacity="0.5"/>
-                    <circle cx="205" cy="97" r="4" fill="#7BBFFF" opacity="0.5"/>
-                    <text x="240" y="155" font-family="serif" font-style="italic" font-size="13" fill="#2D4A6E" opacity="0.6" text-anchor="middle">Upload the .ino code first</text>
-                </svg>
-            </div>
-            <div class="card-body">
-                <div class="card-step-num">Step one</div>
-                <div class="card-title">Upload the Arduino Code</div>
-                <div class="card-desc">Open the Arduino IDE, paste the Braillino .ino sketch, select your board and port, then hit upload. Wait for "Done uploading."</div>
-                <span class="card-tag">Arduino IDE required</span>
+        <div class="input-box">
+            <textarea
+                id="textInput"
+                placeholder="Type your message here…"
+                maxlength="100"
+                spellcheck="false"
+            ></textarea>
+            <div class="input-footer">
+                <span class="char-count"><span id="charCount">0</span> / 100</span>
+                <button class="send-btn" id="sendBtn" disabled>Send to Braille →</button>
             </div>
         </div>
+
+        <div class="braille-preview" id="braillePreview"></div>
     </div>
 
-    <div class="card-slot" style="top: 180vh;">
-        <div class="step-card alt" id="card2">
-            <div class="card-illustration peach">
-                <svg viewBox="0 0 480 195" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
-                    <circle cx="420" cy="30" r="35" fill="white" opacity="0.12"/>
-                    <circle cx="60" cy="175" r="25" fill="white" opacity="0.15"/>
-                    <rect x="80" y="38" width="320" height="130" rx="10" fill="#D4956A" opacity="0.3"/>
-                    <rect x="80" y="38" width="320" height="28" rx="10" fill="#C4855A" opacity="0.5"/>
-                    <circle cx="100" cy="52" r="5" fill="#E87060" opacity="0.8"/>
-                    <circle cx="118" cy="52" r="5" fill="#F0B060" opacity="0.8"/>
-                    <circle cx="136" cy="52" r="5" fill="#80C080" opacity="0.8"/>
-                    <rect x="155" y="45" width="180" height="14" rx="7" fill="white" opacity="0.3"/>
-                    <rect x="160" y="104" width="160" height="36" rx="4" fill="#C4855A" opacity="0.7"/>
-                    <text x="240" y="127" font-family="sans-serif" font-size="13" fill="white" text-anchor="middle" font-weight="600">Connect Device</text>
-                    <circle cx="310" cy="82" r="7" fill="#90E8B4"/>
-                    <text x="325" y="86" font-family="sans-serif" font-size="10" fill="#3A6A4A" font-weight="600">CONNECTED</text>
-                </svg>
-            </div>
-            <div class="card-body">
-                <div class="card-step-num">Step two</div>
-                <div class="card-title">Connect Your Device</div>
-                <div class="card-desc">Plug your Arduino in via USB, open Braillino in Chrome or Edge, click "Connect Device" and select your board from the popup.</div>
-                <span class="card-tag">Chrome or Edge only</span>
-            </div>
+    <!-- RIGHT: INSTRUCTIONS -->
+    <div class="instructions-panel">
+        <div class="instructions-header">
+            <h2>How It Works</h2>
+            <p>Four simple steps to get started</p>
         </div>
-    </div>
 
-    <div class="card-slot" style="top: 280vh;">
-        <div class="step-card" id="card3">
-            <div class="card-illustration mint">
-                <svg viewBox="0 0 480 195" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
-                    <circle cx="60" cy="48" r="28" fill="white" opacity="0.15"/>
-                    <circle cx="420" cy="158" r="38" fill="white" opacity="0.12"/>
-                    <g opacity="0.85">
-                        <rect x="100" y="68" width="34" height="30" rx="5" fill="#4A8A6A"/>
-                        <rect x="142" y="68" width="34" height="30" rx="5" fill="#4A8A6A"/>
-                        <rect x="184" y="68" width="34" height="30" rx="5" fill="#3A7A5A"/>
-                        <rect x="226" y="68" width="34" height="30" rx="5" fill="#4A8A6A"/>
-                        <rect x="268" y="68" width="34" height="30" rx="5" fill="#4A8A6A"/>
-                        <rect x="310" y="68" width="34" height="30" rx="5" fill="#4A8A6A"/>
-                        <rect x="352" y="68" width="34" height="30" rx="5" fill="#4A8A6A"/>
-                        <rect x="118" y="106" width="34" height="30" rx="5" fill="#5A9A7A" opacity="0.8"/>
-                        <rect x="160" y="106" width="34" height="30" rx="5" fill="#5A9A7A" opacity="0.8"/>
-                        <rect x="202" y="106" width="34" height="30" rx="5" fill="#5A9A7A" opacity="0.8"/>
-                        <rect x="244" y="106" width="34" height="30" rx="5" fill="#5A9A7A" opacity="0.8"/>
-                        <rect x="286" y="106" width="34" height="30" rx="5" fill="#5A9A7A" opacity="0.8"/>
-                        <rect x="328" y="106" width="34" height="30" rx="5" fill="#5A9A7A" opacity="0.8"/>
-                        <rect x="155" y="144" width="170" height="26" rx="5" fill="#3A7A5A" opacity="0.9"/>
-                    </g>
-                    <text x="117" y="89" font-family="sans-serif" font-size="11" fill="white" text-anchor="middle" font-weight="600">H</text>
-                    <text x="159" y="89" font-family="sans-serif" font-size="11" fill="white" text-anchor="middle" font-weight="600">I</text>
-                </svg>
-            </div>
-            <div class="card-body">
-                <div class="card-step-num">Step three</div>
-                <div class="card-title">Type Your Message</div>
-                <div class="card-desc">Type any word up to 100 characters. Letters are auto-converted to uppercase for Braille Grade 1. Hit Enter or press Send.</div>
-                <span class="card-tag">Max 100 characters</span>
-            </div>
-        </div>
-    </div>
-
-    <div class="card-slot" style="top: 380vh;">
-        <div class="step-card alt" id="card4">
-            <div class="card-illustration lilac">
-                <svg viewBox="0 0 480 195" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
-                    <circle cx="80" cy="68" r="30" fill="white" opacity="0.12"/>
-                    <circle cx="400" cy="148" r="40" fill="white" opacity="0.1"/>
-                    <rect x="120" y="48" width="240" height="100" rx="12" fill="#6A50A0" opacity="0.5"/>
-                    <rect x="130" y="58" width="220" height="80" rx="8" fill="#5A3A8A" opacity="0.6"/>
-                    <circle cx="175" cy="83" r="7" fill="#EEE0FF"/>
-                    <circle cx="195" cy="83" r="7" fill="rgba(238,224,255,0.3)"/>
-                    <circle cx="175" cy="100" r="7" fill="#EEE0FF"/>
-                    <circle cx="195" cy="100" r="7" fill="#EEE0FF"/>
-                    <circle cx="175" cy="117" r="7" fill="rgba(238,224,255,0.3)"/>
-                    <circle cx="195" cy="117" r="7" fill="rgba(238,224,255,0.3)"/>
-                    <circle cx="225" cy="83" r="7" fill="#EEE0FF"/>
-                    <circle cx="245" cy="83" r="7" fill="rgba(238,224,255,0.3)"/>
-                    <circle cx="225" cy="100" r="7" fill="rgba(238,224,255,0.3)"/>
-                    <circle cx="245" cy="100" r="7" fill="rgba(238,224,255,0.3)"/>
-                    <circle cx="225" cy="117" r="7" fill="rgba(238,224,255,0.3)"/>
-                    <circle cx="245" cy="117" r="7" fill="#EEE0FF"/>
-                    <circle cx="275" cy="83" r="7" fill="#EEE0FF"/>
-                    <circle cx="295" cy="83" r="7" fill="#EEE0FF"/>
-                    <circle cx="275" cy="100" r="7" fill="#EEE0FF"/>
-                    <circle cx="295" cy="100" r="7" fill="rgba(238,224,255,0.3)"/>
-                    <circle cx="275" cy="117" r="7" fill="rgba(238,224,255,0.3)"/>
-                    <circle cx="295" cy="117" r="7" fill="rgba(238,224,255,0.3)"/>
-                    <rect x="148" y="158" width="50" height="16" rx="4" fill="#4A2A7A" opacity="0.5"/>
-                    <rect x="215" y="158" width="50" height="16" rx="4" fill="#4A2A7A" opacity="0.5"/>
-                    <rect x="280" y="158" width="50" height="16" rx="4" fill="#4A2A7A" opacity="0.5"/>
-                </svg>
-            </div>
-            <div class="card-body">
-                <div class="card-step-num">Step four</div>
-                <div class="card-title">Feel the Braille</div>
-                <div class="card-desc">Watch the servo motors move in real time, forming each Braille letter. Each character displays for 4 seconds. Touch and read.</div>
-                <span class="card-tag">Tactile · Real-time</span>
-            </div>
-        </div>
-    </div>
-
-</div><!-- /SCROLL STAGE -->
-
-<!-- CONVERTER -->
-<section class="converter-section" id="converter">
-    <div class="converter-inner">
-        <div class="converter-left">
-            <h2>Try it<br><em style="font-style:italic;">now.</em></h2>
-            <p>Connect your Arduino and send any word into the physical world. Type below and watch Braille come to life through touch.</p>
-            <button class="connect-btn" id="connectBtn">
-                <span>⊕</span>
-                <span id="connectLabel">Connect Device</span>
-            </button>
-        </div>
-        <div class="converter-right">
-            <div class="input-box">
-                <textarea
-                    id="textInput"
-                    placeholder="Type your message here…"
-                    maxlength="100"
-                    spellcheck="false"
-                    rows="6"
-                ></textarea>
-                <div class="input-footer">
-                    <span class="char-count"><span id="charCount">0</span> / 100</span>
-                    <button class="send-btn" id="sendBtn" disabled>Send to Braille →</button>
+        <div class="steps-grid">
+            <!-- Step 1 -->
+            <div class="step-card">
+                <div class="step-header">
+                    <div class="step-number">1</div>
+                    <div class="step-title-group">
+                        <div class="step-label">Step One</div>
+                        <h3>Upload Code</h3>
+                    </div>
                 </div>
+                <div class="step-video">
+                    <video src="step1braillino.mp4" muted loop playsinline></video>
+                </div>
+                <p class="step-desc">Open Arduino IDE, paste the .ino sketch, select your board and port, then upload.</p>
             </div>
-            <div class="braille-preview" id="braillePreview"></div>
+
+            <!-- Step 2 -->
+            <div class="step-card">
+                <div class="step-header">
+                    <div class="step-number">2</div>
+                    <div class="step-title-group">
+                        <div class="step-label">Step Two</div>
+                        <h3>Connect Device</h3>
+                    </div>
+                </div>
+                <div class="step-video">
+                    <video src="step2braillino.mp4" muted loop playsinline></video>
+                </div>
+                <p class="step-desc">Plug in your Arduino via USB and click "Connect Device" in Chrome or Edge.</p>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="step-card">
+                <div class="step-header">
+                    <div class="step-number">3</div>
+                    <div class="step-title-group">
+                        <div class="step-label">Step Three</div>
+                        <h3>Type Message</h3>
+                    </div>
+                </div>
+                <div class="step-video">
+                    <video src="step3braillino.mp4" muted loop playsinline></video>
+                </div>
+                <p class="step-desc">Type any text (up to 100 characters). It auto-converts to Braille Grade 1.</p>
+            </div>
+
+            <!-- Step 4 -->
+            <div class="step-card">
+                <div class="step-header">
+                    <div class="step-number">4</div>
+                    <div class="step-title-group">
+                        <div class="step-label">Step Four</div>
+                        <h3>Feel Braille</h3>
+                    </div>
+                </div>
+                <div class="step-video">
+                    <video src="step4braillino.mp4" muted loop playsinline></video>
+                </div>
+                <p class="step-desc">Watch servos form each Braille letter. Each character displays for 4 seconds.</p>
+            </div>
+        </div>
+
+        <!-- Requirements -->
+        <div class="requirements-footer">
+            <div class="req-item">
+                <span class="req-num">01</span>
+                <h4>Hardware</h4>
+                <p>Arduino with 2 servos (pins 9 & 10)</p>
+            </div>
+            <div class="req-item">
+                <span class="req-num">02</span>
+                <h4>Software</h4>
+                <p>Arduino IDE for uploading sketch</p>
+            </div>
+            <div class="req-item">
+                <span class="req-num">03</span>
+                <h4>Browser</h4>
+                <p>Chrome or Edge (Web Serial API)</p>
+            </div>
         </div>
     </div>
-</section>
 
-<!-- REQUIREMENTS -->
-<div class="req-strip">
-    <div class="req-item">
-        <span class="req-num">01</span>
-        <h3>Hardware</h3>
-        <p>Arduino Uno or Nano with 2 servo motors on pins 9 and 10</p>
-    </div>
-    <div class="req-item">
-        <span class="req-num">02</span>
-        <h3>Software</h3>
-        <p>Arduino IDE for uploading the Braillino sketch to your board</p>
-    </div>
-    <div class="req-item">
-        <span class="req-num">03</span>
-        <h3>Browser</h3>
-        <p>Chrome or Edge — required for the Web Serial API connection</p>
-    </div>
 </div>
-
-<!-- FOOTER -->
-<footer>
-    <p>© 2026 Braillino · Words, made accessible by touch</p>
-    <div style="display:flex;gap:24px;">
-        <a href="how-it-works.html">How It Works</a>
-        <a href="about.html">About</a>
-    </div>
-</footer>
 
 <script>
 // ── BRAILLE MAP ──
@@ -668,11 +626,9 @@ const BRAILLE = {
     Q:[1,1,1,1,1,0],R:[1,1,1,0,1,0],S:[0,1,1,1,0,0],T:[0,1,1,1,1,0],
     U:[1,0,1,0,0,1],V:[1,1,1,0,0,1],W:[0,1,0,1,1,1],X:[1,0,1,1,0,1],
     Y:[1,0,1,1,1,1],Z:[1,0,1,0,1,1],
-    // Numbers
     '1':[1,0,0,0,0,0],'2':[1,1,0,0,0,0],'3':[1,0,0,1,0,0],'4':[1,0,0,1,1,0],
     '5':[1,0,0,0,1,0],'6':[1,1,0,1,0,0],'7':[1,1,0,1,1,0],'8':[1,1,0,0,1,0],
     '9':[0,1,0,1,0,0],'0':[0,1,0,1,1,0],
-    // Punctuation
     '.':[0,1,0,0,1,1],',':[0,1,0,0,0,0],'?':[0,1,1,0,0,1],'!':[0,1,1,0,1,0],
     ';':[0,1,1,0,0,0],':':[0,1,0,0,1,0],'-':[0,0,1,0,0,1],"'":[0,0,1,0,0,0],
     '"':[0,1,1,0,1,1],'(':[0,1,1,0,1,1],')':[0,1,1,1,0,1],
@@ -680,63 +636,15 @@ const BRAILLE = {
     ' ':[0,0,0,0,0,0]
 };
 
-// ── FLOATING CONVERT BUTTON ──
-const floatConvert = document.getElementById('floatConvert');
-const converterSection = document.getElementById('converter');
-let btnDismissed = false;
-
-function updateFloatBtn() {
-    if (btnDismissed) return;
-    const scrollY = window.scrollY;
-    const converterTop = converterSection.getBoundingClientRect().top;
-    if (scrollY > window.innerHeight * 0.4 && converterTop > 0) {
-        floatConvert.classList.add('visible');
-    } else {
-        floatConvert.classList.remove('visible');
-    }
-}
-
-floatConvert.addEventListener('click', () => {
-    btnDismissed = true;
-    floatConvert.classList.remove('visible');
-    floatConvert.style.pointerEvents = 'none';
-    floatConvert.style.opacity = '0';
+// ── AUTO-PLAY VIDEOS ON HOVER ──
+document.querySelectorAll('.step-video video').forEach(video => {
+    const card = video.closest('.step-card');
+    card.addEventListener('mouseenter', () => video.play());
+    card.addEventListener('mouseleave', () => {
+        video.pause();
+        video.currentTime = 0;
+    });
 });
-
-window.addEventListener('scroll', updateFloatBtn, { passive: true });
-updateFloatBtn();
-
-// ── GIANT WORD: show only while scroll-stage is on screen ──
-const giantWordEl = document.getElementById('giantWord');
-const stageEl = document.getElementById('stage');
-
-function updateGiantWord() {
-    const scrollY = window.scrollY;
-    const rect = stageEl.getBoundingClientRect();
-    const stageTop = scrollY + rect.top;
-    const stageBottom = stageTop + stageEl.offsetHeight;
-    const imgH = giantWordEl.offsetHeight;
-
-    if (scrollY >= stageTop - 94 && scrollY < stageBottom - window.innerHeight) {
-        giantWordEl.classList.remove('hidden');
-        // progress 0 = just entered, 1 = near end of stage
-        const progress = (scrollY - (stageTop - 94)) / (stageEl.offsetHeight - window.innerHeight);
-        // Start fully below screen (bottom: -imgH), end fully visible (bottom: 0)
-        const bottomVal = -imgH + (progress * imgH);
-        giantWordEl.style.bottom = Math.min(0, bottomVal) + 'px';
-    } else {
-        giantWordEl.classList.add('hidden');
-    }
-}
-
-// ── CARD ANIMATIONS ──
-const cardObs = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-}, { threshold: 0.2 });
-document.querySelectorAll('.step-card').forEach(c => cardObs.observe(c));
-
-window.addEventListener('scroll', updateGiantWord, { passive: true });
-updateGiantWord();
 
 // ── BRAILLE PREVIEW ──
 function renderBraillePreview(text) {
@@ -749,8 +657,6 @@ function renderBraillePreview(text) {
         cell.className = 'braille-cell';
         const grid = document.createElement('div');
         grid.className = 'braille-char';
-        // Arduino layout: [L_TOP, L_MID, L_BOT, R_TOP, R_MID, R_BOT]
-        // Display order: Left column (0,1,2) then Right column (3,4,5)
         [0,1,2,3,4,5].forEach(i => {
             const d = document.createElement('div');
             d.className = 'braille-dot' + (dots[i] ? ' raised' : '');

@@ -31,19 +31,80 @@
         html { scroll-behavior: smooth; }
         body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--dark); overflow-x: hidden; }
 
-        nav { position: sticky; top: 0; left: 0; right: 0; z-index: 200; display: flex; justify-content: space-between; align-items: center; padding: 0 40px; height: 56px; background: var(--dark); border-bottom: 1px solid rgba(255,255,255,0.08); }
+        /* NAV */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 200;
+            height: 56px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 40px;
+            background: var(--cream);
+            border-bottom: 2px solid var(--dark);
+        }
         .nav-links { display: flex; gap: 32px; }
-        .nav-links a { color: rgba(255,255,255,0.7); text-decoration: none; font-size: 12px; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 500; transition: color 0.2s; }
-        .nav-links a:hover { color: #fff; }
+        .nav-links a { 
+            color: var(--dark); 
+            text-decoration: none; 
+            font-size: 12px; 
+            text-transform: uppercase; 
+            letter-spacing: 0.12em; 
+            font-weight: 500; 
+            transition: opacity 0.2s;
+            position: relative;
+            padding-bottom: 2px;
+        }
+        .nav-links a:hover::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--dark);
+        }
+        .nav-links a.active {
+            font-weight: 600;
+            opacity: 1;
+        }
+        .nav-links a.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--dark);
+        }
         .logo { display: flex; align-items: center; text-decoration: none; }
 
-        .ticker-wrap { background: var(--paper); border-bottom: 1px solid rgba(26,20,16,0.12); overflow: hidden; height: 38px; display: flex; align-items: center; }
-        .ticker-track { display: flex; white-space: nowrap; animation: ticker 12s linear infinite; }
+        .ticker-wrap { 
+            position: fixed;
+            top: 56px;
+            left: 0;
+            right: 0;
+            z-index: 199;
+            background: var(--paper); 
+            border-bottom: 1px solid rgba(26,20,16,0.12); 
+            overflow: hidden; 
+            height: 38px; 
+            display: flex; 
+            align-items: center; 
+        }
+        .ticker-track { display: flex; white-space: nowrap; animation: ticker 18s linear infinite; }
         .ticker-item { display: inline-flex; align-items: center; gap: 24px; padding: 0 40px; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
         .ticker-item::after { content: "✦"; font-size: 9px; color: var(--accent); }
         @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
-        .hero { background: var(--dark); padding: 120px 40px 100px; position: relative; overflow: hidden; }
+        .hero { 
+            background: var(--dark); 
+            padding: 120px 40px 100px; 
+            position: relative; 
+            overflow: hidden;
+            margin-top: 94px;
+        }
         .hero::before { content: ''; position: absolute; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(201,185,154,0.12), transparent 70%); top: -100px; right: -100px; }
         .hero-inner { max-width: 900px; margin: 0 auto; }
         .hero-tag { font-size: 11px; text-transform: uppercase; letter-spacing: 0.18em; color: var(--accent); font-weight: 500; margin-bottom: 24px; }
@@ -117,19 +178,18 @@
 
 <nav>
     <div class="nav-links">
-        <a href="how-it-works.html">How It Works</a>
-        <a href="about.html">About</a>
+        <a href="resources.html">Resources</a>
+        <a href="about.html" class="active">About</a>
     </div>
   <a href="index.html" class="logo">
-  <img src="newbraillino.png" alt="Braillino" style="height:28px;width:auto;display:block;">
+  <img src="LOGOBRAILLINO.png" alt="Braillino" style="height:28px;width:auto;display:block;">
 </a>
     <div style="width: 120px;"></div>
 </nav>
 
 <div class="ticker-wrap">
     <div class="ticker-track">
-        <span class="ticker-item">Our Story</span><span class="ticker-item">Mission</span><span class="ticker-item">Values</span><span class="ticker-item">Team</span><span class="ticker-item">Our Story</span><span class="ticker-item">Mission</span><span class="ticker-item">Values</span><span class="ticker-item">Team</span><span class="ticker-item">Our Story</span><span class="ticker-item">Mission</span><span class="ticker-item">Values</span><span class="ticker-item">Team</span><span class="ticker-item">Our Story</span><span class="ticker-item">Mission</span><span class="ticker-item">Values</span><span class="ticker-item">Team</span> <span class="ticker-item">Our Story</span><span class="ticker-item">Mission</span><span class="ticker-item">Values</span><span class="ticker-item">Team</span><span class="ticker-item">Our Story</span><span class="ticker-item">Mission</span><span class="ticker-item">Values</span><span class="ticker-item">Team</span><span class="ticker-item">Our Story</span><span class="ticker-item">Mission</span><span class="ticker-item">Values</span><span class="ticker-item">Team</span><span class="ticker-item">Our Story</span><span class="ticker-item">Mission</span><span class="ticker-item">Values</span><span class="ticker-item">Team</span>
-    <span class="ticker-item">Our Story</span><span class="ticker-item">Mission</span><span class="ticker-item">Values</span><span class="ticker-item">Team</span><span class="ticker-item">Our Story</span><span class="ticker-item">Mission</span><span class="ticker-item">Values</span><span class="ticker-item">Team</span><span class="ticker-item">Our Story</span><span class="ticker-item">Mission</span><span class="ticker-item">Values</span><span class="ticker-item">Team</span><span class="ticker-item">Our Story</span><span class="ticker-item">Mission</span><span class="ticker-item">Values</span><span class="ticker-item">Team</span>
+        <span class="ticker-item">Our Story</span><span class="ticker-item">Mission</span><span class="ticker-item">Values</span><span class="ticker-item">Team</span><span class="ticker-item">Our Story</span><span class="ticker-item">Mission</span><span class="ticker-item">Values</span><span class="ticker-item">Team</span><span class="ticker-item">Our Story</span><span class="ticker-item">Mission</span><span class="ticker-item">Values</span><span class="ticker-item">Team</span><span class="ticker-item">Our Story</span><span class="ticker-item">Mission</span><span class="ticker-item">Values</span><span class="ticker-item">Team</span>
     </div>
 </div>
 
@@ -220,7 +280,7 @@
 <footer>
     <p>© 2026 Braillino · Making text accessible through touch</p>
     <div style="display:flex; gap:24px;">
-        <a href="how-it-works.html">How It Works</a>
+        <a href="resources.html">Resources</a>
         <a href="index.html">Home</a>
     </div>
 </footer>
