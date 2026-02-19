@@ -7,416 +7,962 @@
     <link rel="icon" type="image/png" href="apple-touch-icon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-        :root { --cream: #F5F0E8; --paper: #EDE7D9; --dark: #1A1410; --muted: #6B5F52; --accent: #C9B99A; --warm: #E8DDD0; }
-        html, body { height: 100%; overflow: hidden; font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--dark); }
+        :root {
+            --cream: #F5F0E8; --paper: #EDE7D9; --dark: #1A1410;
+            --muted: #6B5F52; --accent: #C9B99A; --warm: #E8DDD0;
+            --green: #90E8B4; --green-dark: #0A2018;
+            --sidebar: 72px;
+        }
 
-        .logo-watermark { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80vw; max-width: 1200px; height: auto; opacity: 0.08; z-index: 0; pointer-events: none; mix-blend-mode: multiply; }
+        html, body { height: 100%; font-family: 'DM Sans', sans-serif; background: var(--dark); color: var(--dark); overflow: hidden; }
 
-        nav { position: fixed; top: 0; left: 0; right: 0; z-index: 200; height: 56px; display: flex; justify-content: space-between; align-items: center; padding: 0 40px; background: var(--cream); border-bottom: 2px solid var(--dark); }
-        .nav-links { display: flex; gap: 32px; }
-        .nav-links a { color: var(--dark); text-decoration: none; font-size: 12px; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 500; transition: opacity 0.2s; position: relative; padding-bottom: 2px; }
-        .nav-links a:hover::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px; background: var(--dark); }
-        .logo-text { display: flex; align-items: center; text-decoration: none; }
-        .status-pill { display: flex; align-items: center; gap: 7px; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dark); background: rgba(26,20,16,0.08); padding: 6px 14px; border-radius: 20px; }
-        .dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(26,20,16,0.3); transition: all 0.4s; }
-        .dot.on { background: #90E8B4; box-shadow: 0 0 8px #90E8B4; }
+        /* ── SKIP LINK (keyboard a11y) ── */
+        .skip-link {
+            position: fixed; top: -100px; left: 50%; transform: translateX(-50%);
+            background: var(--accent); color: var(--dark);
+            padding: 12px 28px; font-size: 14px; font-weight: 600;
+            letter-spacing: 0.06em; text-transform: uppercase;
+            text-decoration: none; z-index: 9999;
+            border-radius: 0 0 4px 4px; transition: top 0.2s;
+        }
+        .skip-link:focus { top: 0; }
 
-        .ticker-wrap { position: fixed; top: 56px; left: 0; right: 0; z-index: 199; background: var(--paper); border-bottom: 1px solid rgba(26,20,16,0.12); overflow: hidden; height: 38px; display: flex; align-items: center; }
-        .ticker-track { display: flex; white-space: nowrap; animation: ticker 18s linear infinite; }
-        .ticker-item { display: inline-flex; align-items: center; gap: 24px; padding: 0 40px; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
-        .ticker-item::after { content: '✦'; font-size: 9px; color: var(--accent); }
+        /* ── SIDEBAR NAV ── */
+        .sidebar {
+            position: fixed; top: 0; left: 0; bottom: 0;
+            width: var(--sidebar); background: #100D0A;
+            border-right: 1px solid rgba(201,185,154,0.12);
+            display: flex; flex-direction: column;
+            align-items: center; padding: 20px 0 24px;
+            z-index: 300;
+        }
+
+        .sidebar-logo {
+            width: 40px; height: 40px; margin-bottom: 36px;
+            display: flex; align-items: center; justify-content: center;
+            text-decoration: none; flex-shrink: 0;
+        }
+        .sidebar-logo img {
+            width: 44px; height: 44px; object-fit: contain;
+        }
+
+        .sidebar-nav {
+            display: flex; flex-direction: column;
+            gap: 2px; flex: 1; width: 100%; align-items: center;
+        }
+
+        .sidebar-link {
+            position: relative; display: flex; flex-direction: column;
+            align-items: center; gap: 5px; padding: 14px 8px;
+            width: 100%; text-decoration: none; border: none; background: none;
+            color: rgba(245,240,232,0.35); font-family: 'DM Sans', sans-serif;
+            font-size: 9px; font-weight: 600; letter-spacing: 0.1em;
+            text-transform: uppercase; cursor: pointer;
+            transition: color 0.2s, background 0.2s; outline: none;
+        }
+        .sidebar-link:hover { color: var(--cream); background: rgba(245,240,232,0.06); }
+        .sidebar-link:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+        .sidebar-link.active { color: var(--accent); }
+        .sidebar-link.active::after {
+            content: ''; position: absolute; left: 0; top: 50%;
+            transform: translateY(-50%); width: 3px; height: 28px;
+            background: var(--accent); border-radius: 0 2px 2px 0;
+        }
+        .sidebar-icon { font-size: 17px; line-height: 1; }
+
+        .sidebar-status {
+            display: flex; flex-direction: column; align-items: center;
+            gap: 6px; padding: 12px 0;
+        }
+        .s-dot {
+            width: 10px; height: 10px; border-radius: 50%;
+            background: rgba(245,240,232,0.15); transition: all 0.4s;
+        }
+        .s-dot.on { background: var(--green); box-shadow: 0 0 10px rgba(144,232,180,0.6); }
+        .s-label {
+            font-size: 8px; font-weight: 600; letter-spacing: 0.08em;
+            text-transform: uppercase; color: rgba(245,240,232,0.25);
+            transition: color 0.3s;
+        }
+        .s-label.on { color: var(--green); }
+
+        /* ── APP SHELL ── */
+        .shell {
+            position: fixed; top: 0; left: var(--sidebar); right: 0; bottom: 0;
+            display: flex; overflow: hidden;
+        }
+
+        /* ── LEFT: CONVERTER PANEL ── */
+        .converter-panel {
+            background: var(--dark); display: flex; flex-direction: column;
+            overflow-y: auto;
+            width: 400px;
+            min-width: 280px; max-width: 70%;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .conv-inner {
+            display: flex; flex-direction: column; flex: 1;
+            padding: 44px 40px 36px; min-height: 100%;
+        }
+
+        .conv-eyebrow {
+            font-size: 10px; text-transform: uppercase; letter-spacing: 0.2em;
+            color: var(--accent); font-weight: 600; margin-bottom: 18px;
+        }
+
+        .conv-inner h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(34px, 3.2vw, 46px);
+            font-weight: 900; color: var(--cream);
+            line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 14px;
+        }
+        .conv-inner h1 em { font-style: italic; color: var(--accent); }
+
+        .conv-sub {
+            font-size: 14px; line-height: 1.75;
+            color: rgba(245,240,232,0.48); margin-bottom: 36px;
+        }
+
+        /* Connect button */
+        .connect-btn {
+            display: flex; align-items: center; justify-content: center;
+            gap: 11px; width: 100%; padding: 17px 24px;
+            background: var(--cream); color: var(--dark); border: none;
+            font-family: 'DM Sans', sans-serif; font-size: 14px;
+            font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase;
+            cursor: pointer; border-radius: 3px; min-height: 54px;
+            transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+            margin-bottom: 24px;
+        }
+        .connect-btn:hover:not(:disabled) { background: #fff; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(0,0,0,0.35); }
+        .connect-btn:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+        .connect-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+        .connect-btn.connected { background: var(--green); color: var(--green-dark); }
+        .connect-btn.connected:hover { background: #a8f0c8; }
+        .btn-icon { font-size: 18px; }
+
+        /* Divider */
+        .conv-divider {
+            height: 1px; background: rgba(245,240,232,0.08);
+            margin-bottom: 24px;
+        }
+
+        /* Textarea */
+        .field-label {
+            font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em;
+            font-weight: 600; color: rgba(245,240,232,0.35); margin-bottom: 10px;
+            display: block;
+        }
+        .input-box {
+            background: rgba(255,255,255,0.04); border: 1.5px solid rgba(245,240,232,0.12);
+            border-radius: 4px; transition: border-color 0.25s; margin-bottom: 12px;
+        }
+        .input-box:focus-within { border-color: rgba(201,185,154,0.45); }
+
+        textarea {
+            width: 100%; min-height: 110px; padding: 18px 20px;
+            background: transparent; border: none; outline: none;
+            font-family: 'DM Sans', sans-serif; font-size: 17px;
+            color: var(--cream); resize: none; line-height: 1.65;
+        }
+        textarea::placeholder { color: rgba(245,240,232,0.22); font-style: italic; }
+
+        .input-footer {
+            display: flex; justify-content: flex-end;
+            padding: 8px 16px;
+            border-top: 1px solid rgba(245,240,232,0.06);
+        }
+        .char-count { font-size: 12px; color: rgba(245,240,232,0.28); }
+
+        /* Send button */
+        .send-btn {
+            width: 100%; padding: 16px; min-height: 52px;
+            background: rgba(245,240,232,0.07);
+            border: 1.5px solid rgba(245,240,232,0.13);
+            color: rgba(245,240,232,0.4);
+            font-family: 'DM Sans', sans-serif; font-size: 14px;
+            font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+            cursor: pointer; border-radius: 3px; transition: all 0.2s;
+            margin-bottom: 28px;
+        }
+        .send-btn:not(:disabled):hover {
+            background: rgba(245,240,232,0.13);
+            color: var(--cream); border-color: rgba(245,240,232,0.3);
+        }
+        .send-btn:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+        .send-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+        .send-btn.ready {
+            background: var(--cream); color: var(--dark);
+            border-color: var(--cream);
+        }
+        .send-btn.ready:hover { background: #fff; }
+        .send-btn.sent { background: var(--green); color: var(--green-dark); border-color: var(--green); }
+
+        /* Braille preview */
+        .braille-area { margin-top: auto; }
+        .braille-eyebrow {
+            font-size: 10px; text-transform: uppercase; letter-spacing: 0.14em;
+            color: rgba(245,240,232,0.2); font-weight: 600; margin-bottom: 12px;
+        }
+        .braille-preview {
+            display: flex; gap: 10px; flex-wrap: wrap;
+            min-height: 46px; align-items: flex-start;
+        }
+        .braille-cell { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+        .braille-char {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 2px;
+        }
+        .braille-dot {
+            width: 8px; height: 8px; border-radius: 50%;
+            background: rgba(245,240,232,0.1); transition: background 0.2s;
+        }
+        .braille-dot.raised { background: var(--accent); }
+        .braille-char-label { font-size: 9px; color: rgba(245,240,232,0.22); }
+
+        /* ── RIGHT: STEPS PANEL ── */
+        .steps-panel {
+            background: var(--cream); display: flex;
+            flex-direction: column; overflow-y: auto;
+            flex: 1; min-width: 0;
+        }
+
+        /* Ticker strip at top */
+        .ticker-strip {
+            flex-shrink: 0; height: 36px; background: #100D0A;
+            display: flex; align-items: center; overflow: hidden;
+            border-bottom: 1px solid rgba(201,185,154,0.08);
+        }
+        .ticker-track { display: flex; white-space: nowrap; animation: ticker 22s linear infinite; }
+        .ticker-item {
+            display: inline-flex; align-items: center; gap: 20px;
+            padding: 0 36px; font-size: 10px; letter-spacing: 0.16em;
+            text-transform: uppercase; color: rgba(245,240,232,0.25); font-weight: 500;
+        }
+        .ticker-item::after { content: '✦'; font-size: 7px; color: var(--accent); opacity: 0.5; }
         @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
-        .main-container { position: fixed; top: 94px; left: 0; right: 0; bottom: 0; display: grid; grid-template-columns: 1fr 1.2fr; overflow: hidden; }
-
-        .converter-panel { background: var(--dark); padding: 100px 80px; display: flex; flex-direction: column; justify-content: center; position: relative; z-index: 1; overflow-y: auto; }
-        .converter-panel h1 { font-family: 'Playfair Display', serif; font-size: clamp(40px, 4.8vw, 62px); font-weight: 900; color: var(--cream); line-height: 1.25; letter-spacing: -0.02em; margin-bottom: 28px; }
-        .converter-panel h1 .line1 { display: block; }
-        .converter-panel h1 em { font-style: italic; color: var(--accent); }
-        .converter-panel .subtitle { font-size: 15px; line-height: 1.7; color: rgba(245,240,232,0.6); margin-bottom: 48px; }
-
-        .connect-btn { display: inline-flex; align-items: center; gap: 10px; padding: 14px 32px; background: var(--cream); color: var(--dark); border: none; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; border-radius: 2px; transition: background 0.2s, transform 0.2s; margin-bottom: 36px; width: fit-content; align-self: flex-start; }
-        .connect-btn:hover { background: #fff; transform: translateY(-1px); }
-        .connect-btn.connected { background: #90E8B4; color: #0A2018; }
-
-        .input-box { background: rgba(255,255,255,0.05); border: 1px solid rgba(245,240,232,0.14); border-radius: 4px; transition: border-color 0.3s; margin-bottom: 18px; }
-        .input-box:focus-within { border-color: rgba(245,240,232,0.35); }
-        textarea { width: 100%; min-height: 140px; padding: 20px; background: transparent; border: none; outline: none; font-family: 'DM Sans', sans-serif; font-size: 16px; color: var(--cream); resize: none; line-height: 1.6; }
-        textarea::placeholder { color: rgba(245,240,232,0.3); font-style: italic; }
-        .input-footer { display: flex; justify-content: space-between; align-items: center; padding: 12px 18px; border-top: 1px solid rgba(245,240,232,0.08); }
-        .char-count { font-size: 12px; color: rgba(245,240,232,0.35); }
-        .send-btn { padding: 10px 24px; background: var(--cream); color: var(--dark); border: none; font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; border-radius: 2px; transition: all 0.2s; }
-        .send-btn:hover:not(:disabled) { background: #fff; }
-        .send-btn:disabled { opacity: 0.3; cursor: not-allowed; }
-        .send-btn.sent { background: #90E8B4; color: #0A2018; }
-
-        .braille-preview { display: flex; gap: 12px; flex-wrap: wrap; min-height: 52px; align-items: center; }
-        .braille-char { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 3px; }
-        .braille-dot { width: 9px; height: 9px; border-radius: 50%; background: rgba(245,240,232,0.15); transition: background 0.3s; }
-        .braille-dot.raised { background: var(--cream); }
-        .braille-label { font-size: 10px; color: rgba(245,240,232,0.35); text-align: center; margin-top: 3px; }
-        .braille-cell { display: flex; flex-direction: column; align-items: center; }
-
-        .instructions-panel { background: var(--cream); padding: 40px; display: flex; flex-direction: column; position: relative; z-index: 1; overflow-y: auto; }
-        .instructions-header { text-align: center; margin-bottom: 32px; }
-        .instructions-header h2 { font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 700; margin-bottom: 8px; }
-        .instructions-header p { font-size: 14px; color: var(--muted); letter-spacing: 0.05em; }
-
-        .steps-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; flex: 1; }
-        .step-card { background: var(--warm); border: 1.5px solid rgba(26,20,16,0.12); border-radius: 4px; padding: 24px; display: flex; flex-direction: column; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
-        .step-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(26,20,16,0.15); }
-        .step-card:nth-child(1) { background: #C8DEF2; }
-        .step-card:nth-child(2) { background: #F2D4BE; }
-        .step-card:nth-child(3) { background: #C4E8D4; }
-        .step-card:nth-child(4) { background: #DDD0F0; }
-
-        /* ══ STEP DETAIL MODAL ══ */
-        .step-detail-view { display: flex; position: fixed; inset: 0; z-index: 500; padding: 60px 40px; align-items: center; justify-content: center; cursor: pointer; opacity: 0; pointer-events: none; background: rgba(26,20,16,0); backdrop-filter: blur(0px); -webkit-backdrop-filter: blur(0px); transition: opacity 0.4s ease, background 0.4s ease, backdrop-filter 0.4s ease, -webkit-backdrop-filter 0.4s ease; }
-        .step-detail-view.active { opacity: 1; pointer-events: all; background: rgba(26,20,16,0.78); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
-        .step-detail-view.closing { opacity: 0 !important; pointer-events: none !important; background: rgba(26,20,16,0) !important; backdrop-filter: blur(0px) !important; -webkit-backdrop-filter: blur(0px) !important; }
-        .detail-container { display: grid; grid-template-columns: 1fr 1fr; width: 100%; max-width: 1400px; height: 72vh; max-height: 820px; background: var(--cream); overflow: hidden; box-shadow: 0 40px 100px rgba(0,0,0,0.5); cursor: default; opacity: 0; transform: scale(0.88) translateY(32px); transition: opacity 0.4s ease, transform 0.45s cubic-bezier(0.16,1,0.3,1); }
-        .step-detail-view.active .detail-container { opacity: 1; transform: scale(1) translateY(0); }
-        .step-detail-view.closing .detail-container { opacity: 0 !important; transform: scale(0.93) translateY(16px) !important; transition: opacity 0.28s ease, transform 0.28s cubic-bezier(0.4,0,1,1) !important; }
-        .detail-video-panel { background: var(--dark); overflow: hidden; }
-        .detail-video-wrapper { width: 100%; height: 100%; position: relative; }
-        .detail-video-wrapper video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
-        .detail-content-panel { background: var(--cream); padding: 72px 56px; overflow-y: auto; }
-        .detail-header { margin-bottom: 28px; }
-        .detail-step-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--muted); font-weight: 500; margin-bottom: 8px; }
-        .detail-title { font-family: 'Playfair Display', serif; font-size: 34px; font-weight: 700; margin-bottom: 14px; line-height: 1.2; }
-        .detail-intro { font-size: 15px; line-height: 1.75; color: var(--muted); margin-bottom: 28px; }
-        .detail-section { margin-bottom: 28px; }
-        .detail-section h4 { font-family: 'Playfair Display', serif; font-size: 19px; font-weight: 700; margin-bottom: 14px; }
-        .detail-steps-list { list-style: none; }
-        .detail-steps-list li { display: flex; align-items: flex-start; gap: 14px; padding: 13px 0; border-bottom: 1px solid rgba(26,20,16,0.07); font-size: 14px; line-height: 1.7; color: var(--dark); }
-        .detail-steps-list li:last-child { border-bottom: none; }
-        .step-number-badge { flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%; background: var(--dark); color: var(--cream); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; margin-top: 3px; }
-        .detail-tips { background: rgba(26,20,16,0.04); padding: 18px 22px; border-left: 3px solid var(--accent); }
-        .detail-tips h5 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 10px; color: var(--dark); font-weight: 600; }
-        .detail-tips p { font-size: 13px; line-height: 1.7; color: var(--muted); }
-        .step-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 2px solid rgba(26,20,16,0.15); }
-        .step-number { font-family: 'Playfair Display', serif; font-weight: 900; font-size: 48px; line-height: 1; color: rgba(26,20,16,0.25); }
-        .step-title-group h3 { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; margin-bottom: 2px; }
-        .step-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); font-weight: 500; }
-        .step-video { width: 100%; height: 0; padding-bottom: 75%; background: rgba(26,20,16,0.08); border-radius: 3px; margin-bottom: 12px; position: relative; overflow: hidden; }
-        .step-video video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-        .step-desc { font-size: 13px; line-height: 1.6; color: var(--dark); }
-        .requirements-footer { margin-top: 24px; padding-top: 24px; border-top: 2px solid rgba(26,20,16,0.1); display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-        .req-item { text-align: center; }
-        .req-num { font-family: 'Playfair Display', serif; font-style: italic; font-size: 24px; color: var(--accent); display: block; margin-bottom: 6px; }
-        .req-item h4 { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
-        .req-item p { font-size: 11px; color: var(--muted); line-height: 1.5; }
-
-        /* ══ CUSTOM CONNECT MODAL ══ */
-        .connect-modal-overlay {
-            display: flex;
-            position: fixed;
-            inset: 0;
-            z-index: 600;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            pointer-events: none;
-            background: rgba(26,20,16,0);
-            backdrop-filter: blur(0px);
-            -webkit-backdrop-filter: blur(0px);
-            transition: opacity 0.35s ease, background 0.35s ease, backdrop-filter 0.35s ease;
+        /* Steps sticky header */
+        .steps-header {
+            position: sticky; top: 0; z-index: 10;
+            background: var(--paper);
+            border-bottom: 1.5px solid rgba(26,20,16,0.1);
+            padding: 18px 40px;
+            display: flex; align-items: baseline; gap: 16px;
         }
-        .connect-modal-overlay.active {
-            opacity: 1;
-            pointer-events: all;
-            background: rgba(26,20,16,0.82);
-            backdrop-filter: blur(12px);
+        .steps-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px; font-weight: 700;
+        }
+        .steps-header span { font-size: 13px; color: var(--muted); }
+
+        /* Step cards — tall horizontal rows */
+        .steps-list { display: flex; flex-direction: column; flex: 1; }
+
+        .step-card {
+            display: flex; align-items: stretch; width: 100%;
+            border: none; border-bottom: 1.5px solid rgba(26,20,16,0.07);
+            background: transparent; cursor: pointer; text-align: left;
+            font-family: inherit; outline: none;
+            transition: background 0.18s;
+        }
+        .step-card:last-child { border-bottom: none; }
+        .step-card:hover { background: var(--warm); }
+        .step-card:focus-visible { outline: 3px solid var(--dark); outline-offset: -3px; }
+
+        /* Color strip */
+        .card-strip { width: 5px; flex-shrink: 0; position: relative; overflow: hidden; }
+        .step-card:nth-child(1) .card-strip { background: #7EB8F0; }
+        .step-card:nth-child(2) .card-strip { background: #E8A87C; }
+        .step-card:nth-child(3) .card-strip { background: #78C99A; }
+        .step-card:nth-child(4) .card-strip { background: #A990D4; }
+
+        /* ══ STEP 1: UPLOAD — progress bar fills inside the card-num ══ */
+        /* The ghost number gets a rising fill overlay on hover */
+        .step-card:nth-child(1) .card-num {
+            position: relative; overflow: hidden;
+        }
+        .step-card:nth-child(1) .card-num::after {
+            content: '';
+            position: absolute; bottom: 0; left: 0; right: 0; height: 0%;
+            background: linear-gradient(to top, rgba(46,125,232,0.18), rgba(92,163,255,0.06));
+            pointer-events: none;
+        }
+        .step-card:nth-child(1):hover .card-num::after {
+            animation: uploadFill 2.4s ease-in-out infinite;
+        }
+        @keyframes uploadFill {
+            0%   { height: 0%; opacity: 1; }
+            75%  { height: 100%; opacity: 1; }
+            100% { height: 100%; opacity: 0; }
+        }
+
+        /* ══ STEP 2: CONNECT — pulsing glow radiates from the card-num ══ */
+        .step-card:nth-child(2) .card-num {
+            position: relative;
+            transition: color 0.3s;
+        }
+        .step-card:nth-child(2):hover .card-num {
+            color: rgba(76,175,80,0.2);
+        }
+        .step-card:nth-child(2) .card-num::after {
+            content: '';
+            position: absolute; inset: 0;
+            border-radius: 4px;
+            box-shadow: 0 0 0 0 rgba(76,175,80,0);
+            pointer-events: none; opacity: 0;
+        }
+        .step-card:nth-child(2):hover .card-num::after {
+            animation: connectGlow 1.8s ease-out infinite;
+        }
+        @keyframes connectGlow {
+            0%   { opacity: 0; box-shadow: 0 0 0 0 rgba(76,175,80,0.4); }
+            40%  { opacity: 1; }
+            100% { opacity: 0; box-shadow: 0 0 0 28px rgba(76,175,80,0); }
+        }
+
+        /* ══ STEP 3: TYPE — braille dots bloom below the card-num ══ */
+        .step-card:nth-child(3) .card-num {
+            position: relative; overflow: visible;
+        }
+        /* H pattern */
+        .step-card:nth-child(3) .card-num::before {
+            content: '';
+            position: absolute;
+            bottom: -28px; left: 2px;
+            width: 13px; height: 28px;
+            background-image:
+                radial-gradient(circle at center, rgba(26,20,16,0.5) 2.5px, transparent 2.5px),
+                radial-gradient(circle at center, rgba(26,20,16,0.5) 2.5px, transparent 2.5px),
+                radial-gradient(circle at center, transparent 2.5px, transparent 2.5px),
+                radial-gradient(circle at center, transparent 2.5px, transparent 2.5px),
+                radial-gradient(circle at center, rgba(26,20,16,0.5) 2.5px, transparent 2.5px),
+                radial-gradient(circle at center, transparent 2.5px, transparent 2.5px);
+            background-size: 7px 7px;
+            background-position: 0px 0px, 0px 10px, 0px 20px, 7px 0px, 7px 10px, 7px 20px;
+            background-repeat: no-repeat;
+            opacity: 0; pointer-events: none; z-index: 3;
+        }
+        .step-card:nth-child(3):hover .card-num::before { animation: typeH 3.8s ease-in-out infinite; }
+        /* I pattern */
+        .step-card:nth-child(3) .card-num::after {
+            content: '';
+            position: absolute;
+            bottom: -28px; left: 20px;
+            width: 13px; height: 28px;
+            background-image:
+                radial-gradient(circle at center, transparent 2.5px, transparent 2.5px),
+                radial-gradient(circle at center, rgba(26,20,16,0.5) 2.5px, transparent 2.5px),
+                radial-gradient(circle at center, transparent 2.5px, transparent 2.5px),
+                radial-gradient(circle at center, rgba(26,20,16,0.5) 2.5px, transparent 2.5px),
+                radial-gradient(circle at center, transparent 2.5px, transparent 2.5px),
+                radial-gradient(circle at center, transparent 2.5px, transparent 2.5px);
+            background-size: 7px 7px;
+            background-position: 0px 0px, 0px 10px, 0px 20px, 7px 0px, 7px 10px, 7px 20px;
+            background-repeat: no-repeat;
+            opacity: 0; pointer-events: none; z-index: 3;
+        }
+        .step-card:nth-child(3):hover .card-num::after { animation: typeI 3.8s ease-in-out infinite; }
+        @keyframes typeH {
+            0%,12%  { opacity: 0; transform: translateY(4px); }
+            22%,100%{ opacity: 1; transform: translateY(0); }
+        }
+        @keyframes typeI {
+            0%,38%  { opacity: 0; transform: translateY(4px); }
+            52%,100%{ opacity: 1; transform: translateY(0); }
+        }
+
+        /* ══ STEP 4: FEEL — dots pulse up from inside the card-num ══ */
+        .step-card:nth-child(4) .card-num {
+            position: relative; overflow: visible;
+        }
+        .step-card:nth-child(4) .card-num::before {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 22px; height: 34px;
+            background-image:
+                radial-gradient(circle at center, rgba(26,20,16,0.55) 3px, transparent 3px),
+                radial-gradient(circle at center, rgba(26,20,16,0.55) 3px, transparent 3px),
+                radial-gradient(circle at center, rgba(26,20,16,0.55) 3px, transparent 3px),
+                radial-gradient(circle at center, rgba(26,20,16,0.55) 3px, transparent 3px),
+                radial-gradient(circle at center, rgba(26,20,16,0.55) 3px, transparent 3px),
+                radial-gradient(circle at center, rgba(26,20,16,0.55) 3px, transparent 3px);
+            background-size: 8px 8px;
+            background-position: 0% 0%, 0% 50%, 0% 100%, 100% 0%, 100% 50%, 100% 100%;
+            background-repeat: no-repeat;
+            opacity: 0; pointer-events: none; z-index: 3;
+        }
+        .step-card:nth-child(4):hover .card-num::before { animation: feelDots 2s ease-in-out infinite; }
+        @keyframes feelDots {
+            0%,100%{ opacity: 0; transform: translate(-50%, calc(-50% + 6px)) scale(0.85); }
+            50%    { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+
+        .card-body {
+            flex: 1; display: flex; align-items: center;
+            gap: 20px; padding: 22px 32px;
+        }
+
+        .card-num {
+            font-family: 'Playfair Display', serif;
+            font-size: 52px; font-weight: 900;
+            color: rgba(26,20,16,0.08); line-height: 1;
+            flex-shrink: 0; width: 48px; user-select: none;
+        }
+
+        .card-text { flex: 1; }
+        .card-label {
+            font-size: 10px; text-transform: uppercase; letter-spacing: 0.14em;
+            color: var(--muted); font-weight: 600; margin-bottom: 3px;
+        }
+        .card-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 21px; font-weight: 700; color: var(--dark);
+            margin-bottom: 5px; line-height: 1.2;
+        }
+        .card-desc { font-size: 13px; line-height: 1.65; color: var(--muted); }
+
+        /* Thumbnail */
+        .card-thumb {
+            width: 108px; height: 72px; border-radius: 3px;
+            overflow: hidden; flex-shrink: 0;
+            background: rgba(26,20,16,0.07);
+        }
+        .card-thumb video { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+        .card-arrow {
+            font-size: 16px; color: rgba(26,20,16,0.18);
+            flex-shrink: 0; margin-left: 8px;
+            transition: transform 0.2s, color 0.2s;
+        }
+        .step-card:hover .card-arrow { transform: translateX(4px); color: var(--dark); }
+
+        /* Requirements bar */
+        .req-bar {
+            background: var(--dark); padding: 24px 40px;
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+            border-top: 1px solid rgba(201,185,154,0.08);
+        }
+        .req-item { text-align: center; }
+        .req-num {
+            font-family: 'Playfair Display', serif; font-style: italic;
+            font-size: 20px; color: var(--accent); display: block; margin-bottom: 3px;
+        }
+        .req-item h4 { font-size: 12px; font-weight: 600; color: var(--cream); margin-bottom: 2px; }
+        .req-item p { font-size: 11px; color: rgba(245,240,232,0.38); line-height: 1.5; }
+
+        /* ── STEP DETAIL MODAL ── */
+        .step-detail-view {
+            display: flex; position: fixed; inset: 0; z-index: 500;
+            padding: 48px; align-items: center; justify-content: center;
+            cursor: pointer; opacity: 0; pointer-events: none;
+            background: rgba(26,20,16,0); backdrop-filter: blur(0px);
+            -webkit-backdrop-filter: blur(0px);
+            transition: opacity 0.4s ease, background 0.4s ease, backdrop-filter 0.4s ease, -webkit-backdrop-filter 0.4s ease;
+        }
+        .step-detail-view.active {
+            opacity: 1; pointer-events: all;
+            background: rgba(26,20,16,0.85); backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
         }
-        .connect-modal-overlay.closing {
-            opacity: 0 !important;
-            pointer-events: none !important;
+        .step-detail-view.closing {
+            opacity: 0 !important; pointer-events: none !important;
             background: rgba(26,20,16,0) !important;
-            backdrop-filter: blur(0px) !important;
+            backdrop-filter: blur(0px) !important; -webkit-backdrop-filter: blur(0px) !important;
         }
-        .connect-modal {
-            background: var(--cream);
-            width: 100%;
-            max-width: 480px;
-            padding: 48px;
-            position: relative;
-            box-shadow: 0 32px 80px rgba(0,0,0,0.5);
-            opacity: 0;
-            transform: scale(0.92) translateY(24px);
-            transition: opacity 0.35s ease, transform 0.4s cubic-bezier(0.16,1,0.3,1);
+        .detail-container {
+            display: grid; grid-template-columns: 1fr 1.1fr;
+            width: 100%; max-width: 1140px; height: 74vh; max-height: 780px;
+            background: var(--cream); overflow: hidden; cursor: default;
+            box-shadow: 0 48px 120px rgba(0,0,0,0.65);
+            opacity: 0; transform: scale(0.9) translateY(28px);
+            transition: opacity 0.4s ease, transform 0.45s cubic-bezier(0.16,1,0.3,1);
         }
-        .connect-modal-overlay.active .connect-modal {
-            opacity: 1;
-            transform: scale(1) translateY(0);
+        .step-detail-view.active .detail-container { opacity: 1; transform: scale(1) translateY(0); }
+        .step-detail-view.closing .detail-container {
+            opacity: 0 !important; transform: scale(0.94) translateY(14px) !important;
+            transition: opacity 0.24s ease, transform 0.24s ease !important;
         }
-        .connect-modal-overlay.closing .connect-modal {
-            opacity: 0 !important;
-            transform: scale(0.94) translateY(12px) !important;
-            transition: opacity 0.25s ease, transform 0.25s ease !important;
+        .detail-video-panel { background: var(--dark); overflow: hidden; }
+        .detail-video-wrapper { width: 100%; height: 100%; position: relative; }
+        .detail-video-wrapper video {
+            position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain;
         }
-        .connect-modal-tag {
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 0.16em;
-            color: var(--muted);
-            font-weight: 500;
-            margin-bottom: 12px;
+        .detail-content-panel {
+            background: var(--cream); padding: 52px 48px; overflow-y: auto; position: relative;
         }
-        .connect-modal h2 {
-            font-family: 'Playfair Display', serif;
-            font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 8px;
+        .detail-close {
+            position: absolute; top: 18px; right: 18px;
+            width: 38px; height: 38px; border-radius: 50%;
+            background: rgba(26,20,16,0.08); border: none;
+            font-size: 16px; color: var(--muted); cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: background 0.2s, color 0.2s;
         }
-        .connect-modal-sub {
-            font-size: 13px;
-            color: var(--muted);
-            line-height: 1.6;
-            margin-bottom: 32px;
+        .detail-close:hover { background: rgba(26,20,16,0.18); color: var(--dark); }
+        .detail-close:focus-visible { outline: 3px solid var(--dark); outline-offset: 2px; }
+
+        .detail-step-label {
+            font-size: 10px; text-transform: uppercase; letter-spacing: 0.16em;
+            color: var(--muted); font-weight: 600; margin-bottom: 8px;
         }
-        .connect-field {
-            margin-bottom: 20px;
+        .detail-title {
+            font-family: 'Playfair Display', serif; font-size: 28px;
+            font-weight: 700; margin-bottom: 12px; line-height: 1.2;
         }
-        .connect-field label {
-            display: block;
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 0.12em;
-            font-weight: 500;
-            color: var(--muted);
-            margin-bottom: 8px;
+        .detail-intro { font-size: 14px; line-height: 1.8; color: var(--muted); margin-bottom: 24px; }
+        .detail-section h4 {
+            font-family: 'Playfair Display', serif; font-size: 17px;
+            font-weight: 700; margin-bottom: 12px;
         }
-        .connect-field select {
-            width: 100%;
-            padding: 12px 16px;
-            background: var(--warm);
-            border: 1.5px solid rgba(26,20,16,0.15);
-            border-radius: 2px;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 14px;
-            color: var(--dark);
-            appearance: none;
-            -webkit-appearance: none;
+        .detail-steps-list { list-style: none; }
+        .detail-steps-list li {
+            display: flex; align-items: flex-start; gap: 13px;
+            padding: 11px 0; border-bottom: 1px solid rgba(26,20,16,0.07);
+            font-size: 14px; line-height: 1.7; color: var(--dark);
+        }
+        .detail-steps-list li:last-child { border-bottom: none; }
+        .step-badge {
+            flex-shrink: 0; width: 24px; height: 24px; border-radius: 50%;
+            background: var(--dark); color: var(--cream);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 11px; font-weight: 600; margin-top: 2px;
+        }
+        .detail-tips {
+            margin-top: 20px; background: rgba(26,20,16,0.04);
+            padding: 16px 20px; border-left: 3px solid var(--accent);
+        }
+        .detail-tips h5 {
+            font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em;
+            margin-bottom: 7px; font-weight: 600;
+        }
+        .detail-tips p { font-size: 13px; line-height: 1.7; color: var(--muted); }
+
+        /* ── CONNECT MODAL ── */
+        .modal-overlay {
+            display: flex; position: fixed; inset: 0; z-index: 600;
+            align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none;
+            background: rgba(26,20,16,0); backdrop-filter: blur(0px);
+            transition: opacity 0.32s ease, background 0.32s ease, backdrop-filter 0.32s ease;
+        }
+        .modal-overlay.active {
+            opacity: 1; pointer-events: all;
+            background: rgba(26,20,16,0.85); backdrop-filter: blur(14px);
+        }
+        .modal-overlay.closing {
+            opacity: 0 !important; pointer-events: none !important;
+            background: rgba(26,20,16,0) !important; backdrop-filter: blur(0px) !important;
+        }
+        .modal-box {
+            background: var(--cream); width: 100%; max-width: 460px;
+            padding: 48px; position: relative;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.6);
+            opacity: 0; transform: scale(0.92) translateY(22px);
+            transition: opacity 0.32s ease, transform 0.38s cubic-bezier(0.16,1,0.3,1);
+        }
+        .modal-overlay.active .modal-box { opacity: 1; transform: scale(1) translateY(0); }
+        .modal-overlay.closing .modal-box {
+            opacity: 0 !important; transform: scale(0.95) translateY(10px) !important;
+            transition: opacity 0.22s ease, transform 0.22s ease !important;
+        }
+        .modal-x {
+            position: absolute; top: 16px; right: 16px;
+            width: 36px; height: 36px; background: none; border: none;
+            font-size: 18px; color: var(--muted); cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 50%; transition: background 0.2s;
+        }
+        .modal-x:hover { background: rgba(26,20,16,0.08); color: var(--dark); }
+        .modal-x:focus-visible { outline: 3px solid var(--dark); outline-offset: 2px; }
+
+        .modal-tag {
+            font-size: 10px; text-transform: uppercase; letter-spacing: 0.18em;
+            color: var(--muted); font-weight: 600; margin-bottom: 10px;
+        }
+        .modal-box h2 {
+            font-family: 'Playfair Display', serif; font-size: 26px;
+            font-weight: 700; margin-bottom: 8px;
+        }
+        .modal-sub { font-size: 13px; color: var(--muted); line-height: 1.65; margin-bottom: 28px; }
+
+        .field { margin-bottom: 18px; }
+        .field > label {
+            display: block; font-size: 11px; text-transform: uppercase;
+            letter-spacing: 0.12em; font-weight: 600; color: var(--muted); margin-bottom: 8px;
+        }
+        .field select {
+            width: 100%; padding: 13px 16px; min-height: 48px;
+            background: var(--warm); border: 1.5px solid rgba(26,20,16,0.14);
+            border-radius: 3px; font-family: 'DM Sans', sans-serif;
+            font-size: 14px; color: var(--dark);
+            appearance: none; -webkit-appearance: none;
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%231A1410' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 14px center;
+            background-repeat: no-repeat; background-position: right 14px center;
             cursor: pointer;
-            transition: border-color 0.2s;
         }
-        .connect-field select:focus { outline: none; border-color: var(--accent); }
+        .field select:focus { outline: 3px solid var(--accent); border-color: var(--accent); }
 
-        .connect-port-row {
-            display: flex;
-            gap: 10px;
-            align-items: flex-end;
-            margin-bottom: 20px;
-        }
-        .connect-port-row .connect-field { flex: 1; margin-bottom: 0; }
-        .port-scan-btn {
-            padding: 12px 16px;
-            background: transparent;
-            border: 1.5px solid rgba(26,20,16,0.2);
-            border-radius: 2px;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 12px;
-            font-weight: 500;
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
-            color: var(--dark);
-            cursor: pointer;
-            white-space: nowrap;
+        .port-row { display: flex; gap: 10px; align-items: flex-end; margin-bottom: 18px; }
+        .port-row .field { flex: 1; margin-bottom: 0; }
+        .scan-btn {
+            padding: 13px 16px; min-height: 48px; white-space: nowrap;
+            background: transparent; border: 1.5px solid rgba(26,20,16,0.18);
+            border-radius: 3px; font-family: 'DM Sans', sans-serif;
+            font-size: 12px; font-weight: 600; letter-spacing: 0.06em;
+            text-transform: uppercase; color: var(--dark); cursor: pointer;
             transition: background 0.2s, border-color 0.2s;
-            height: 44px;
         }
-        .port-scan-btn:hover { background: var(--warm); border-color: var(--accent); }
+        .scan-btn:hover { background: var(--warm); border-color: var(--accent); }
+        .scan-btn:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
 
-        .connect-modal-actions {
-            display: flex;
-            gap: 12px;
-            margin-top: 32px;
+        .modal-actions { display: flex; gap: 10px; margin-top: 24px; }
+        .modal-connect {
+            flex: 1; padding: 15px; min-height: 52px;
+            background: var(--dark); color: var(--cream); border: none;
+            font-family: 'DM Sans', sans-serif; font-size: 14px;
+            font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+            cursor: pointer; border-radius: 3px;
+            transition: background 0.2s, transform 0.15s;
         }
-        .modal-connect-btn {
-            flex: 1;
-            padding: 14px;
-            background: var(--dark);
-            color: var(--cream);
-            border: none;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 13px;
-            font-weight: 500;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            cursor: pointer;
-            border-radius: 2px;
-            transition: background 0.2s, transform 0.2s;
-        }
-        .modal-connect-btn:hover { background: #2D2520; transform: translateY(-1px); }
-        .modal-connect-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
-        .modal-cancel-btn {
-            padding: 14px 20px;
-            background: transparent;
-            color: var(--muted);
-            border: 1.5px solid rgba(26,20,16,0.15);
-            font-family: 'DM Sans', sans-serif;
-            font-size: 13px;
-            font-weight: 500;
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
-            cursor: pointer;
-            border-radius: 2px;
+        .modal-connect:hover { background: #2D2520; transform: translateY(-1px); }
+        .modal-connect:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+        .modal-connect:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+        .modal-cancel {
+            padding: 15px 20px; min-height: 52px;
+            background: transparent; color: var(--muted);
+            border: 1.5px solid rgba(26,20,16,0.14);
+            font-family: 'DM Sans', sans-serif; font-size: 14px;
+            font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+            cursor: pointer; border-radius: 3px;
             transition: border-color 0.2s, color 0.2s;
         }
-        .modal-cancel-btn:hover { border-color: var(--dark); color: var(--dark); }
-        .connect-modal-status {
-            margin-top: 16px;
-            font-size: 12px;
-            color: var(--muted);
-            min-height: 18px;
-            text-align: center;
-        }
-        .connect-modal-status.error { color: #c0392b; }
-        .connect-modal-status.success { color: #27ae60; }
+        .modal-cancel:hover { border-color: var(--dark); color: var(--dark); }
+        .modal-cancel:focus-visible { outline: 3px solid var(--dark); outline-offset: 2px; }
 
-        .connect-modal-close {
+        .modal-status {
+            margin-top: 14px; font-size: 13px; min-height: 20px;
+            text-align: center; color: var(--muted);
+        }
+        .modal-status.err { color: #c0392b; }
+        .modal-status.ok { color: #2ecc71; font-weight: 600; }
+
+        /* ── SPLIT DIVIDER ── */
+        .split-divider {
+            width: 6px; flex-shrink: 0;
+            background: rgba(201,185,154,0.08);
+            cursor: col-resize;
+            position: relative;
+            display: flex; align-items: center; justify-content: center;
+            transition: background 0.2s;
+            z-index: 10;
+            user-select: none;
+        }
+        .split-divider:hover,
+        .split-divider.dragging {
+            background: rgba(201,185,154,0.22);
+        }
+        .split-divider:focus-visible {
+            outline: 2px solid var(--accent);
+            background: rgba(201,185,154,0.2);
+        }
+
+        /* The visible pill handle */
+        .split-handle {
             position: absolute;
-            top: 16px; right: 20px;
-            background: none; border: none;
-            font-size: 20px; color: var(--muted);
-            cursor: pointer; line-height: 1;
-            transition: color 0.2s;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 22px; height: 48px;
+            background: rgba(201,185,154,0.18);
+            border-radius: 20px;
+            display: flex; align-items: center; justify-content: center;
+            transition: background 0.2s, transform 0.2s, opacity 0.2s;
+            opacity: 0;
         }
-        .connect-modal-close:hover { color: var(--dark); }
+        .split-divider:hover .split-handle,
+        .split-divider.dragging .split-handle {
+            opacity: 1;
+            background: rgba(201,185,154,0.35);
+        }
+        .split-divider.dragging .split-handle {
+            transform: translate(-50%, -50%) scaleY(1.1);
+            background: rgba(201,185,154,0.5);
+        }
 
-        @media (max-width: 1024px) {
-            .main-container { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
-            .converter-panel { padding: 40px 28px; }
-            .instructions-panel { padding: 24px; }
-            .steps-grid { grid-template-columns: 1fr; }
-            .requirements-footer { grid-template-columns: 1fr; gap: 16px; }
-            nav { padding: 0 20px; }
-            .nav-links { display: none; }
-            .step-detail-view { padding: 20px; }
-            .detail-container { grid-template-columns: 1fr; max-height: 92vh; }
-            .detail-content-panel { padding: 32px 24px; }
-            .connect-modal { padding: 32px 24px; }
+        /* 3×2 dot grip */
+        .handle-dots {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 3px;
+            padding: 2px;
+        }
+        .handle-dots span {
+            width: 3px; height: 3px; border-radius: 50%;
+            background: rgba(201,185,154,0.8);
+            display: block;
+        }
+
+        /* Snap indicator lines that flash at snap points */
+        .split-divider::before {
+            content: '';
+            position: absolute; top: 0; bottom: 0; left: 50%;
+            width: 1px;
+            background: rgba(201,185,154,0);
+            transform: translateX(-50%);
+            transition: background 0.15s;
+            pointer-events: none;
+        }
+        .split-divider.snap-hint::before {
+            background: rgba(201,185,154,0.6);
+        }
+
+        @media (max-width: 860px) {
+            :root { --sidebar: 0px; }
+            .sidebar { display: none; }
+            .shell { flex-direction: column; }
+            .converter-panel { width: 100% !important; max-width: 100%; min-width: 0; max-height: 56vh; border-bottom: 1px solid rgba(201,185,154,0.12); }
+            .split-divider { display: none; }
+            .card-thumb { display: none; }
+            .req-bar { grid-template-columns: 1fr; gap: 12px; }
         }
     </style>
 </head>
 <body>
 
-<img src="LOGOBRAILLINO.png" alt="Braillino" class="logo-watermark">
+<a href="#converter" class="skip-link">Skip to converter</a>
 
-<nav>
-    <div class="nav-links">
-        <a href="resources.html">Resources</a>
-        <a href="about.html">About</a>
-    </div>
-    <a href="index.html" class="logo-text">
-        <img src="LOGOBRAILLINO.png" alt="Braillino" style="height:28px;width:auto;display:block;">
+<!-- ══ SIDEBAR ══ -->
+<nav class="sidebar" aria-label="Site navigation">
+    <a href="index.html" class="sidebar-logo" aria-label="Braillino — home">
+        <img src="braillinologooo.png" alt="">
     </a>
-    <div class="status-pill">
-        <div class="dot" id="statusDot"></div>
-        <span id="statusText">Offline</span>
+
+    <div class="sidebar-nav">
+        <a href="index.html" class="sidebar-link active" aria-current="page">
+            <span class="sidebar-icon" aria-hidden="true">⊙</span>
+            <span>Home</span>
+        </a>
+        <a href="resources.html" class="sidebar-link">
+            <span class="sidebar-icon" aria-hidden="true">↓</span>
+            <span>Docs</span>
+        </a>
+        <a href="about.html" class="sidebar-link">
+            <span class="sidebar-icon" aria-hidden="true">✦</span>
+            <span>About</span>
+        </a>
+    </div>
+
+    <!-- Connection status in sidebar -->
+    <div class="sidebar-status" aria-live="polite" aria-atomic="true" aria-label="Device connection status">
+        <div class="s-dot" id="sDot" aria-hidden="true"></div>
+        <span class="s-label" id="sLabel">Offline</span>
     </div>
 </nav>
 
-<div class="ticker-wrap">
-    <div class="ticker-track">
-        <span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span><span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span><span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span><span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span>
-        <span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span><span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span><span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span><span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Convert</span><span class="ticker-item">Feel</span>
-    </div>
-</div>
+<!-- ══ SHELL ══ -->
+<div class="shell">
 
-<div class="main-container">
+    <!-- LEFT: CONVERTER -->
+    <main class="converter-panel" id="converter" aria-label="Braille converter">
+        <div class="conv-inner">
+            <div class="conv-eyebrow">Braillino · Live Converter</div>
+            <h1>Words made<br><em>touchable.</em></h1>
+            <p class="conv-sub">Connect your Arduino and send any text as tactile Braille patterns — in real time.</p>
 
-    <div class="converter-panel">
-        <h1><span class="line1">Words made</span> <em>accessible</em> by touch.</h1>
-        <p class="subtitle">Connect your Arduino and transform any text into tactile Braille patterns. Type below and bring words to life.</p>
-        <button class="connect-btn" id="connectBtn">
-            <span>⊕</span>
-            <span id="connectLabel">Connect Device</span>
-        </button>
-        <div class="input-box">
-            <textarea id="textInput" placeholder="Type your message here…" maxlength="100" spellcheck="false"></textarea>
-            <div class="input-footer">
-                <span class="char-count"><span id="charCount">0</span> / 100</span>
-                <button class="send-btn" id="sendBtn" disabled>Send to Braille →</button>
+            <button class="connect-btn" id="connectBtn" aria-describedby="sLabel">
+                <span class="btn-icon" aria-hidden="true">⊕</span>
+                <span id="connectLabel">Connect Device</span>
+            </button>
+
+            <div class="conv-divider" aria-hidden="true"></div>
+
+            <label class="field-label" for="textInput">Your message</label>
+            <div class="input-box">
+                <textarea
+                    id="textInput"
+                    placeholder="Type your message here…"
+                    maxlength="100"
+                    spellcheck="false"
+                    aria-describedby="charCount"
+                ></textarea>
+                <div class="input-footer">
+                    <span class="char-count" id="charCount" aria-live="polite">
+                        <span id="charNum">0</span> / 100
+                    </span>
+                </div>
+            </div>
+
+            <button class="send-btn" id="sendBtn" disabled aria-label="Send text to Arduino as Braille">
+                Send to Braille →
+            </button>
+
+            <div class="braille-area">
+                <div class="braille-eyebrow" aria-hidden="true">Braille preview</div>
+                <div class="braille-preview" id="braillePreview"
+                     role="img" aria-label="Live Braille dot preview"></div>
             </div>
         </div>
-        <div class="braille-preview" id="braillePreview"></div>
+    </main>
+
+    <!-- DRAG DIVIDER -->
+    <div class="split-divider" id="splitDivider" role="separator" aria-label="Drag to resize panels" aria-orientation="vertical" tabindex="0" title="Drag to resize · Double-click to reset">
+        <div class="split-handle">
+            <div class="handle-dots">
+                <span></span><span></span><span></span>
+                <span></span><span></span><span></span>
+            </div>
+        </div>
     </div>
 
-    <div class="instructions-panel">
-        <div class="instructions-header">
+    <!-- RIGHT: STEPS -->
+    <section class="steps-panel" aria-label="How it works">
+
+        <div class="ticker-strip" aria-hidden="true">
+            <div class="ticker-track">
+                <span class="ticker-item">Upload</span><span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Feel</span><span class="ticker-item">Upload</span><span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Feel</span><span class="ticker-item">Upload</span><span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Feel</span><span class="ticker-item">Upload</span><span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Feel</span>
+                <span class="ticker-item">Upload</span><span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Feel</span><span class="ticker-item">Upload</span><span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Feel</span><span class="ticker-item">Upload</span><span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Feel</span><span class="ticker-item">Upload</span><span class="ticker-item">Connect</span><span class="ticker-item">Type</span><span class="ticker-item">Feel</span>
+            </div>
+        </div>
+
+        <div class="steps-header">
             <h2>How It Works</h2>
-            <p>Click any step to learn more</p>
+            <span>Click any step to learn more</span>
         </div>
-        <div class="steps-grid">
-            <div class="step-card" onclick="openStepDetail(1)">
-                <div class="step-header"><div class="step-number">1</div><div class="step-title-group"><div class="step-label">Step One</div><h3>Upload Code</h3></div></div>
-                <div class="step-video"><video src="demo1.mp4" muted loop playsinline></video></div>
-                <p class="step-desc">Open Arduino IDE, paste the .ino sketch, select your board and port, then upload.</p>
+
+        <div class="steps-list" role="list">
+
+            <button class="step-card" onclick="openStep(1)"
+                role="listitem" aria-label="Step 1: Upload Code — tap to learn more">
+                <div class="card-strip" aria-hidden="true"></div>
+                <div class="card-body">
+                    <div class="card-num" aria-hidden="true">1</div>
+                    <div class="card-text">
+                        <div class="card-label">Step One</div>
+                        <div class="card-title">Upload Code</div>
+                        <div class="card-desc">Open Arduino IDE, paste the .ino sketch, select your board and port, then upload.</div>
+                    </div>
+                    <div class="card-thumb" aria-hidden="true">
+                        <video src="demo1.mp4" muted loop playsinline></video>
+                    </div>
+                    <span class="card-arrow" aria-hidden="true">→</span>
+                </div>
+            </button>
+
+            <button class="step-card" onclick="openStep(2)"
+                role="listitem" aria-label="Step 2: Connect Device — tap to learn more">
+                <div class="card-strip" aria-hidden="true"></div>
+                <div class="card-body">
+                    <div class="card-num" aria-hidden="true">2</div>
+                    <div class="card-text">
+                        <div class="card-label">Step Two</div>
+                        <div class="card-title">Connect Device</div>
+                        <div class="card-desc">Plug in your Arduino via USB and click "Connect Device" in Chrome or Edge.</div>
+                    </div>
+                    <div class="card-thumb" aria-hidden="true">
+                        <video src="demo2.mp4" muted loop playsinline></video>
+                    </div>
+                    <span class="card-arrow" aria-hidden="true">→</span>
+                </div>
+            </button>
+
+            <button class="step-card" onclick="openStep(3)"
+                role="listitem" aria-label="Step 3: Type Message — tap to learn more">
+                <div class="card-strip" aria-hidden="true"></div>
+                <div class="card-body">
+                    <div class="card-num" aria-hidden="true">3</div>
+                    <div class="card-text">
+                        <div class="card-label">Step Three</div>
+                        <div class="card-title">Type Message</div>
+                        <div class="card-desc">Type any text up to 100 characters. Auto-converts to Braille Grade 1 live.</div>
+                    </div>
+                    <div class="card-thumb" aria-hidden="true">
+                        <video src="demo3.mp4" muted loop playsinline></video>
+                    </div>
+                    <span class="card-arrow" aria-hidden="true">→</span>
+                </div>
+            </button>
+
+            <button class="step-card" onclick="openStep(4)"
+                role="listitem" aria-label="Step 4: Feel Braille — tap to learn more">
+                <div class="card-strip" aria-hidden="true"></div>
+                <div class="card-body">
+                    <div class="card-num" aria-hidden="true">4</div>
+                    <div class="card-text">
+                        <div class="card-label">Step Four</div>
+                        <div class="card-title">Feel Braille</div>
+                        <div class="card-desc">Watch servos form each Braille character. Each letter displays for 4 seconds.</div>
+                    </div>
+                    <div class="card-thumb" aria-hidden="true">
+                        <video src="step4braillino.mp4" muted loop playsinline></video>
+                    </div>
+                    <span class="card-arrow" aria-hidden="true">→</span>
+                </div>
+            </button>
+
+        </div>
+
+        <div class="req-bar" aria-label="Requirements">
+            <div class="req-item">
+                <span class="req-num" aria-hidden="true">01</span>
+                <h4>Hardware</h4>
+                <p>Arduino + 2 servos (pins 9 & 10)</p>
             </div>
-            <div class="step-card" onclick="openStepDetail(2)">
-                <div class="step-header"><div class="step-number">2</div><div class="step-title-group"><div class="step-label">Step Two</div><h3>Connect Device</h3></div></div>
-                <div class="step-video"><video src="demo2.mp4" muted loop playsinline></video></div>
-                <p class="step-desc">Plug in your Arduino via USB and click "Connect Device" in Chrome or Edge.</p>
+            <div class="req-item">
+                <span class="req-num" aria-hidden="true">02</span>
+                <h4>Software</h4>
+                <p>Arduino IDE for the sketch</p>
             </div>
-            <div class="step-card" onclick="openStepDetail(3)">
-                <div class="step-header"><div class="step-number">3</div><div class="step-title-group"><div class="step-label">Step Three</div><h3>Type Message</h3></div></div>
-                <div class="step-video"><video src="demo3.mp4" muted loop playsinline></video></div>
-                <p class="step-desc">Type any text (up to 100 characters). It auto-converts to Braille Grade 1.</p>
-            </div>
-            <div class="step-card" onclick="openStepDetail(4)">
-                <div class="step-header"><div class="step-number">4</div><div class="step-title-group"><div class="step-label">Step Four</div><h3>Feel Braille</h3></div></div>
-                <div class="step-video"><video src="step4braillino.mp4" muted loop playsinline></video></div>
-                <p class="step-desc">Watch servos form each Braille letter. Each character displays for 4 seconds.</p>
+            <div class="req-item">
+                <span class="req-num" aria-hidden="true">03</span>
+                <h4>Browser</h4>
+                <p>Chrome or Edge — Web Serial</p>
             </div>
         </div>
 
-        <!-- STEP DETAIL MODAL -->
-        <div class="step-detail-view" id="stepDetailView">
-            <div class="detail-container" id="detailContainer">
-                <div class="detail-video-panel"><div class="detail-video-wrapper"><video id="detailVideo" muted loop autoplay playsinline></video></div></div>
-                <div class="detail-content-panel"><div id="detailContent"></div></div>
-            </div>
-        </div>
-
-        <div class="requirements-footer">
-            <div class="req-item"><span class="req-num">01</span><h4>Hardware</h4><p>Arduino with 2 servos (pins 9 & 10)</p></div>
-            <div class="req-item"><span class="req-num">02</span><h4>Software</h4><p>Arduino IDE for uploading sketch</p></div>
-            <div class="req-item"><span class="req-num">03</span><h4>Browser</h4><p>Chrome or Edge (Web Serial API)</p></div>
-        </div>
-    </div>
-
+    </section>
 </div>
 
-<!-- ══ CUSTOM CONNECT MODAL ══ -->
-<div class="connect-modal-overlay" id="connectModalOverlay">
-    <div class="connect-modal" id="connectModal">
-        <button class="connect-modal-close" onclick="closeConnectModal()">✕</button>
-        <div class="connect-modal-tag">Device Setup</div>
-        <h2>Connect Arduino</h2>
-        <p class="connect-modal-sub">Choose your connection settings below. Click <strong>Scan Ports</strong> to detect available ports, then connect.</p>
+<!-- ══ STEP DETAIL MODAL ══ -->
+<div class="step-detail-view" id="stepView" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
+    <div class="detail-container" id="detailContainer">
+        <div class="detail-video-panel">
+            <div class="detail-video-wrapper">
+                <video id="detailVideo" muted loop autoplay playsinline aria-hidden="true"></video>
+            </div>
+        </div>
+        <div class="detail-content-panel">
+            <button class="detail-close" id="detailCloseBtn" onclick="closeStep()" aria-label="Close">✕</button>
+            <div id="detailContent"></div>
+        </div>
+    </div>
+</div>
 
-        <div class="connect-port-row">
-            <div class="connect-field">
-                <label>Serial Port</label>
+<!-- ══ CONNECT MODAL ══ -->
+<div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-box">
+        <button class="modal-x" onclick="closeModal()" aria-label="Close">✕</button>
+        <div class="modal-tag">Device Setup</div>
+        <h2 id="modalTitle">Connect Arduino</h2>
+        <p class="modal-sub">Click <strong>Scan Ports</strong> to find your Arduino, pick a baud rate, then connect.</p>
+
+        <div class="port-row">
+            <div class="field">
+                <label for="portSelect">Serial Port</label>
                 <select id="portSelect">
-                    <option value="">— Click Scan Ports —</option>
+                    <option value="">— Click Scan Ports first —</option>
                 </select>
             </div>
-            <button class="port-scan-btn" id="scanBtn" onclick="scanPorts()">Scan Ports</button>
+            <button class="scan-btn" id="scanBtn" onclick="scanPorts()">Scan Ports</button>
         </div>
 
-        <div class="connect-field">
-            <label>Baud Rate</label>
+        <div class="field">
+            <label for="baudSelect">Baud Rate</label>
             <select id="baudSelect">
-                <option value="9600" selected>9600 (Default)</option>
+                <option value="9600" selected>9600 — Default</option>
                 <option value="19200">19200</option>
                 <option value="38400">38400</option>
                 <option value="57600">57600</option>
@@ -424,43 +970,22 @@
             </select>
         </div>
 
-        <div class="connect-modal-actions">
-            <button class="modal-connect-btn" id="modalConnectBtn" onclick="connectFromModal()">Connect</button>
-            <button class="modal-cancel-btn" onclick="closeConnectModal()">Cancel</button>
+        <div class="modal-actions">
+            <button class="modal-connect" id="modalConnectBtn" onclick="connectFromModal()">Connect</button>
+            <button class="modal-cancel" onclick="closeModal()">Cancel</button>
         </div>
-        <div class="connect-modal-status" id="connectModalStatus"></div>
+        <div class="modal-status" id="modalStatus" aria-live="polite"></div>
     </div>
 </div>
 
 <script>
+// ── BRAILLE TABLE ──
 const BRAILLE = {
-    // Dots: [1,2,3,4,5,6] = [top-left, mid-left, bot-left, top-right, mid-right, bot-right]
-    A:[1,0,0,0,0,0],
-    B:[1,1,0,0,0,0],
-    C:[1,0,0,1,0,0],
-    D:[1,0,0,1,1,0],
-    E:[1,0,0,0,1,0],
-    F:[1,1,0,1,0,0],
-    G:[1,1,0,1,1,0],
-    H:[1,1,0,0,1,0],
-    I:[0,1,0,1,0,0],
-    J:[0,1,0,1,1,0],
-    K:[1,0,1,0,0,0],
-    L:[1,1,1,0,0,0],
-    M:[1,0,1,1,0,0],
-    N:[1,0,1,1,1,0],
-    O:[1,0,1,0,1,0],
-    P:[1,1,1,1,0,0],
-    Q:[1,1,1,1,1,0],
-    R:[1,1,1,0,1,0],
-    S:[0,1,1,1,0,0],
-    T:[0,1,1,1,1,0],
-    U:[1,0,1,0,0,1],
-    V:[1,1,1,0,0,1],
-    W:[0,1,0,1,1,1],
-    X:[1,0,1,1,0,1],
-    Y:[1,0,1,1,1,1],
-    Z:[1,0,1,0,1,1],
+    A:[1,0,0,0,0,0],B:[1,1,0,0,0,0],C:[1,0,0,1,0,0],D:[1,0,0,1,1,0],E:[1,0,0,0,1,0],
+    F:[1,1,0,1,0,0],G:[1,1,0,1,1,0],H:[1,1,0,0,1,0],I:[0,1,0,1,0,0],J:[0,1,0,1,1,0],
+    K:[1,0,1,0,0,0],L:[1,1,1,0,0,0],M:[1,0,1,1,0,0],N:[1,0,1,1,1,0],O:[1,0,1,0,1,0],
+    P:[1,1,1,1,0,0],Q:[1,1,1,1,1,0],R:[1,1,1,0,1,0],S:[0,1,1,1,0,0],T:[0,1,1,1,1,0],
+    U:[1,0,1,0,0,1],V:[1,1,1,0,0,1],W:[0,1,0,1,1,1],X:[1,0,1,1,0,1],Y:[1,0,1,1,1,1],Z:[1,0,1,0,1,1],
     '1':[1,0,0,0,0,0],'2':[1,1,0,0,0,0],'3':[1,0,0,1,0,0],'4':[1,0,0,1,1,0],'5':[1,0,0,0,1,0],
     '6':[1,1,0,1,0,0],'7':[1,1,0,1,1,0],'8':[1,1,0,0,1,0],'9':[0,1,0,1,0,0],'0':[0,1,0,1,1,0],
     '.':[0,1,0,0,1,1],',':[0,1,0,0,0,0],'?':[0,1,1,0,0,1],'!':[0,1,1,0,1,0],
@@ -469,292 +994,372 @@ const BRAILLE = {
     '@':[0,0,0,1,1,0],'#':[0,0,0,1,1,1],' ':[0,0,0,0,0,0]
 };
 
-// ── STEP DETAIL DATA ──
-const stepDetails = {
-    1: { label:'Step One', title:'Upload the Arduino Code', video:'demo1.mp4', intro:'Before you can use Braillino, you need to upload the Arduino sketch to your board. This code tells the Arduino how to control the servos and communicate with the web interface.', steps:['Download the Braillino .ino file from the Resources page','Open Arduino IDE on your computer (download from arduino.cc if needed)','Click File → Open and select the braillino_fixed.ino file','Connect your Arduino to your computer via USB cable','Go to Tools → Board and select your Arduino model (Uno or Nano)','Go to Tools → Port and select the port your Arduino is connected to','Click the Upload button (right arrow icon) in the toolbar','Wait for "Done uploading" message to appear at the bottom'], tips:'Make sure you have the correct board selected! Arduino Uno and Nano use different settings. If upload fails, try unplugging and reconnecting your Arduino.' },
-    2: { label:'Step Two', title:'Connect Your Device', video:'demo2.mp4', intro:'Once the code is uploaded, keep your Arduino plugged in and connect it to the Braillino web app using the Web Serial API.', steps:["Keep your Arduino connected via USB (don't unplug it)",'Open Chrome or Edge browser — Safari and Firefox don\'t support Web Serial','Navigate to the Braillino website','Click the "Connect Device" button on the left side','Click "Scan Ports" in the connect panel to detect your Arduino','Select your Arduino from the port list','Choose baud rate 9600 (default)','Click Connect — the status dot turns green'], tips:"If no ports appear after scanning, make sure your Arduino is plugged in and the code was uploaded successfully." },
-    3: { label:'Step Three', title:'Type Your Message', video:'demo3.mp4', intro:'With your device connected, you can now type any message and see it converted to Braille in real-time.', steps:['Click in the text area that says "Type your message here..."','Type any text using letters A-Z, numbers 0-9, and supported punctuation','Watch as the Braille preview updates in real-time below the text box','Keep your message under 100 characters (shown in the character counter)','Press Enter on your keyboard OR click the "Send to Braille →" button','The message will be sent to your Arduino immediately'], tips:"Text is automatically converted to uppercase for Braille Grade 1. Supported punctuation includes: . , ? ! ; : - ' \" ( ) / @ #" },
-    4: { label:'Step Four', title:'Feel the Braille', video:'step4braillino.mp4', intro:'Watch and feel as your Arduino displays each character in Braille, one letter at a time.', steps:['The servos will begin moving to form the first character','Each character is displayed for 4 seconds',"If the same letter appears twice in a row, there's a short 400ms pause between them",'Watch the servo positions to see the Braille pattern forming','Place your finger on the device to feel the raised dots','The device will cycle through your entire message once','Type a new message to display more text'], tips:'The servos display patterns using 6 dots arranged in 2 columns of 3 dots each. Left servo controls dots 1-3, right servo controls dots 4-6.' }
+const STEPS = {
+    1:{ label:'Step One', title:'Upload the Arduino Code', video:'demo1.mp4',
+        intro:'Before using Braillino, upload the Arduino sketch to your board. This code controls the servos and handles communication with the web interface.',
+        steps:['Download the .ino file from the Resources page','Open Arduino IDE on your computer','Click File → Open and select the braillino_fixed.ino file','Connect your Arduino via USB cable','Go to Tools → Board and select Uno or Nano','Go to Tools → Port and select the correct port','Click the Upload button (→) in the toolbar','Wait for "Done uploading" to appear'],
+        tip:'Make sure you have the correct board selected! Uno and Nano use different settings. If upload fails, try unplugging and reconnecting your Arduino.' },
+    2:{ label:'Step Two', title:'Connect Your Device', video:'demo2.mp4',
+        intro:'Once the code is uploaded, keep your Arduino plugged in and connect it to Braillino using the Web Serial API.',
+        steps:["Keep your Arduino connected via USB — don't unplug",'Open Chrome or Edge (Safari/Firefox don\'t support Web Serial)','Go to the Braillino website','Click "Connect Device" on the left panel','Click "Scan Ports" to find your Arduino','Select your Arduino from the list','Baud rate 9600 is default — keep it unless you changed the sketch','Click Connect — the status dot turns green'],
+        tip:'If no ports appear after scanning, confirm your Arduino is plugged in and the sketch was uploaded successfully.' },
+    3:{ label:'Step Three', title:'Type Your Message', video:'demo3.mp4',
+        intro:'With your device connected, type any message and watch it convert to Braille in real time.',
+        steps:['Click the text area on the left panel','Type letters A–Z, numbers 0–9, or punctuation','Watch the Braille preview update live below','Keep your message under 100 characters','Press Enter or click "Send to Braille →"','The message is sent to your Arduino immediately'],
+        tip:"Text auto-converts to uppercase for Braille Grade 1. Supported punctuation: . , ? ! ; : - ' \" ( ) / @ #" },
+    4:{ label:'Step Four', title:'Feel the Braille', video:'step4braillino.mp4',
+        intro:'Watch and feel as your Arduino displays each character one letter at a time.',
+        steps:['Servos begin moving to form the first character','Each character displays for 4 seconds','Same letter twice in a row gets a 400ms pause between them','Watch servo positions to see each Braille pattern','Place your finger on the device to feel raised dots','The device cycles through your full message once','Type a new message to display more text'],
+        tip:'Dots are arranged in 2 columns of 3. Left servo = dots 1–3, right servo = dots 4–6.' }
 };
 
-// ── STEP VIDEO HOVER ──
-document.querySelectorAll('.step-video video').forEach(video => {
-    const card = video.closest('.step-card');
-    card.addEventListener('mouseenter', () => video.play());
-    card.addEventListener('mouseleave', () => { video.pause(); video.currentTime = 0; });
+// ── VIDEO HOVER ON THUMBNAILS ──
+document.querySelectorAll('.card-thumb video').forEach(v => {
+    const card = v.closest('.step-card');
+    card.addEventListener('mouseenter', () => v.play());
+    card.addEventListener('mouseleave', () => { v.pause(); v.currentTime = 0; });
 });
 
 // ── STEP DETAIL MODAL ──
-let closeTimer = null;
-const detailView = document.getElementById('stepDetailView');
-const detailContainer = document.getElementById('detailContainer');
-const detailVideo = document.getElementById('detailVideo');
+let stepCloseTimer = null;
+const stepView      = document.getElementById('stepView');
+const detailCont    = document.getElementById('detailContainer');
+const detailVid     = document.getElementById('detailVideo');
 const detailContent = document.getElementById('detailContent');
+const detailCloseBtn = document.getElementById('detailCloseBtn');
 
-function openStepDetail(stepNum) {
-    if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
-    detailView.classList.remove('closing');
-    const d = stepDetails[stepNum];
-    detailVideo.src = d.video;
-    detailVideo.play();
+function openStep(n) {
+    if (stepCloseTimer) { clearTimeout(stepCloseTimer); stepCloseTimer = null; }
+    stepView.classList.remove('closing');
+    const d = STEPS[n];
+    detailVid.src = d.video;
+    detailVid.play();
     detailContent.innerHTML = `
-        <div class="detail-header">
-            <div class="detail-step-label">${d.label}</div>
-            <h2 class="detail-title">${d.title}</h2>
-            <p class="detail-intro">${d.intro}</p>
-        </div>
+        <div class="detail-step-label">${d.label}</div>
+        <h2 class="detail-title" id="detailTitle">${d.title}</h2>
+        <p class="detail-intro">${d.intro}</p>
         <div class="detail-section">
-            <h4>Step-by-Step Instructions</h4>
-            <ul class="detail-steps-list">${d.steps.map((s,i)=>`<li><div class="step-number-badge">${i+1}</div><div>${s}</div></li>`).join('')}</ul>
+            <h4>Step-by-Step</h4>
+            <ul class="detail-steps-list">
+                ${d.steps.map((s,i) => `<li><div class="step-badge" aria-hidden="true">${i+1}</div><div>${s}</div></li>`).join('')}
+            </ul>
         </div>
-        <div class="detail-section"><div class="detail-tips"><h5>💡 Pro Tip</h5><p>${d.tips}</p></div></div>`;
-    requestAnimationFrame(() => requestAnimationFrame(() => detailView.classList.add('active')));
+        <div class="detail-tips"><h5>💡 Pro Tip</h5><p>${d.tip}</p></div>`;
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+        stepView.classList.add('active');
+        detailCloseBtn.focus();
+    }));
 }
-function closeStepDetail() {
-    detailView.classList.add('closing');
-    detailView.classList.remove('active');
-    closeTimer = setTimeout(() => {
-        detailView.classList.remove('closing');
-        detailVideo.pause(); detailVideo.currentTime = 0; detailVideo.src = '';
-        closeTimer = null;
-    }, 320);
+function closeStep() {
+    stepView.classList.add('closing');
+    stepView.classList.remove('active');
+    stepCloseTimer = setTimeout(() => {
+        stepView.classList.remove('closing');
+        detailVid.pause(); detailVid.currentTime = 0; detailVid.src = '';
+        stepCloseTimer = null;
+    }, 300);
 }
-detailView.addEventListener('click', e => { if (e.target === detailView) closeStepDetail(); });
-detailContainer.addEventListener('click', e => e.stopPropagation());
-document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeStepDetail(); closeConnectModal(); } });
+stepView.addEventListener('click', e => { if (e.target === stepView) closeStep(); });
+detailCont.addEventListener('click', e => e.stopPropagation());
 
 // ── BRAILLE PREVIEW ──
-function renderBraillePreview(text) {
-    const container = document.getElementById('braillePreview');
-    container.innerHTML = '';
-    for (const ch of text.slice(0,14)) {
-        const upper = ch.toUpperCase();
-        const dots = BRAILLE[upper] || BRAILLE[ch] || BRAILLE[' '];
+function renderBraille(text) {
+    const wrap = document.getElementById('braillePreview');
+    wrap.innerHTML = '';
+    for (const ch of text.slice(0, 16)) {
+        const up = ch.toUpperCase();
+        const dots = BRAILLE[up] || BRAILLE[ch] || BRAILLE[' '];
         const cell = document.createElement('div'); cell.className = 'braille-cell';
-        const grid = document.createElement('div'); grid.className = 'braille-char';
-        // Grid fills left-to-right per row, so order must be: d1,d4, d2,d5, d3,d6
-        [0,3,1,4,2,5].forEach(i => { const d = document.createElement('div'); d.className = 'braille-dot'+(dots[i]?' raised':''); grid.appendChild(d); });
-        const lbl = document.createElement('div'); lbl.className = 'braille-label'; lbl.textContent = ch===' '?'·':ch;
-        cell.appendChild(grid); cell.appendChild(lbl); container.appendChild(cell);
+        const grid = document.createElement('div'); grid.className = 'braille-char'; grid.setAttribute('aria-hidden','true');
+        // Correct column-first order: d1,d4 / d2,d5 / d3,d6
+        [0,3,1,4,2,5].forEach(i => {
+            const d = document.createElement('div');
+            d.className = 'braille-dot' + (dots[i] ? ' raised' : '');
+            grid.appendChild(d);
+        });
+        const lbl = document.createElement('div');
+        lbl.className = 'braille-char-label';
+        lbl.textContent = ch === ' ' ? '·' : ch.toUpperCase();
+        cell.appendChild(grid); cell.appendChild(lbl); wrap.appendChild(cell);
     }
 }
 
-// ── WEB SERIAL + CUSTOM MODAL ──
+// ── WEB SERIAL ──
 let port, writer;
-const connectBtn    = document.getElementById('connectBtn');
-const connectLabel  = document.getElementById('connectLabel');
-const sendBtn       = document.getElementById('sendBtn');
-const textInput     = document.getElementById('textInput');
-const statusDot     = document.getElementById('statusDot');
-const statusText    = document.getElementById('statusText');
-const charCount     = document.getElementById('charCount');
+const connectBtn   = document.getElementById('connectBtn');
+const connectLabel = document.getElementById('connectLabel');
+const sendBtn      = document.getElementById('sendBtn');
+const textInput    = document.getElementById('textInput');
+const charNum      = document.getElementById('charNum');
+const sDot         = document.getElementById('sDot');
+const sLabel       = document.getElementById('sLabel');
+const modalOverlay = document.getElementById('modalOverlay');
+const modalStatus  = document.getElementById('modalStatus');
+const portSelect   = document.getElementById('portSelect');
+const baudSelect   = document.getElementById('baudSelect');
+const modalConnBtn = document.getElementById('modalConnectBtn');
 
-const connectModalOverlay = document.getElementById('connectModalOverlay');
-const connectModalStatus  = document.getElementById('connectModalStatus');
-const portSelect          = document.getElementById('portSelect');
-const baudSelect          = document.getElementById('baudSelect');
-const modalConnectBtn     = document.getElementById('modalConnectBtn');
+baudSelect.value = sessionStorage.getItem('braillino_baud') || '9600';
 
-// Save/restore baud setting
-const savedBaud = sessionStorage.getItem('braillino_baud') || '9600';
-baudSelect.value = savedBaud;
-
-textInput.addEventListener('input', () => { charCount.textContent = textInput.value.length; renderBraillePreview(textInput.value); });
+textInput.addEventListener('input', () => {
+    charNum.textContent = textInput.value.length;
+    renderBraille(textInput.value);
+    sendBtn.classList.toggle('ready', textInput.value.trim().length > 0 && !!port?.readable);
+});
 
 if (!('serial' in navigator)) {
-    statusText.textContent = 'Unsupported';
-    connectBtn.title = 'Use Chrome or Edge browser';
+    sLabel.textContent = 'N/A';
     connectBtn.disabled = true;
+    connectBtn.title = 'Use Chrome or Edge';
 }
 
-// ── On page load: try auto-reconnect if we had a port before ──
+// Auto-reconnect on load
 window.addEventListener('load', async () => {
     if (!('serial' in navigator)) return;
-    // Restore status display from sessionStorage while we try to reconnect
     if (sessionStorage.getItem('braillino_connected') === 'true') {
-        setStatusConnecting();
+        setConnecting();
         try {
             const ports = await navigator.serial.getPorts();
-            if (ports.length > 0) {
-                const baud = parseInt(sessionStorage.getItem('braillino_baud') || '9600');
-                port = ports[0]; // most recently used port
-                await port.open({ baudRate: baud });
+            if (ports.length) {
+                port = ports[0];
+                await port.open({ baudRate: parseInt(sessionStorage.getItem('braillino_baud') || '9600') });
                 writer = port.writable.getWriter();
-                setStatusConnected();
-                return;
+                setConnected(); return;
             }
-        } catch(err) {
-            console.log('Auto-reconnect failed:', err);
-        }
-        setStatusOffline();
+        } catch(e) { console.log('Auto-reconnect failed:', e); }
+        setOffline();
     }
 });
 
-connectBtn.addEventListener('click', async () => {
-    if (port && port.readable) {
-        await disconnect();
-    } else {
-        openConnectModal();
-    }
+connectBtn.addEventListener('click', () => {
+    if (port?.readable) disconnect();
+    else openModal();
 });
 
-sendBtn.addEventListener('click', async () => {
-    const text = textInput.value.trim().toUpperCase();
-    if (!text) return;
-    await sendToArduino(text);
-});
-textInput.addEventListener('keypress', async e => {
-    if (e.key === 'Enter' && !e.shiftKey && port && port.readable) { e.preventDefault(); sendBtn.click(); }
+sendBtn.addEventListener('click', () => {
+    const txt = textInput.value.trim().toUpperCase();
+    if (txt && port?.readable) sendText(txt);
 });
 
-// ── STATUS HELPERS ──
-function setStatusConnected() {
-    statusDot.classList.add('on');
-    statusText.textContent = 'Connected';
-    connectLabel.textContent = 'Disconnect';
-    connectBtn.classList.add('connected');
+textInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey && port?.readable) { e.preventDefault(); sendBtn.click(); }
+});
+
+// Status helpers
+function setConnected() {
+    sDot.classList.add('on'); sLabel.classList.add('on'); sLabel.textContent = 'Online';
+    connectLabel.textContent = 'Disconnect'; connectBtn.classList.add('connected');
+    connectBtn.setAttribute('aria-label','Disconnect device');
     sendBtn.disabled = false;
-    sessionStorage.setItem('braillino_connected', 'true');
+    sendBtn.classList.toggle('ready', textInput.value.trim().length > 0);
+    sessionStorage.setItem('braillino_connected','true');
     sessionStorage.setItem('braillino_baud', baudSelect.value);
     textInput.focus();
 }
-function setStatusOffline() {
-    statusDot.classList.remove('on');
-    statusText.textContent = 'Offline';
-    connectLabel.textContent = 'Connect Device';
-    connectBtn.classList.remove('connected');
-    sendBtn.disabled = true;
-    sessionStorage.setItem('braillino_connected', 'false');
+function setOffline() {
+    sDot.classList.remove('on'); sLabel.classList.remove('on'); sLabel.textContent = 'Offline';
+    connectLabel.textContent = 'Connect Device'; connectBtn.classList.remove('connected');
+    connectBtn.setAttribute('aria-label','Connect Arduino device');
+    sendBtn.disabled = true; sendBtn.classList.remove('ready');
+    sessionStorage.setItem('braillino_connected','false');
 }
-function setStatusConnecting() {
-    statusDot.classList.remove('on');
-    statusText.textContent = 'Connecting…';
+function setConnecting() { sLabel.textContent = 'Connecting…'; }
+
+// Connect modal
+let modalCloseTimer = null;
+function openModal() {
+    if (modalCloseTimer) { clearTimeout(modalCloseTimer); modalCloseTimer = null; }
+    modalOverlay.classList.remove('closing');
+    modalStatus.textContent = ''; modalStatus.className = 'modal-status';
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+        modalOverlay.classList.add('active');
+        document.getElementById('scanBtn').focus();
+    }));
 }
-
-// ── CUSTOM CONNECT MODAL ──
-let connectModalCloseTimer = null;
-
-function openConnectModal() {
-    if (connectModalCloseTimer) { clearTimeout(connectModalCloseTimer); connectModalCloseTimer = null; }
-    connectModalOverlay.classList.remove('closing');
-    connectModalStatus.textContent = '';
-    connectModalStatus.className = 'connect-modal-status';
-    requestAnimationFrame(() => requestAnimationFrame(() => connectModalOverlay.classList.add('active')));
+function closeModal() {
+    modalOverlay.classList.add('closing'); modalOverlay.classList.remove('active');
+    modalCloseTimer = setTimeout(() => { modalOverlay.classList.remove('closing'); modalCloseTimer = null; }, 300);
+    connectBtn.focus();
 }
+modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) closeModal(); });
 
-function closeConnectModal() {
-    connectModalOverlay.classList.add('closing');
-    connectModalOverlay.classList.remove('active');
-    connectModalCloseTimer = setTimeout(() => {
-        connectModalOverlay.classList.remove('closing');
-        connectModalCloseTimer = null;
-    }, 300);
-}
-
-connectModalOverlay.addEventListener('click', e => { if (e.target === connectModalOverlay) closeConnectModal(); });
-
-// Scan available ports already granted by browser
 async function scanPorts() {
-    const scanBtn = document.getElementById('scanBtn');
-    scanBtn.textContent = 'Scanning…';
-    scanBtn.disabled = true;
-    connectModalStatus.textContent = '';
-
+    const btn = document.getElementById('scanBtn');
+    btn.textContent = 'Scanning…'; btn.disabled = true;
+    modalStatus.textContent = '';
     try {
-        // getPorts() returns previously-granted ports (no browser popup)
         const ports = await navigator.serial.getPorts();
         portSelect.innerHTML = '';
-
-        if (ports.length === 0) {
-            // No previously granted ports — must request one
-            portSelect.innerHTML = '<option value="request">⊕ Click Connect to select a port…</option>';
-            connectModalStatus.textContent = 'No saved ports found. Click Connect to pick one.';
+        if (!ports.length) {
+            portSelect.innerHTML = '<option value="request">⊕ Click Connect to pick a port…</option>';
+            modalStatus.textContent = 'No saved ports found. Click Connect to select one.';
         } else {
-            ports.forEach((p, i) => {
+            ports.forEach((p,i) => {
                 const info = p.getInfo();
-                const label = info.usbVendorId
-                    ? `Port ${i+1} — USB VID:${info.usbVendorId.toString(16).toUpperCase()} PID:${info.usbProductId?.toString(16).toUpperCase()}`
+                const lbl = info.usbVendorId
+                    ? `Port ${i+1} — VID:${info.usbVendorId.toString(16).toUpperCase()} PID:${info.usbProductId?.toString(16).toUpperCase()}`
                     : `Port ${i+1} — Serial Device`;
-                const opt = document.createElement('option');
-                opt.value = i;
-                opt.textContent = label;
-                portSelect.appendChild(opt);
+                const o = document.createElement('option'); o.value = i; o.textContent = lbl;
+                portSelect.appendChild(o);
             });
-            connectModalStatus.textContent = `${ports.length} port${ports.length>1?'s':''} found.`;
+            modalStatus.textContent = `${ports.length} port${ports.length > 1 ? 's' : ''} found.`;
         }
-    } catch(err) {
-        connectModalStatus.textContent = 'Could not scan ports.';
-        connectModalStatus.className = 'connect-modal-status error';
-    }
-
-    scanBtn.textContent = 'Scan Ports';
-    scanBtn.disabled = false;
+    } catch(e) { modalStatus.textContent = 'Could not scan ports.'; modalStatus.className = 'modal-status err'; }
+    btn.textContent = 'Scan Ports'; btn.disabled = false;
 }
 
 async function connectFromModal() {
-    modalConnectBtn.disabled = true;
-    modalConnectBtn.textContent = 'Connecting…';
-    connectModalStatus.textContent = '';
-    connectModalStatus.className = 'connect-modal-status';
-
+    modalConnBtn.disabled = true; modalConnBtn.textContent = 'Connecting…';
+    modalStatus.textContent = ''; modalStatus.className = 'modal-status';
     const baud = parseInt(baudSelect.value);
     sessionStorage.setItem('braillino_baud', baudSelect.value);
-
     try {
         const ports = await navigator.serial.getPorts();
-        const selectedIdx = portSelect.value;
-
-        if (selectedIdx === 'request' || selectedIdx === '' || ports.length === 0) {
-            // Fall back to browser picker if no saved ports
-            port = await navigator.serial.requestPort();
-        } else {
-            port = ports[parseInt(selectedIdx)];
-        }
-
+        const idx = portSelect.value;
+        port = (idx === 'request' || idx === '' || !ports.length)
+            ? await navigator.serial.requestPort()
+            : ports[parseInt(idx)];
         await port.open({ baudRate: baud });
         writer = port.writable.getWriter();
-
-        connectModalStatus.textContent = '✓ Connected successfully!';
-        connectModalStatus.className = 'connect-modal-status success';
-
-        setStatusConnected();
-
-        setTimeout(() => closeConnectModal(), 800);
-    } catch(err) {
-        console.error('Connect error:', err);
-        connectModalStatus.textContent = err.message.includes('cancelled') ? 'Connection cancelled.' : 'Connection failed. Is the Arduino plugged in?';
-        connectModalStatus.className = 'connect-modal-status error';
-        port = null;
+        modalStatus.textContent = '✓ Connected!'; modalStatus.className = 'modal-status ok';
+        setConnected();
+        setTimeout(() => closeModal(), 700);
+    } catch(e) {
+        modalStatus.textContent = e.message?.includes('cancelled') ? 'Cancelled.' : 'Failed — is the Arduino plugged in?';
+        modalStatus.className = 'modal-status err'; port = null;
     }
-
-    modalConnectBtn.disabled = false;
-    modalConnectBtn.textContent = 'Connect';
+    modalConnBtn.disabled = false; modalConnBtn.textContent = 'Connect';
 }
 
-// ── DISCONNECT ──
 async function disconnect() {
-    try {
-        if (writer) { writer.releaseLock(); writer = null; }
-        if (port) { await port.close(); port = null; }
-    } catch(err) { console.error('Disconnect error:', err); }
-    setStatusOffline();
+    try { if (writer) { writer.releaseLock(); writer = null; } if (port) { await port.close(); port = null; } } catch(e) {}
+    setOffline();
 }
 
-// ── SEND ──
-async function sendToArduino(text) {
+async function sendText(text) {
     try {
         await writer.write(new TextEncoder().encode(text + '\n'));
         const orig = sendBtn.textContent;
         sendBtn.textContent = 'Sent ✓'; sendBtn.classList.add('sent');
         setTimeout(() => { sendBtn.textContent = orig; sendBtn.classList.remove('sent'); }, 1800);
-    } catch(err) { console.error('Send error:', err); }
+    } catch(e) { console.error(e); }
 }
 
+// ESC closes whichever modal is open
+document.addEventListener('keydown', e => {
+    if (e.key !== 'Escape') return;
+    if (stepView.classList.contains('active')) closeStep();
+    else if (modalOverlay.classList.contains('active')) closeModal();
+});
+
+// Release writer on navigate (don't fully close port — allows auto-reconnect)
 window.addEventListener('beforeunload', () => {
-    // Don't actually close the port on navigate — let auto-reconnect handle it
-    // Only close writer to release lock
     if (writer) { try { writer.releaseLock(); } catch(e) {} writer = null; }
 });
+
+// ── SPLIT VIEW DRAG ──
+(function() {
+    const divider     = document.getElementById('splitDivider');
+    const converterEl = document.querySelector('.converter-panel');
+    const shell       = document.querySelector('.shell');
+    if (!divider || !converterEl) return;
+
+    const SNAPS      = [0.3, 0.4, 0.5, 0.6];
+    const SNAP_RANGE = 20; // px threshold
+    const DEFAULT_W  = 400;
+
+    let dragging = false, startX = 0, startW = 0;
+
+    function clamp(v, lo, hi) { return Math.min(Math.max(v, lo), hi); }
+
+    function getNearestSnap(px, shellW) {
+        for (const s of SNAPS) {
+            if (Math.abs(px - s * shellW) < SNAP_RANGE) return Math.round(s * shellW);
+        }
+        return null;
+    }
+
+    function flashSnap() {
+        divider.classList.add('snap-hint');
+        setTimeout(() => divider.classList.remove('snap-hint'), 300);
+    }
+
+    function applyWidth(px) {
+        const shellW  = shell.getBoundingClientRect().width;
+        const clamped = clamp(px, 280, shellW * 0.70);
+        converterEl.style.width = clamped + 'px';
+        return clamped;
+    }
+
+    // Mouse drag
+    divider.addEventListener('mousedown', e => {
+        dragging = true;
+        startX   = e.clientX;
+        startW   = converterEl.getBoundingClientRect().width;
+        divider.classList.add('dragging');
+        document.body.style.cursor     = 'col-resize';
+        document.body.style.userSelect = 'none';
+        e.preventDefault();
+    });
+
+    document.addEventListener('mousemove', e => {
+        if (!dragging) return;
+        const newW = startW + (e.clientX - startX);
+        const shellW = shell.getBoundingClientRect().width;
+        const snap = getNearestSnap(newW, shellW);
+        if (snap !== null) { applyWidth(snap); flashSnap(); }
+        else applyWidth(newW);
+    });
+
+    document.addEventListener('mouseup', () => {
+        if (!dragging) return;
+        dragging = false;
+        divider.classList.remove('dragging');
+        document.body.style.cursor     = '';
+        document.body.style.userSelect = '';
+    });
+
+    // Double-click to reset
+    divider.addEventListener('dblclick', () => {
+        converterEl.style.transition = 'width 0.4s cubic-bezier(0.16,1,0.3,1)';
+        applyWidth(DEFAULT_W);
+        flashSnap();
+        setTimeout(() => converterEl.style.transition = '', 420);
+    });
+
+    // Keyboard control (arrow keys, Enter to reset)
+    divider.addEventListener('keydown', e => {
+        const step = e.shiftKey ? 40 : 10;
+        const cur  = converterEl.getBoundingClientRect().width;
+        if (e.key === 'ArrowLeft')  { applyWidth(cur - step); e.preventDefault(); }
+        if (e.key === 'ArrowRight') { applyWidth(cur + step); e.preventDefault(); }
+        if (e.key === 'Enter' || e.key === ' ') {
+            converterEl.style.transition = 'width 0.4s cubic-bezier(0.16,1,0.3,1)';
+            applyWidth(DEFAULT_W);
+            flashSnap();
+            setTimeout(() => converterEl.style.transition = '', 420);
+            e.preventDefault();
+        }
+    });
+
+    // Touch drag
+    divider.addEventListener('touchstart', e => {
+        dragging = true;
+        startX   = e.touches[0].clientX;
+        startW   = converterEl.getBoundingClientRect().width;
+        divider.classList.add('dragging');
+    }, { passive: true });
+
+    document.addEventListener('touchmove', e => {
+        if (!dragging) return;
+        applyWidth(startW + (e.touches[0].clientX - startX));
+    }, { passive: true });
+
+    document.addEventListener('touchend', () => {
+        dragging = false;
+        divider.classList.remove('dragging');
+    });
+})();
 </script>
 </body>
 </html>
