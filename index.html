@@ -220,7 +220,7 @@
         .send-btn.sent { background: var(--green); color: var(--green-dark); border-color: var(--green); }
 
         /* Braille preview */
-        .braille-area { margin-top: auto; }
+        .braille-area { margin-top: 0; }
         .braille-eyebrow {
             font-size: 10px; text-transform: uppercase; letter-spacing: 0.14em;
             color: rgba(245,240,232,0.2); font-weight: 600; margin-bottom: 12px;
@@ -1044,7 +1044,7 @@ const STEPS = {
         tip:'If no ports appear after scanning, confirm your Arduino is plugged in and the sketch was uploaded successfully.' },
     3:{ label:'Step Three', title:'Type Your Message', video:'demo3.mp4',
         intro:'With your device connected, type any message and watch it convert to Braille in real time.',
-        steps:['Click the text area on the left panel','Type letters A–Z, or punctuation','Watch the Braille preview update live below','Keep your message under 100 characters','Press Enter or click "Send to Braille →"','The message is sent to your Arduino immediately'],
+        steps:['Click the text area on the left panel','Type letters A–Z, numbers 0–9, or punctuation','Watch the Braille preview update live below','Keep your message under 100 characters','Press Enter or click "Send to Braille →"','The message is sent to your Arduino immediately'],
         tip:"Text auto-converts to uppercase for Braille Grade 1. Supported punctuation: . , ? ! ; : - ' \" ( ) / @ #" },
     4:{ label:'Step Four', title:'Feel the Braille', video:'step4braillino.mp4',
         intro:'Watch and feel as your Arduino displays each character one letter at a time.',
