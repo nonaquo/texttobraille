@@ -1025,12 +1025,8 @@ const BRAILLE = {
     K:[1,0,1,0,0,0],L:[1,1,1,0,0,0],M:[1,0,1,1,0,0],N:[1,0,1,1,1,0],O:[1,0,1,0,1,0],
     P:[1,1,1,1,0,0],Q:[1,1,1,1,1,0],R:[1,1,1,0,1,0],S:[0,1,1,1,0,0],T:[0,1,1,1,1,0],
     U:[1,0,1,0,0,1],V:[1,1,1,0,0,1],W:[0,1,0,1,1,1],X:[1,0,1,1,0,1],Y:[1,0,1,1,1,1],Z:[1,0,1,0,1,1],
-    '1':[1,0,0,0,0,0],'2':[1,1,0,0,0,0],'3':[1,0,0,1,0,0],'4':[1,0,0,1,1,0],'5':[1,0,0,0,1,0],
-    '6':[1,1,0,1,0,0],'7':[1,1,0,1,1,0],'8':[1,1,0,0,1,0],'9':[0,1,0,1,0,0],'0':[0,1,0,1,1,0],
     '.':[0,1,0,0,1,1],',':[0,1,0,0,0,0],'?':[0,1,1,0,0,1],'!':[0,1,1,0,1,0],
     ';':[0,1,1,0,0,0],':':[0,1,0,0,1,0],'-':[0,0,1,0,0,1],"'":[0,0,1,0,0,0],
-    '"':[0,1,1,0,1,1],'/':[0,0,1,1,0,1],
-    '@':[0,0,0,1,1,0],'#':[0,0,0,1,1,1],' ':[0,0,0,0,0,0]
 };
 
 const STEPS = {
@@ -1044,8 +1040,8 @@ const STEPS = {
         tip:'If no ports appear after scanning, confirm your Arduino is plugged in and the sketch was uploaded successfully.' },
     3:{ label:'Step Three', title:'Type Your Message', video:'demo3.mp4',
         intro:'With your device connected, type any message and watch it convert to Braille in real time.',
-        steps:['Click the text area on the left panel','Type letters A–Z, numbers 0–9, or punctuation','Watch the Braille preview update live below','Keep your message under 100 characters','Press Enter or click "Send to Braille →"','The message is sent to your Arduino immediately'],
-        tip:"Text auto-converts to uppercase for Braille Grade 1. Supported punctuation: . , ? ! ; : - ' \" / @ #" },
+        steps:['Click the text area on the left panel','Type letters A–Z, and punctuations','Watch the Braille preview update live below','Keep your message under 100 characters','Press Enter or click "Send to Braille →"','The message is sent to your Arduino immediately'],
+        tip:"Text auto-converts to uppercase for Braille Grade 1. Supported punctuation: . , ? ! ; : - ' " },
     4:{ label:'Step Four', title:'Feel the Braille', video:'step4braillino.mp4',
         intro:'Watch and feel as your Arduino displays each character one letter at a time.',
         steps:['Servos begin moving to form the first character','Each character displays for 4 seconds','Same letter twice in a row gets a 400ms pause between them','Watch servo positions to see each Braille pattern','Place your finger on the device to feel raised dots','The device cycles through your full message once','Type a new message to display more text'],
