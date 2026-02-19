@@ -23,39 +23,21 @@
         :root {
             --cream: #F5F0E8; --paper: #EDE7D9; --dark: #1A1410;
             --muted: #6B5F52; --accent: #C9B99A; --warm: #E8DDD0;
-            
         }
         html { scroll-behavior: smooth; }
         body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--dark); overflow-x: hidden; }
 
         /* ── DECORATIVE SIDE ELEMENTS ── */
-        .side-deco {
-            position: fixed;
-            top: 0; bottom: 0;
-            width: 32px;
-            z-index: 50;
-            pointer-events: none;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 0;
-        }
+        .side-deco { position: fixed; top: 0; bottom: 0; width: 32px; z-index: 50; pointer-events: none; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0; }
         .side-deco.left { left: 0; }
         .side-deco.right { right: 0; }
-        .side-stripe {
-            width: 100%;
-            flex: 1;
-        }
-        /* Left: dark → accent → cream tones, repeating */
+        .side-stripe { width: 100%; flex: 1; }
         .side-deco.left .side-stripe:nth-child(1) { background: #1A1410; }
         .side-deco.left .side-stripe:nth-child(2) { background: #C9B99A; }
         .side-deco.left .side-stripe:nth-child(3) { background: #EDE7D9; }
         .side-deco.left .side-stripe:nth-child(4) { background: #2D2520; }
         .side-deco.left .side-stripe:nth-child(5) { background: #C9B99A; }
         .side-deco.left .side-stripe:nth-child(6) { background: #1A1410; }
-
-        /* Right: reversed */
         .side-deco.right .side-stripe:nth-child(1) { background: #1A1410; }
         .side-deco.right .side-stripe:nth-child(2) { background: #C9B99A; }
         .side-deco.right .side-stripe:nth-child(3) { background: #EDE7D9; }
@@ -64,56 +46,25 @@
         .side-deco.right .side-stripe:nth-child(6) { background: #1A1410; }
 
         /* NAV */
-        nav {
-            position: fixed;
-            top: 0; left: 0; right: 0;
-            z-index: 200;
-            height: 56px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 40px;
-            background: var(--cream);
-            border-bottom: 2px solid var(--dark);
-        }
+        nav { position: fixed; top: 0; left: 0; right: 0; z-index: 200; height: 56px; display: flex; justify-content: space-between; align-items: center; padding: 0 40px; background: var(--cream); border-bottom: 2px solid var(--dark); }
         .nav-links { display: flex; gap: 32px; }
-        .nav-links a { 
-            color: var(--dark); text-decoration: none; font-size: 12px; 
-            text-transform: uppercase; letter-spacing: 0.12em; font-weight: 500; 
-            transition: opacity 0.2s; position: relative; padding-bottom: 2px;
-        }
+        .nav-links a { color: var(--dark); text-decoration: none; font-size: 12px; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 500; transition: opacity 0.2s; position: relative; padding-bottom: 2px; }
         .nav-links a:hover::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px; background: var(--dark); }
         .nav-links a.active { font-weight: 600; }
         .nav-links a.active::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: var(--dark); }
         .logo { display: flex; align-items: center; text-decoration: none; }
 
         /* TICKER */
-        .ticker-wrap { 
-            position: fixed; top: 56px; left: 0; right: 0; z-index: 199;
-            background: var(--paper); border-bottom: 1px solid rgba(26,20,16,0.12); 
-            overflow: hidden; height: 38px; display: flex; align-items: center; 
-        }
+        .ticker-wrap { position: fixed; top: 56px; left: 0; right: 0; z-index: 199; background: var(--paper); border-bottom: 1px solid rgba(26,20,16,0.12); overflow: hidden; height: 38px; display: flex; align-items: center; }
         .ticker-track { display: flex; white-space: nowrap; animation: ticker 18s linear infinite; }
         .ticker-item { display: inline-flex; align-items: center; gap: 24px; padding: 0 40px; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
         .ticker-item::after { content: "✦"; font-size: 9px; color: var(--accent); }
         @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
         /* HERO */
-        .hero { 
-            background: var(--dark); padding: 120px 40px 100px; 
-            position: relative; overflow: hidden; margin-top: 94px;
-        }
+        .hero { background: var(--dark); padding: 120px 40px 100px; position: relative; overflow: hidden; margin-top: 94px; }
         .hero::before { content: ''; position: absolute; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(201,185,154,0.12), transparent 70%); top: -100px; right: -100px; }
-
-        /* ── ACCENT LINE IN HERO ── */
-        .hero::after {
-            content: '';
-            position: absolute;
-            bottom: 0; left: 0;
-            width: 200px; height: 4px;
-            background: linear-gradient(90deg, #C9B99A, transparent);
-        }
-
+        .hero::after { content: ''; position: absolute; bottom: 0; left: 0; width: 200px; height: 4px; background: linear-gradient(90deg, #C9B99A, transparent); }
         .hero-inner { max-width: 900px; margin: 0 auto; }
         .hero-tag { font-size: 11px; text-transform: uppercase; letter-spacing: 0.18em; color: var(--accent); font-weight: 500; margin-bottom: 24px; }
         .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(60px, 10vw, 120px); font-weight: 900; color: var(--cream); line-height: 0.95; letter-spacing: -0.04em; margin-bottom: 48px; }
@@ -123,14 +74,7 @@
         /* CONTENT */
         .content { max-width: 900px; margin: 0 auto; padding: 100px 40px; }
 
-        /* ── COLOR BAR ── */
-        .color-bar {
-            height: 5px;
-            background: linear-gradient(90deg, #1A1410, #C9B99A, #EDE7D9, #C9B99A, #1A1410);
-            margin-bottom: 100px;
-            opacity: 0;
-            animation: fadeIn 1s 0.5s forwards;
-        }
+        .color-bar { height: 5px; background: linear-gradient(90deg, #1A1410, #C9B99A, #EDE7D9, #C9B99A, #1A1410); margin-bottom: 100px; opacity: 0; animation: fadeIn 1s 0.5s forwards; }
         @keyframes fadeIn { to { opacity: 1; } }
 
         .story-block { display: grid; grid-template-columns: 1fr 2fr; gap: 60px; margin-bottom: 100px; align-items: start; opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
@@ -139,20 +83,11 @@
         .story-text h2 { font-family: 'Playfair Display', serif; font-size: clamp(32px, 4vw, 48px); font-weight: 700; margin-bottom: 24px; line-height: 1.15; }
         .story-text p { font-size: 16px; line-height: 1.85; color: var(--muted); margin-bottom: 18px; }
         .story-text p:last-child { margin-bottom: 0; }
-
-        /* ── COLORFUL HIGHLIGHT PILL ── */
-        .story-text .highlight-pill {
-            display: inline-block;
-            background: var(--accent);
-            border-radius: 2px;
-            padding: 2px 8px;
-            font-style: italic;
-        }
+        .story-text .highlight-pill { display: inline-block; background: var(--accent); border-radius: 2px; padding: 2px 8px; font-style: italic; }
 
         .pull-quote { background: var(--dark); padding: 80px 60px; margin-bottom: 0; position: relative; overflow: hidden; opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease 0.1s, transform 0.8s ease 0.1s; }
         .pull-quote.visible { opacity: 1; transform: translateY(0); }
         .pull-quote::before { content: '"'; position: absolute; font-family: 'Playfair Display', serif; font-size: 300px; color: rgba(201,185,154,0.07); line-height: 1; top: -40px; left: 20px; pointer-events: none; }
-        /* ── ACCENT STRIPE ON PULL QUOTE ── */
         .pull-quote::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #C9B99A, #EDE7D9, #C9B99A); }
         .pull-quote blockquote { font-family: 'Playfair Display', serif; font-style: italic; font-size: clamp(22px, 3vw, 34px); color: var(--cream); line-height: 1.5; max-width: 680px; position: relative; z-index: 1; }
         .pull-quote cite { display: block; margin-top: 24px; font-family: 'DM Sans', sans-serif; font-style: normal; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); position: relative; z-index: 1; }
@@ -163,8 +98,6 @@
         .section-header span { font-size: 12px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); }
         .values-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; background: rgba(26,20,16,0.1); opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease 0.2s, transform 0.8s ease 0.2s; }
         .values-grid.visible { opacity: 1; transform: translateY(0); }
-
-        /* ── VALUE CARDS in site tones ── */
         .value-card { padding: 40px 36px; transition: filter 0.3s, transform 0.2s; }
         .value-card:hover { filter: brightness(0.95); transform: translateY(-2px); }
         .value-card:nth-child(1) { background: #E8DDD0; }
@@ -179,91 +112,46 @@
         .tech-section.visible { opacity: 1; transform: translateY(0); }
         .tech-section h2 { font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 700; margin-bottom: 32px; }
         .tech-tags { display: flex; flex-wrap: wrap; gap: 10px; }
-
-        /* ── TECH TAGS in site tones ── */
         .tech-tag { padding: 10px 20px; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500; color: var(--dark); border-radius: 2px; transition: transform 0.2s, background 0.2s, color 0.2s; border: 1.5px solid rgba(26,20,16,0.2); background: transparent; }
         .tech-tag:hover { transform: translateY(-2px); background: var(--dark); color: var(--cream); border-color: var(--dark); }
 
-        /* ══════════════════════════════════════
-           TEAM SPOTLIGHT SECTION
-        ══════════════════════════════════════ */
-        .team-section {
-            padding: 0;
-            background: var(--dark);
-            position: relative;
-            overflow: hidden;
-        }
-        .team-section::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #1A1410, #C9B99A, #EDE7D9, #C9B99A, #1A1410);
-            z-index: 10;
-        }
+        /* ══ TEAM SPOTLIGHT ══ */
+        .team-section { padding: 0; background: var(--dark); position: relative; overflow: hidden; }
+        .team-section::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #1A1410, #C9B99A, #EDE7D9, #C9B99A, #1A1410); z-index: 10; }
         .team-section-inner { width: 100%; }
 
-        .team-section .section-header {
-            border-bottom-color: rgba(255,255,255,0.1);
-            padding: 48px 60px 24px;
+        /* Team header — left aligned, matches rest of page */
+        .team-section .team-header {
+            display: flex;
+            align-items: baseline;
+            gap: 24px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding: 48px 60px 16px;
             margin-bottom: 0;
         }
-        .team-section .section-header h2 { color: var(--cream); }
-        .team-section .section-header span { color: rgba(245,240,232,0.4); }
-
-        /* SPOTLIGHT — full width, tall */
-        .team-spotlight {
-            position: relative;
-            width: 100%;
-            height: 75vh;
-            min-height: 500px;
-            overflow: hidden;
+        .team-section .team-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--cream);
+        }
+        .team-section .team-header span {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 15px;
+            color: var(--accent);
+            letter-spacing: 0.01em;
+            font-weight: 400;
         }
 
-        .spotlight-member {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            opacity: 0;
-            transition: opacity 0.6s ease;
-            pointer-events: none;
-        }
-        .spotlight-member.active {
-            opacity: 1;
-            pointer-events: all;
-        }
+        /* SPOTLIGHT */
+        .team-spotlight { position: relative; width: 100%; height: 75vh; min-height: 500px; overflow: hidden; }
+        .spotlight-member { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; opacity: 0; transition: opacity 0.6s ease; pointer-events: none; }
+        .spotlight-member.active { opacity: 1; pointer-events: all; }
+        .spotlight-bg { position: absolute; inset: 0; overflow: hidden; }
+        .spotlight-photo-large { width: 100%; height: 100%; object-fit: cover; object-position: center 40%; border-radius: 0; border: none; filter: none; position: absolute; top: 0; left: 0; transform: none; }
+        .spotlight-bg::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(20,14,10,0.92) 0%, rgba(20,14,10,0.4) 40%, rgba(20,14,10,0.1) 100%); }
 
-        .spotlight-bg {
-            position: absolute;
-            inset: 0;
-            overflow: hidden;
-        }
-
-        /* Photo fills entire spotlight area */
-        .spotlight-photo-large {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center 30%;
-            border-radius: 0;
-            border: none;
-            filter: none;
-            position: absolute;
-            top: 0; left: 0;
-            transform: none;
-        }
-
-        /* Dark overlay so text stays readable */
-        .spotlight-bg::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to top, rgba(20,14,10,0.92) 0%, rgba(20,14,10,0.4) 40%, rgba(20,14,10,0.1) 100%);
-        }
-
-        /* Spotlight backgrounds fallback */
         .spotlight-member:nth-child(1) .spotlight-bg { background: #1A1410; }
         .spotlight-member:nth-child(2) .spotlight-bg { background: #221a14; }
         .spotlight-member:nth-child(3) .spotlight-bg { background: #1e1710; }
@@ -272,103 +160,20 @@
         .spotlight-member:nth-child(6) .spotlight-bg { background: #201510; }
         .spotlight-member:nth-child(7) .spotlight-bg { background: #1a1410; }
 
-        .spotlight-info {
-            position: relative;
-            z-index: 2;
-            padding: 0 60px 32px;
-            width: 100%;
-        }
+        .spotlight-info { position: relative; z-index: 2; padding: 0 60px 32px; width: 100%; }
+        .spotlight-role { font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--accent); font-weight: 500; margin-bottom: 6px; }
+        .spotlight-name { font-family: 'Playfair Display', serif; font-size: clamp(32px, 5vw, 56px); font-weight: 900; color: var(--cream); line-height: 1; margin-bottom: 10px; }
+        .spotlight-desc { font-size: 14px; color: rgba(245,240,232,0.6); line-height: 1.7; max-width: 520px; margin-bottom: 32px; }
 
-        .spotlight-role {
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            color: var(--accent);
-            font-weight: 500;
-            margin-bottom: 6px;
-        }
+        .spotlight-accent { position: absolute; top: 0; left: 0; width: 5px; height: 100%; z-index: 3; background: #C9B99A; }
 
-        .spotlight-name {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(32px, 5vw, 56px);
-            font-weight: 900;
-            color: var(--cream);
-            line-height: 1;
-            margin-bottom: 10px;
-        }
-
-        .spotlight-desc {
-            font-size: 14px;
-            color: rgba(245,240,232,0.6);
-            line-height: 1.7;
-            max-width: 520px;
-            margin-bottom: 32px;
-        }
-
-        /* COLOR ACCENT BAR ON SPOTLIGHT */
-        .spotlight-accent {
-            position: absolute;
-            top: 0; left: 0;
-            width: 5px;
-            height: 100%;
-            z-index: 3;
-        }
-        .spotlight-member:nth-child(1) .spotlight-accent { background: #C9B99A; }
-        .spotlight-member:nth-child(2) .spotlight-accent { background: #C9B99A; }
-        .spotlight-member:nth-child(3) .spotlight-accent { background: #C9B99A; }
-        .spotlight-member:nth-child(4) .spotlight-accent { background: #C9B99A; }
-        .spotlight-member:nth-child(5) .spotlight-accent { background: #C9B99A; }
-        .spotlight-member:nth-child(6) .spotlight-accent { background: #C9B99A; }
-        .spotlight-member:nth-child(7) .spotlight-accent { background: #C9B99A; }
-
-        /* AVATAR ROW — floats INSIDE the spotlight at the bottom */
-        .team-avatars {
-            position: relative;
-            z-index: 3;
-            display: flex;
-            justify-content: flex-start;
-            gap: 12px;
-            flex-wrap: wrap;
-            padding: 0 60px 48px;
-        }
-
-        .avatar-btn {
-            width: 64px;
-            height: 64px;
-            border-radius: 50%;
-            overflow: hidden;
-            cursor: pointer;
-            border: 2px solid rgba(201,185,154,0.3);
-            transition: border-color 0.3s, transform 0.2s, box-shadow 0.3s;
-            background: rgba(26,20,16,0.6);
-            flex-shrink: 0;
-            padding: 0;
-        }
-
-        .avatar-btn img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            filter: grayscale(60%) brightness(0.8);
-            transition: filter 0.3s;
-        }
-
-        .avatar-btn:hover img,
-        .avatar-btn.active img {
-            filter: grayscale(0%) brightness(1);
-        }
-
-        .avatar-btn:hover {
-            transform: translateY(-3px);
-            border-color: rgba(201,185,154,0.7);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.5);
-        }
-
-        .avatar-btn.active {
-            transform: translateY(-5px);
-            border-color: #C9B99A;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.6);
-        }
+        /* AVATAR ROW */
+        .team-avatars { position: relative; z-index: 3; display: flex; justify-content: flex-start; gap: 12px; flex-wrap: wrap; padding: 0 60px 48px; }
+        .avatar-btn { width: 64px; height: 64px; border-radius: 50%; overflow: hidden; cursor: pointer; border: 2px solid rgba(201,185,154,0.3); transition: border-color 0.3s, transform 0.2s, box-shadow 0.3s; background: rgba(26,20,16,0.6); flex-shrink: 0; padding: 0; }
+        .avatar-btn img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(60%) brightness(0.8); transition: filter 0.3s; }
+        .avatar-btn:hover img, .avatar-btn.active img { filter: grayscale(0%) brightness(1); }
+        .avatar-btn:hover { transform: translateY(-3px); border-color: rgba(201,185,154,0.7); box-shadow: 0 6px 20px rgba(0,0,0,0.5); }
+        .avatar-btn.active { transform: translateY(-5px); border-color: #C9B99A; box-shadow: 0 8px 24px rgba(0,0,0,0.6); }
 
         /* FOOTER */
         footer { background: var(--dark); padding: 40px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.06); }
@@ -387,29 +192,22 @@
             .side-deco { display: none; }
             .team-spotlight { height: 340px; }
             .spotlight-name { font-size: 26px; }
-            .team-avatars { gap: 10px; }
+            .team-avatars { gap: 10px; padding: 0 24px 32px; }
             .avatar-btn { width: 52px; height: 52px; }
+            .team-section .team-header { padding: 32px 24px 16px; }
+            .spotlight-info { padding: 0 24px 24px; }
         }
     </style>
 </head>
 <body>
 
-<!-- COLORFUL SIDE BARS -->
 <div class="side-deco left">
-    <div class="side-stripe"></div>
-    <div class="side-stripe"></div>
-    <div class="side-stripe"></div>
-    <div class="side-stripe"></div>
-    <div class="side-stripe"></div>
-    <div class="side-stripe"></div>
+    <div class="side-stripe"></div><div class="side-stripe"></div><div class="side-stripe"></div>
+    <div class="side-stripe"></div><div class="side-stripe"></div><div class="side-stripe"></div>
 </div>
 <div class="side-deco right">
-    <div class="side-stripe"></div>
-    <div class="side-stripe"></div>
-    <div class="side-stripe"></div>
-    <div class="side-stripe"></div>
-    <div class="side-stripe"></div>
-    <div class="side-stripe"></div>
+    <div class="side-stripe"></div><div class="side-stripe"></div><div class="side-stripe"></div>
+    <div class="side-stripe"></div><div class="side-stripe"></div><div class="side-stripe"></div>
 </div>
 
 <nav>
@@ -439,7 +237,6 @@
 </section>
 
 <div class="content">
-
     <div class="color-bar"></div>
 
     <div class="story-block" id="sb1">
@@ -484,11 +281,12 @@
 <!-- ══ TEAM SPOTLIGHT ══ -->
 <section class="team-section">
     <div class="team-section-inner">
-        <div class="section-header" style="justify-content: center; border-bottom-color: rgba(255,255,255,0.1);">
-            <h2 style="color: var(--cream); text-align: center;">The Team</h2>
+
+        <div class="team-header">
+            <h2>The Team</h2>
+            <span>The people who made it possible.</span>
         </div>
-        <p style="font-family: 'DM Serif Display', serif; font-style: italic; font-size: 18px; color: var(--accent); text-align: center; margin-bottom: 40px; letter-spacing: 0.03em;">The people who made it possible.</p>
-        <!-- SPOTLIGHT DISPLAY -->
+
         <div class="team-spotlight" id="teamSpotlight">
 
             <div class="spotlight-member active" data-index="0">
@@ -526,7 +324,7 @@
                 <div class="spotlight-info">
                     <div class="spotlight-role">Lead Developer & Web Editor</div>
                     <div class="spotlight-name">Ephraim Serenio</div>
-                    <div class="spotlight-desc">Served as a lead coder for the project. Assisted in paper development and managed the website’s content and updates.</div>
+                    <div class="spotlight-desc">Served as a lead coder for the project. Assisted in paper development and managed the website's content and updates.</div>
                 </div>
             </div>
 
@@ -584,35 +382,27 @@
 
         </div><!-- end spotlight -->
 
-        <!-- AVATAR PICKER ROW -->
         <div class="team-avatars" id="teamAvatars">
             <button class="avatar-btn active" data-index="0" title="Daniel Basto">
-                <img src="basto.jpg" alt="Daniel Basto"
-                     onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 68 68\'><rect fill=\'%23C9B99A\' width=\'68\' height=\'68\' rx=\'34\'/><text y=\'40\' x=\'34\' text-anchor=\'middle\' font-size=\'22\' fill=\'%231A1410\' font-family=\'serif\'>DB</text></svg>'">
+                <img src="basto.jpg" alt="Daniel Basto" onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 68 68\'><rect fill=\'%23C9B99A\' width=\'68\' height=\'68\' rx=\'34\'/><text y=\'40\' x=\'34\' text-anchor=\'middle\' font-size=\'22\' fill=\'%231A1410\' font-family=\'serif\'>DB</text></svg>'">
             </button>
             <button class="avatar-btn" data-index="1" title="Franchesca Asuncion">
-                <img src="asuncion.jpeg" alt="Franchesca Asuncion"
-                     onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 68 68\'><rect fill=\'%23E8DDD0\' width=\'68\' height=\'68\' rx=\'34\'/><text y=\'40\' x=\'34\' text-anchor=\'middle\' font-size=\'22\' fill=\'%231A1410\' font-family=\'serif\'>FA</text></svg>'">
+                <img src="asuncion.jpeg" alt="Franchesca Asuncion" onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 68 68\'><rect fill=\'%23E8DDD0\' width=\'68\' height=\'68\' rx=\'34\'/><text y=\'40\' x=\'34\' text-anchor=\'middle\' font-size=\'22\' fill=\'%231A1410\' font-family=\'serif\'>FA</text></svg>'">
             </button>
             <button class="avatar-btn" data-index="2" title="Ephraim Serenio">
-                <img src="serenio.jpg" alt="Ephraim Serenio"
-                     onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 68 68\'><rect fill=\'%23C9B99A\' width=\'68\' height=\'68\' rx=\'34\'/><text y=\'40\' x=\'34\' text-anchor=\'middle\' font-size=\'22\' fill=\'%231A1410\' font-family=\'serif\'>ES</text></svg>'">
+                <img src="serenio.jpg" alt="Ephraim Serenio" onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 68 68\'><rect fill=\'%23C9B99A\' width=\'68\' height=\'68\' rx=\'34\'/><text y=\'40\' x=\'34\' text-anchor=\'middle\' font-size=\'22\' fill=\'%231A1410\' font-family=\'serif\'>ES</text></svg>'">
             </button>
             <button class="avatar-btn" data-index="3" title="Zhen Gomba">
-                <img src="gomba.jpeg" alt="Zhen Gomba"
-                     onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 68 68\'><rect fill=\'%23E8DDD0\' width=\'68\' height=\'68\' rx=\'34\'/><text y=\'40\' x=\'34\' text-anchor=\'middle\' font-size=\'22\' fill=\'%231A1410\' font-family=\'serif\'>ZG</text></svg>'">
+                <img src="gomba.jpeg" alt="Zhen Gomba" onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 68 68\'><rect fill=\'%23E8DDD0\' width=\'68\' height=\'68\' rx=\'34\'/><text y=\'40\' x=\'34\' text-anchor=\'middle\' font-size=\'22\' fill=\'%231A1410\' font-family=\'serif\'>ZG</text></svg>'">
             </button>
             <button class="avatar-btn" data-index="4" title="Marc Mazaredo">
-                <img src="mazaredo.jpeg" alt="Marc Mazaredo"
-                     onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 68 68\'><rect fill=\'%23C9B99A\' width=\'68\' height=\'68\' rx=\'34\'/><text y=\'40\' x=\'34\' text-anchor=\'middle\' font-size=\'22\' fill=\'%231A1410\' font-family=\'serif\'>MM</text></svg>'">
+                <img src="mazaredo.jpeg" alt="Marc Mazaredo" onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 68 68\'><rect fill=\'%23C9B99A\' width=\'68\' height=\'68\' rx=\'34\'/><text y=\'40\' x=\'34\' text-anchor=\'middle\' font-size=\'22\' fill=\'%231A1410\' font-family=\'serif\'>MM</text></svg>'">
             </button>
             <button class="avatar-btn" data-index="5" title="Keisha Reyes">
-                <img src="reyes.jpeg" alt="Keisha Reyes"
-                     onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 68 68\'><rect fill=\'%23E8DDD0\' width=\'68\' height=\'68\' rx=\'34\'/><text y=\'40\' x=\'34\' text-anchor=\'middle\' font-size=\'22\' fill=\'%231A1410\' font-family=\'serif\'>KR</text></svg>'">
+                <img src="reyes.jpeg" alt="Keisha Reyes" onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 68 68\'><rect fill=\'%23E8DDD0\' width=\'68\' height=\'68\' rx=\'34\'/><text y=\'40\' x=\'34\' text-anchor=\'middle\' font-size=\'22\' fill=\'%231A1410\' font-family=\'serif\'>KR</text></svg>'">
             </button>
             <button class="avatar-btn" data-index="6" title="Mharc Mendoza">
-                <img src="mendoza.jpeg" alt="Mharc Mendoza"
-                     onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 68 68\'><rect fill=\'%23C9B99A\' width=\'68\' height=\'68\' rx=\'34\'/><text y=\'40\' x=\'34\' text-anchor=\'middle\' font-size=\'22\' fill=\'%231A1410\' font-family=\'serif\'>MM</text></svg>'">
+                <img src="mendoza.jpeg" alt="Mharc Mendoza" onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 68 68\'><rect fill=\'%23C9B99A\' width=\'68\' height=\'68\' rx=\'34\'/><text y=\'40\' x=\'34\' text-anchor=\'middle\' font-size=\'22\' fill=\'%231A1410\' font-family=\'serif\'>MM</text></svg>'">
             </button>
         </div>
 
@@ -628,26 +418,20 @@
 </footer>
 
 <script>
-// ── SCROLL ANIMATIONS ──
 const scrollEls = document.querySelectorAll('.story-block, .pull-quote, .values-grid, .tech-section');
 const obs = new IntersectionObserver((entries) => {
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
 }, { threshold: 0.15 });
 scrollEls.forEach(el => obs.observe(el));
 
-// ── TEAM SPOTLIGHT SWITCHER ──
 const avatarBtns = document.querySelectorAll('.avatar-btn');
 const spotlightMembers = document.querySelectorAll('.spotlight-member');
 
 avatarBtns.forEach(btn => {
     btn.addEventListener('click', () => {
         const idx = parseInt(btn.dataset.index);
-
-        // Update avatars
         avatarBtns.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-
-        // Update spotlight
         spotlightMembers.forEach(m => m.classList.remove('active'));
         spotlightMembers[idx].classList.add('active');
     });
