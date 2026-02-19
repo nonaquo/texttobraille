@@ -273,9 +273,19 @@
         .spotlight-bg { position: absolute; inset: 0; overflow: hidden; }
         .spotlight-bg img {
             width: 100%; height: 100%; object-fit: cover;
-            object-position: center 20%; position: absolute; top: 0; left: 0;
+            object-position: center 40%; position: absolute; top: 0; left: 0;
         }
         .spotlight-bg::after {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(to top, rgba(20,14,10,0.93) 0%, rgba(20,14,10,0.4) 45%, rgba(20,14,10,0.08) 100%);
+        }
+
+        .spotlight-bgg { position: absolute; inset: 0; overflow: hidden; }
+        .spotlight-bgg img {
+            width: 100%; height: 100%; object-fit: cover;
+            object-position: center 50%; position: absolute; top: 0; left: 0;
+        }
+        .spotlight-bgg::after {
             content: ''; position: absolute; inset: 0;
             background: linear-gradient(to top, rgba(20,14,10,0.93) 0%, rgba(20,14,10,0.4) 45%, rgba(20,14,10,0.08) 100%);
         }
@@ -542,7 +552,7 @@
 
             <div class="spotlight-member" data-index="3">
                 <div class="spotlight-accent" aria-hidden="true"></div>
-                <div class="spotlight-bg">
+                <div class="spotlight-bgg">
                     <img src="gombaspotlight.jpg" alt="Zhen Gomba"
                          onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 260 260\'><rect fill=\'%23E8DDD0\' width=\'260\' height=\'260\' rx=\'130\'/><text y=\'145\' x=\'130\' text-anchor=\'middle\' font-size=\'80\' fill=\'%231A1410\' font-family=\'serif\'>ZG</text></svg>'">
                 </div>
