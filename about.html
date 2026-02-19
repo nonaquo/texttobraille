@@ -53,6 +53,9 @@
         .nav-links a.active { font-weight: 600; }
         .nav-links a.active::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: var(--dark); }
         .logo { display: flex; align-items: center; text-decoration: none; }
+        .status-pill { display: flex; align-items: center; gap: 7px; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dark); background: rgba(26,20,16,0.08); padding: 6px 14px; border-radius: 20px; }
+        .dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(26,20,16,0.3); transition: all 0.4s; }
+        .dot.on { background: #90E8B4; box-shadow: 0 0 8px #90E8B4; }
 
         /* TICKER */
         .ticker-wrap { position: fixed; top: 56px; left: 0; right: 0; z-index: 199; background: var(--paper); border-bottom: 1px solid rgba(26,20,16,0.12); overflow: hidden; height: 38px; display: flex; align-items: center; }
@@ -218,7 +221,10 @@
     <a href="index.html" class="logo">
         <img src="LOGOBRAILLINO.png" alt="Braillino" style="height:28px;width:auto;display:block;">
     </a>
-    <div style="width: 120px;"></div>
+    <div class="status-pill">
+        <div class="dot" id="statusDot"></div>
+        <span id="statusText">Offline</span>
+    </div>
 </nav>
 
 <div class="ticker-wrap">
@@ -436,6 +442,17 @@ avatarBtns.forEach(btn => {
         spotlightMembers[idx].classList.add('active');
     });
 });
+</script>
+<script>
+// Read connection state from sessionStorage and reflect in status pill
+(function() {
+    const dot  = document.getElementById('statusDot');
+    const text = document.getElementById('statusText');
+    if (sessionStorage.getItem('braillino_connected') === 'true') {
+        dot.classList.add('on');
+        text.textContent = 'Connected';
+    }
+})();
 </script>
 </body>
 </html>
