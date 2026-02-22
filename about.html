@@ -380,154 +380,63 @@
 
         .spacer { height: 96px; }
 
+        /* ══════════════════════════════════════════════════════════════════════════
+           RESPONSIVE — TABLET & MOBILE
+           ══════════════════════════════════════════════════════════════════════════ */
+
         @media (max-width: 860px) {
             :root { --sidebar: 0px; }
             .sidebar { display: none; }
-            .story-block { grid-template-columns: 1fr; gap: 24px; }
+
+            /* Offset page shell since sidebar is gone */
+            .page-shell { margin-left: 0; }
+
+            /* Hero */
+            .hero { padding: 52px 24px 44px; }
+            .hero h1 { font-size: clamp(36px, 9vw, 60px); }
+            .hero-sub { font-size: 15px; }
+
+            /* Content */
+            .content { padding: 48px 24px 60px; }
+
+            /* Story blocks: single column */
+            .story-block { grid-template-columns: 1fr; gap: 20px; }
+
+            /* Pull quote */
+            .pull-quote { padding: 44px 24px; }
+
+            /* Values: single column */
             .values-grid { grid-template-columns: 1fr; }
-            .hero { padding: 52px 28px 48px; }
-            .content { padding: 56px 28px; }
-            .pull-quote { padding: 44px 28px; }
-            .tech-section { padding: 44px 28px; }
-            .team-header { padding: 36px 28px 16px; }
-            .team-spotlight { height: 360px; }
-            .spotlight-info { padding: 0 28px 24px; }
-            .team-avatars { padding: 0 28px 40px; }
-            .avatar-btn { width: 52px; height: 52px; }
-            footer { padding: 28px; flex-direction: column; gap: 16px; text-align: center; }
+            .value-card { padding: 28px 24px; }
+
+            /* Tech section */
+            .tech-section { padding: 40px 24px; }
+
+            /* Team section */
+            .team-header { padding: 32px 24px 14px; }
+            .team-spotlight { height: 340px; min-height: 0; }
+            .spotlight-info { padding: 0 24px 20px; }
+            .spotlight-name { font-size: clamp(24px, 6vw, 40px); }
+            .spotlight-desc { font-size: 13px; }
+            .team-avatars { padding: 0 24px 36px; gap: 8px; }
+            .avatar-btn { width: 50px; height: 50px; }
+
+            /* Footer */
+            footer { padding: 24px; flex-direction: column; gap: 14px; text-align: center; }
         }
-        /* ══════════════════════════════════════════════════════════════════════════
-           RESPONSIVE - MOBILE & TABLET
-           ══════════════════════════════════════════════════════════════════════════ */
-        
-        @media (max-width: 1024px) {
-            :root { --sidebar: 0px; }
-            
-            /* Hide sidebar on mobile */
-            .sidebar { display: none; }
-            
-            /* Adjust main content */
-            .main-content {
-                margin-left: 0;
-                padding: 60px 24px 60px;
-            }
-            
-            .hero {
-                padding: 48px 0;
-            }
-            
-            .hero h1 {
-                font-size: clamp(36px, 9vw, 56px);
-            }
-            
-            .hero-subtitle {
-                font-size: 15px;
-            }
-            
-            .mission-section {
-                padding: 60px 0;
-            }
-            
-            .mission-grid {
-                grid-template-columns: 1fr;
-                gap: 40px;
-            }
-            
-            .mission-content h2 {
-                font-size: clamp(32px, 7vw, 44px);
-            }
-            
-            .mission-content p {
-                font-size: 15px;
-            }
-            
-            .mission-image {
-                height: 300px;
-            }
-            
-            .team-section h2 {
-                font-size: clamp(32px, 7vw, 44px);
-            }
-            
-            .team-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 20px;
-            }
-            
-            .team-member {
-                padding: 24px 20px;
-            }
-            
-            .member-photo {
-                width: 80px;
-                height: 80px;
-            }
-            
-            .member-name {
-                font-size: 16px;
-            }
-            
-            .member-role {
-                font-size: 12px;
-            }
-            
-            .cta-section {
-                padding: 60px 0;
-            }
-            
-            .cta-box {
-                padding: 48px 28px;
-            }
-            
-            .cta-box h2 {
-                font-size: clamp(28px, 7vw, 40px);
-            }
-            
-            .cta-box p {
-                font-size: 15px;
-            }
-        }
-        
+
         @media (max-width: 480px) {
-            .main-content {
-                padding: 48px 20px;
-            }
-            
-            .hero {
-                padding: 36px 0;
-            }
-            
-            .hero h1 {
-                font-size: 32px;
-            }
-            
-            .mission-section {
-                padding: 48px 0;
-            }
-            
-            .mission-content h2 {
-                font-size: 28px;
-            }
-            
-            .mission-image {
-                height: 250px;
-            }
-            
-            .team-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .team-member {
-                padding: 20px;
-            }
-            
-            .cta-section {
-                padding: 48px 0;
-            }
-            
-            .cta-box {
-                padding: 36px 24px;
-            }
+            .hero { padding: 40px 16px 36px; }
+            .hero h1 { font-size: 30px; }
+            .content { padding: 36px 16px 48px; }
+            .pull-quote { padding: 36px 16px; }
+            .tech-section { padding: 32px 16px; }
+            .value-card { padding: 24px 16px; }
+            .team-header { padding: 24px 16px 12px; }
+            .team-spotlight { height: 300px; }
+            .spotlight-info { padding: 0 16px 16px; }
+            .team-avatars { padding: 0 16px 28px; }
+            .avatar-btn { width: 44px; height: 44px; }
             
             .cta-box h2 {
                 font-size: 28px;

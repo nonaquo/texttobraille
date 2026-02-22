@@ -758,199 +758,115 @@
             background: rgba(201,185,154,0.6);
         }
 
-        @media (max-width: 860px) {
-            :root { --sidebar: 0px; }
-            .sidebar { display: none; }
-            .shell { flex-direction: column; }
-            .converter-panel { width: 100% !important; max-width: 100%; min-width: 0; max-height: 56vh; border-bottom: 1px solid rgba(201,185,154,0.12); }
-            .split-divider { display: none; }
-            .card-thumb { display: none; }
-            .req-bar { grid-template-columns: 1fr; gap: 12px; }
-        }
         /* ══════════════════════════════════════════════════════════════════════════
-           RESPONSIVE - MOBILE & TABLET
+           RESPONSIVE — TABLET & MOBILE
            ══════════════════════════════════════════════════════════════════════════ */
-        
-        @media (max-width: 1024px) {
+
+        @media (max-width: 860px) {
+            /* Allow page to scroll naturally */
+            html, body { overflow: auto; height: auto; }
+
+            /* Kill the fixed sidebar */
             :root { --sidebar: 0px; }
-            
-            html, body { overflow: auto; }
-            
-            /* Hide sidebar on mobile */
             .sidebar { display: none; }
-            
-            /* Add mobile top nav */
+
+            /* Top nav bar replacement */
             body::before {
                 content: '';
                 position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                height: 60px;
+                top: 0; left: 0; right: 0;
+                height: 52px;
                 background: #100D0A;
                 border-bottom: 1px solid rgba(201,185,154,0.12);
                 z-index: 299;
             }
-            
-            /* Adjust main container for mobile */
-            .main-container {
+
+            /* Shell becomes a normal block flow */
+            .shell {
                 position: relative;
-                margin-left: 0;
-                padding-top: 60px;
-                height: auto;
-                min-height: 100vh;
+                left: 0; top: 0; right: auto; bottom: auto;
+                display: flex;
+                flex-direction: column;
+                overflow: visible;
+                padding-top: 52px; /* clear the top bar */
             }
-            
+
+            /* Converter panel: full width, auto height */
             .converter-panel {
-                min-height: auto;
-                padding: 48px 24px;
+                width: 100% !important;
+                max-width: 100%;
+                min-width: 0;
+                max-height: none;
+                height: auto;
+                overflow-y: visible;
+                border-bottom: 1px solid rgba(201,185,154,0.12);
             }
-            
-            .converter-panel h1 {
-                font-size: clamp(32px, 8vw, 48px);
-            }
-            
-            .converter-panel .subtitle {
-                font-size: 14px;
-                margin-bottom: 36px;
-            }
-            
-            .connect-btn {
+
+            .conv-inner { padding: 32px 20px 28px; }
+
+            .conv-inner h1 { font-size: clamp(28px, 7vw, 40px); }
+
+            textarea { min-height: 120px; font-size: 16px; }
+
+            .braille-preview { justify-content: center; }
+
+            /* Steps panel: full width, auto height */
+            .steps-panel {
+                flex: none;
                 width: 100%;
-                justify-content: center;
-                padding: 16px 24px;
+                height: auto;
+                overflow-y: visible;
             }
-            
-            textarea {
-                min-height: 120px;
-                font-size: 15px;
-            }
-            
-            .braille-preview {
-                justify-content: center;
-            }
-            
-            .instructions-panel {
-                padding: 48px 24px;
-                min-height: auto;
-            }
-            
-            .instructions-header h2 {
-                font-size: clamp(32px, 8vw, 44px);
-            }
-            
-            .steps-grid {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-            
-            .step-card {
-                padding: 28px 24px;
-            }
-            
-            .step-number {
-                font-size: 52px;
-            }
-            
-            .step-title-group h3 {
-                font-size: 20px;
-            }
-            
-            /* Modal adjustments */
-            .step-detail-view {
-                padding: 20px;
-            }
-            
+
+            /* Hide drag divider */
+            .split-divider { display: none; }
+
+            /* Requirements bar: single column */
+            .req-bar { grid-template-columns: 1fr; gap: 12px; padding: 20px; }
+
+            /* Thumbnails take too much space on small screens */
+            .card-thumb { display: none; }
+
+            /* Step cards: tighter padding */
+            .card-body { padding: 18px 20px; gap: 14px; }
+            .card-num { font-size: 40px; width: 38px; }
+            .card-title { font-size: 18px; }
+
+            /* Steps header */
+            .steps-header { padding: 16px 20px; }
+
+            /* Modal: full-screen on mobile */
+            .step-detail-view { padding: 12px; align-items: flex-end; }
             .detail-container {
                 grid-template-columns: 1fr;
-                grid-template-rows: 45vh auto;
-                height: auto;
-                max-height: 90vh;
+                grid-template-rows: 38vh 1fr;
+                height: 92vh;
+                max-width: 100%;
+                border-radius: 12px 12px 0 0;
                 overflow-y: auto;
             }
-            
-            .detail-video-panel {
-                border-right: none;
-                border-bottom: 4px solid var(--dark);
-            }
-            
-            .detail-content-panel {
-                padding: 36px 24px;
-            }
-            
-            .detail-title {
-                font-size: 28px;
-            }
-            
-            /* Connect modal mobile */
-            .connect-modal {
-                padding: 36px 24px;
-                max-width: 90%;
-                box-shadow: 8px 8px 0 var(--accent-blue);
-            }
-            
-            .connect-modal h2 {
-                font-size: 28px;
-            }
-            
-            .connect-port-row {
-                flex-direction: column;
-            }
-            
-            .port-scan-btn {
-                width: 100%;
-            }
-            
-            .connect-modal-actions {
-                flex-direction: column;
-            }
-            
-            .modal-connect-btn,
-            .modal-cancel-btn {
-                width: 100%;
-            }
-            
-            /* Improve touch targets */
-            button {
-                -webkit-tap-highlight-color: transparent;
-                min-height: 44px;
-            }
-            
-            .step-card {
-                -webkit-tap-highlight-color: transparent;
-            }
+            .detail-video-panel { border-right: none; border-bottom: 3px solid var(--dark); }
+            .detail-content-panel { padding: 28px 20px; }
+            .detail-title { font-size: 26px; }
+
+            /* Connect modal */
+            .modal-box { padding: 28px 20px; max-width: 94%; }
+            .modal-row { flex-direction: column; }
+            .modal-row button { width: 100%; }
+            .modal-actions { flex-direction: column; gap: 10px; }
+            .modal-actions button { width: 100%; }
+
+            /* Better touch targets */
+            button { -webkit-tap-highlight-color: transparent; min-height: 44px; }
         }
-        
+
         /* Extra small phones */
         @media (max-width: 480px) {
-            .converter-panel,
-            .instructions-panel {
-                padding: 36px 20px;
-            }
-            
-            .converter-panel h1 {
-                font-size: 28px;
-            }
-            
-            .instructions-header h2 {
-                font-size: 28px;
-            }
-            
-            .step-card {
-                padding: 24px 20px;
-            }
-            
-            .step-number {
-                font-size: 44px;
-            }
-            
-            .detail-content-panel {
-                padding: 28px 20px;
-            }
-            
-            .connect-modal {
-                padding: 28px 20px;
-            }
+            .conv-inner { padding: 24px 16px 22px; }
+            .conv-inner h1 { font-size: 26px; }
+            .steps-header { padding: 14px 16px; }
+            .card-body { padding: 16px; gap: 10px; }
+            .req-bar { padding: 16px; }
         }
     </style>
 </head>
