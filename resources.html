@@ -203,6 +203,99 @@
             .content { padding: 44px 28px 60px; }
             footer { padding: 28px; flex-direction: column; gap: 16px; text-align: center; }
         }
+        /* ══════════════════════════════════════════════════════════════════════════
+           RESPONSIVE - MOBILE & TABLET
+           ══════════════════════════════════════════════════════════════════════════ */
+        
+        @media (max-width: 1024px) {
+            :root { --sidebar: 0px; }
+            
+            /* Hide sidebar on mobile */
+            .sidebar { display: none; }
+            
+            /* Adjust main content */
+            .main-content {
+                margin-left: 0;
+                padding: 60px 24px 60px;
+            }
+            
+            .hero {
+                padding: 48px 0;
+            }
+            
+            .hero h1 {
+                font-size: clamp(36px, 8vw, 52px);
+            }
+            
+            .hero p {
+                font-size: 15px;
+            }
+            
+            .downloads-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .download-card {
+                padding: 32px 24px;
+            }
+            
+            .faq-section h2 {
+                font-size: clamp(32px, 7vw, 44px);
+            }
+            
+            .faq-item {
+                padding: 24px;
+            }
+            
+            .faq-question {
+                font-size: 16px;
+                padding-right: 40px;
+            }
+            
+            .faq-answer {
+                font-size: 14px;
+            }
+            
+            .requirements-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .req-card {
+                padding: 28px 24px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .main-content {
+                padding: 48px 20px;
+            }
+            
+            .hero {
+                padding: 36px 0;
+            }
+            
+            .hero h1 {
+                font-size: 32px;
+            }
+            
+            .download-card {
+                padding: 28px 20px;
+            }
+            
+            .faq-item {
+                padding: 20px;
+            }
+            
+            .faq-question {
+                font-size: 15px;
+            }
+            
+            .req-card {
+                padding: 24px 20px;
+            }
+        }
     </style>
 </head>
 <body>

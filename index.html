@@ -767,6 +767,191 @@
             .card-thumb { display: none; }
             .req-bar { grid-template-columns: 1fr; gap: 12px; }
         }
+        /* ══════════════════════════════════════════════════════════════════════════
+           RESPONSIVE - MOBILE & TABLET
+           ══════════════════════════════════════════════════════════════════════════ */
+        
+        @media (max-width: 1024px) {
+            :root { --sidebar: 0px; }
+            
+            html, body { overflow: auto; }
+            
+            /* Hide sidebar on mobile */
+            .sidebar { display: none; }
+            
+            /* Add mobile top nav */
+            body::before {
+                content: '';
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 60px;
+                background: #100D0A;
+                border-bottom: 1px solid rgba(201,185,154,0.12);
+                z-index: 299;
+            }
+            
+            /* Adjust main container for mobile */
+            .main-container {
+                position: relative;
+                margin-left: 0;
+                padding-top: 60px;
+                height: auto;
+                min-height: 100vh;
+            }
+            
+            .converter-panel {
+                min-height: auto;
+                padding: 48px 24px;
+            }
+            
+            .converter-panel h1 {
+                font-size: clamp(32px, 8vw, 48px);
+            }
+            
+            .converter-panel .subtitle {
+                font-size: 14px;
+                margin-bottom: 36px;
+            }
+            
+            .connect-btn {
+                width: 100%;
+                justify-content: center;
+                padding: 16px 24px;
+            }
+            
+            textarea {
+                min-height: 120px;
+                font-size: 15px;
+            }
+            
+            .braille-preview {
+                justify-content: center;
+            }
+            
+            .instructions-panel {
+                padding: 48px 24px;
+                min-height: auto;
+            }
+            
+            .instructions-header h2 {
+                font-size: clamp(32px, 8vw, 44px);
+            }
+            
+            .steps-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .step-card {
+                padding: 28px 24px;
+            }
+            
+            .step-number {
+                font-size: 52px;
+            }
+            
+            .step-title-group h3 {
+                font-size: 20px;
+            }
+            
+            /* Modal adjustments */
+            .step-detail-view {
+                padding: 20px;
+            }
+            
+            .detail-container {
+                grid-template-columns: 1fr;
+                grid-template-rows: 45vh auto;
+                height: auto;
+                max-height: 90vh;
+                overflow-y: auto;
+            }
+            
+            .detail-video-panel {
+                border-right: none;
+                border-bottom: 4px solid var(--dark);
+            }
+            
+            .detail-content-panel {
+                padding: 36px 24px;
+            }
+            
+            .detail-title {
+                font-size: 28px;
+            }
+            
+            /* Connect modal mobile */
+            .connect-modal {
+                padding: 36px 24px;
+                max-width: 90%;
+                box-shadow: 8px 8px 0 var(--accent-blue);
+            }
+            
+            .connect-modal h2 {
+                font-size: 28px;
+            }
+            
+            .connect-port-row {
+                flex-direction: column;
+            }
+            
+            .port-scan-btn {
+                width: 100%;
+            }
+            
+            .connect-modal-actions {
+                flex-direction: column;
+            }
+            
+            .modal-connect-btn,
+            .modal-cancel-btn {
+                width: 100%;
+            }
+            
+            /* Improve touch targets */
+            button {
+                -webkit-tap-highlight-color: transparent;
+                min-height: 44px;
+            }
+            
+            .step-card {
+                -webkit-tap-highlight-color: transparent;
+            }
+        }
+        
+        /* Extra small phones */
+        @media (max-width: 480px) {
+            .converter-panel,
+            .instructions-panel {
+                padding: 36px 20px;
+            }
+            
+            .converter-panel h1 {
+                font-size: 28px;
+            }
+            
+            .instructions-header h2 {
+                font-size: 28px;
+            }
+            
+            .step-card {
+                padding: 24px 20px;
+            }
+            
+            .step-number {
+                font-size: 44px;
+            }
+            
+            .detail-content-panel {
+                padding: 28px 20px;
+            }
+            
+            .connect-modal {
+                padding: 28px 20px;
+            }
+        }
     </style>
 </head>
 <body>
